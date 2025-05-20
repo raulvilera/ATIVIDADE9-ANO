@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade de Ciências - 9º Ano</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #e6f2ff;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #004aad;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            align-items: flex-end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group-nome {
+            flex: 3;
+            min-width: 300px;
+        }
+        .form-group-numero {
+            width: 80px;
+        }
+        .form-group-data {
+            width: 150px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #004aad;
+            font-size: 16px;
+        }
+        select, input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .question {
+            background: #f0f8ff;
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.15), -3px 0 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #004aad;
+            border-bottom: 4px solid #004aad;
+            position: relative;
+        }
+        .question:before {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: -8px;
+            right: 8px;
+            top: 8px;
+            background: rgba(0,0,0,0.05);
+            z-index: -1;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #004aad;
+            font-size: 16px;
+        }
+        .image-upload-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .upload-btn {
+            background-color: #004aad;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #003882;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px solid #ddd;
+            display: none;
+        }
+        .options {
+            margin-left: 0;
+        }
+        .option {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+        .correct {
+            background-color: #d4edda;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+        }
+        button {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            background-color: #003882;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e7f3ff;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .enem-stamp {
+            background-color: #004aad;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .discursive {
+            margin-top: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .dashboard h2 {
+            text-align: center;
+            color: #004aad;
+            margin-bottom: 20px;
+        }
+        .dashboard-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .dashboard-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        .weaknesses {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .weaknesses h3 {
+            margin-top: 0;
+            color: #004aad;
+        }
+        .weakness-item {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            border-left: 3px solid #004aad;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background-color: #004aad;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><strong>E.E.PROFª WANDA MASCAGNI DE SÁ</strong></h1>
+        <div class="form-container">
+            <div class="form-group form-group-nome">
+                <label>NOME:</label>
+                <select id="alunos" onchange="preencherNumero()">
+                    <option value="">Selecione seu nome</option>
+                    <!-- 9º Ano A -->
+                    <option value="1" data-grade="9A">ÁGATHA NIKOLLE DA SILVA RAMOS</option>
+                    <option value="2" data-grade="9A">AMANDA BEATRIZ LEAL MOURAD</option>
+                    <option value="4" data-grade="9A">ANNA NICOLY BENVINDO DOS SANTOS</option>
+                    <option value="5" data-grade="9A">ARTHUR DOS SANTOS</option>
+                    <option value="6" data-grade="9A">BEATRIZ UCHOA DOS SANTOS</option>
+                    <option value="7" data-grade="9A">BRUNO EDUARDO NOGUEIRA DE OLIVEIRA</option>
+                    <option value="8" data-grade="9A">CARLOS EDUARDO BELMIRO DOS SANTOS</option>
+                    <option value="9" data-grade="9A">CHRISTIAN DAVI DE OLIVEIRA</option>
+                    <option value="11" data-grade="9A">ERICK HENRIQUE RIBEIRO GONÇALVES</option>
+                    <option value="12" data-grade="9A">FILIPE RODRIGUES SANTOS</option>
+                    <option value="13" data-grade="9A">GABRIEL ALMEIDA MOSCARDINI</option>
+                    <option value="14" data-grade="9A">GIOVANA MOTA VAZ DE JESUS</option>
+                    <option value="15" data-grade="9A">GUILHERME DA SILVA GUIMARÃES</option>
+                    <option value="16" data-grade="9A">HELOÍSA LEAL DOS REIS</option>
+                    <option value="17" data-grade="9A">IAGO ANJOS DE JESUS</option>
+                    <option value="18" data-grade="9A">IGNACIO LINS SANTOS</option>
+                    <option value="19" data-grade="9A">ISADORA DE SOUZA SILVA</option>
+                    <option value="20" data-grade="9A">JOAO VICTOR BATISTA DUARTE</option>
+                    <option value="21" data-grade="9A">JULIANA SANTOS LIMA</option>
+                    <option value="25" data-grade="9A">MANUELA VITÓRIA LIMA DOS SANTOS</option>
+                    <option value="26" data-grade="9A">MIGUEL ALVES OLIVEIRA</option>
+                    <option value="27" data-grade="9A">NIKOLAS ANTONIO</option>
+                    <option value="28" data-grade="9A">ORIANA JOSE TUAREZ RENGEL</option>
+                    <option value="31" data-grade="9A">RAFAELLA VITÓRIA EXPEDITA DE ANDRADE MARQUES</option>
+                    <option value="33" data-grade="9A">RAYLAN DE JESUS BARBOSA</option>
+                    <option value="34" data-grade="9A">REBECA DOS SANTOS SOUSA</option>
+                    <option value="35" data-grade="9A">RICHARD JOSÉ DOS SANTOS</option>
+                    <option value="36" data-grade="9A">SARA CRISTINA PASSOS MARTINS</option>
+                    <option value="37" data-grade="9A">VANESSA CARDOSO DOS SANTOS</option>
+                    <option value="41" data-grade="9A">JULIA DIAS AZEVEDO</option>
+                    <option value="42" data-grade="9A">SAMARA HELEN DA SILVA</option>
+                    <option value="44" data-grade="9A">LUIS MATHEUS DA SILVA RAMOS</option>
+                    
+                    <!-- 9º Ano B -->
+                    <option value="1" data-grade="9B">ALEJANDRO VIEIRA LIMA</option>
+                    <option value="2" data-grade="9B">ALEX GUSTAVO DA SILVA VIEIRA</option>
+                    <option value="3" data-grade="9B">ALLAN BEZERRA DE LIMA</option>
+                    <option value="6" data-grade="9B">ARTHUR DE JESUS NASCIMENTO</option>
+                    <option value="8" data-grade="9B">ARTHUR MARYANO MENDES</option>
+                    <option value="9" data-grade="9B">CARLOS EDUARDO OLIVEIRA SABATERRA</option>
+                    <option value="10" data-grade="9B">DARYO PALMA GREGORIO</option>
+                    <option value="13" data-grade="9B">EDUARDA DE SOUSA OLIVEIRA</option>
+                    <option value="16" data-grade="9B">GIOVANNA MARTINEZ FERREIRA</option>
+                    <option value="17" data-grade="9B">GRAZIELLE VITÓRIA SILVA FIGUEIREDO</option>
+                    <option value="20" data-grade="9B">JULLIA OLIVEIRA DE SOUZA</option>
+                    <option value="21" data-grade="9B">KARINA DE JESUS SANTANA</option>
+                    <option value="24" data-grade="9B">LEONARDO JUNIOR ALBUQUERQUE DA SILVA</option>
+                    <option value="27" data-grade="9B">MARCOS DE OLIVEIRA CARVALHO</option>
+                    <option value="28" data-grade="9B">MARIA EDUARDA SILVA SOUZA</option>
+                    <option value="29" data-grade="9B">MOISES DOS SANTOS BOMFIM</option>
+                    <option value="30" data-grade="9B">NAHYMÊ VITORIA TAVARES DOS SANTOS</option>
+                    <option value="31" data-grade="9B">NICOLAS LUAN MENDES</option>
+                    <option value="32" data-grade="9B">PEDRO HENRIQUE ARRABAL MANZARO</option>
+                    <option value="33" data-grade="9B">PIETRO RAMON DE PAIVA MAGALHÃES LEITÃO</option>
+                    <option value="34" data-grade="9B">SOFIA DE FRANCA COSTA</option>
+                    <option value="35" data-grade="9B">TATIANA DA SILVA RODRIGUES</option>
+                    <option value="36" data-grade="9B">VITOR HUGO DOMINGOS SANTOS</option>
+                    <option value="37" data-grade="9B">WAGNER SILVA MEIRA</option>
+                    <option value="38" data-grade="9B">YASMIM ANDRADE DOS SANTOS</option>
+                    
+                    <!-- 9º Ano C -->
+                    <option value="2" data-grade="9C">ALEXANDRE SERAFIM JUNIOR</option>
+                    <option value="3" data-grade="9C">ANA LUIZA DO NASCIMENTO</option>
+                    <option value="5" data-grade="9C">ARTHUR EMANUEL ALMEIDA REIS</option>
+                    <option value="7" data-grade="9C">CARLOS AUGUSTO DIAS DE MENDONÇA</option>
+                    <option value="9" data-grade="9C">DAPHINE SINDIFER RODRIGUES SILVA</option>
+                    <option value="12" data-grade="9C">ELOISA DE OLIVEIRA CARVALHO</option>
+                    <option value="13" data-grade="9C">ENZO BAPTISTA MAIA</option>
+                    <option value="14" data-grade="9C">EVELLYN ANGELINA CAVALCANTE DE OLIVEIRA</option>
+                    <option value="16" data-grade="9C">GABRIEL VICTOR OLIVEIRA SANTOS</option>
+                    <option value="17" data-grade="9C">GIOVANNA SOUSA DA SILVA</option>
+                    <option value="18" data-grade="9C">GUSTAVO FURLAN GUEDES DA SILVA</option>
+                    <option value="23" data-grade="9C">KAUÃ BRYAN MAZARIO BARBEIRO</option>
+                    <option value="25" data-grade="9C">KAUAN ALAMBERT GOMES DE SOUSA</option>
+                    <option value="26" data-grade="9C">KEMILLY CARVALHO DA FONSECA BRITO</option>
+                    <option value="27" data-grade="9C">KLAIVYN WALLAS ARAUJO ESPIRITO SANTO</option>
+                    <option value="28" data-grade="9C">LORHANNY CAVALCANTE SANTOS</option>
+                    <option value="29" data-grade="9C">MANUELLA LELIS DA SILVA SIMAO</option>
+                    <option value="33" data-grade="9C">MONALISA DOS SANTOS BALDUINO</option>
+                    <option value="34" data-grade="9C">NATHAN SANTANA MONTEMOR</option>
+                    <option value="35" data-grade="9C">NICOLAS PYETRO CASTRO DE ALMEIDA SOUZA</option>
+                    <option value="36" data-grade="9C">NICOLLAS JHAMAL DA SILVA ALVES</option>
+                    <option value="37" data-grade="9C">SARAH SILVA ROGER</option>
+                    <option value="38" data-grade="9C">SERGIO RICARDO SILVA DE SOUZA</option>
+                    <option value="40" data-grade="9C">VINICIUS COSTA SILVA</option>
+                    <option value="41" data-grade="9C">VITÓRIA SILVA VIEIRA</option>
+                    <option value="42" data-grade="9C">FELIPE RITIELLI NEVES DA SILVA</option>
+                    <option value="43" data-grade="9C">JAQUELYNE PEREIRA GONCALVES</option>
+                    <option value="44" data-grade="9C">KRYSTOFER LEITE DA SILVA</option>
+                </select>
+            </div>
+            
+            <div class="form-group form-group-numero">
+                <label>N°:</label>
+                <input type="text" id="numero" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>SÉRIE:</label>
+                <select id="serie">
+                    <option value="9A">9°A</option>
+                    <option value="9B">9°B</option>
+                    <option value="9C">9°C</option>
+                </select>
+            </div>
+            
+            <div class="form-group form-group-data">
+                <label>DATA:</label>
+                <input type="date" id="data">
+            </div>
+        </div>
+        <h2><strong>ATIVIDADE DE CIÊNCIAS (2° BIMESTRE)</strong></h2>
+    </div>
+
+    <div id="questions">
+        <!-- Questão 1 -->
+        <div class="question">
+            <div class="question-text">1. [Análise de manchete científica]<br>
+            Uma matéria da Agência Fapesp traz o seguinte título: "COVID longa está ligada a dano duradouro na mitocôndria — a fábrica de energia das células".</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q1" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q1')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q1').click()">Carregar Imagem</button>
+                <img id="preview-q1" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="a"> 
+                    a) O dano mitocondrial afeta a produção de anticorpos, impedindo a regeneração de células do sangue.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="b"> 
+                    b) A diminuição da produção de energia afeta o funcionamento de células em tecidos com alta demanda energética, como músculos e cérebro.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="c"> 
+                    c) A destruição da mitocôndria impede a digestão intracelular, causando acúmulo de resíduos tóxicos.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="d"> 
+                    d) A mitocôndria danificada altera a estrutura da parede celular, impedindo a entrada de nutrientes.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 2 -->
+        <div class="question">
+            <div class="question-text">2. [Leitura de gráfico - duplicação do DNA]<br>
+            Observe o gráfico a seguir, que representa a quantidade de DNA ao longo do ciclo celular de uma célula eucariota:</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q2" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q2')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q2').click()">Carregar Imagem</button>
+                <img id="preview-q2" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="a"> 
+                    a) Durante a fase G1 a célula está se dividindo, por isso há pico na quantidade de DNA.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="b"> 
+                    b) A duplicação do DNA ocorre na fase M, preparando a célula para se especializar.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="c"> 
+                    c) O pico na fase S indica a replicação do DNA, essencial para garantir o material genético nas células-filhas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="d"> 
+                    d) A queda na fase G2 indica que o DNA está sendo transformado em RNA para ser transmitido às células filhas.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 3 -->
+        <div class="question">
+            <div class="question-text">3. [Cenário com inteligência artificial]<br>
+            Uma empresa desenvolveu um sistema de IA para prever doenças hereditárias a partir da análise do DNA de recém-nascidos. O sistema lê a sequência de bases nitrogenadas e identifica mutações associadas a doenças.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q3" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q3')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q3').click()">Carregar Imagem</button>
+                <img id="preview-q3" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="a"> 
+                    a) A sequência de bases nitrogenadas no DNA determina a cor da pele e do cabelo, mas não influencia o risco de doenças.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="b"> 
+                    b) O DNA é formado por proteínas que reagem com enzimas e geram características hereditárias.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="c"> 
+                    c) As trincas de nucleotídeos (códons) definem a sequência de aminoácidos das proteínas, e mutações podem alterar essas funções.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="d"> 
+                    d) As organelas celulares modificam o DNA constantemente, o que justifica a necessidade de atualizações em tempo real.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 4 -->
+        <div class="question">
+            <div class="question-text">4. [Estudo de caso clínico]<br>
+            Um paciente com deficiência na produção de proteínas digestivas foi diagnosticado com disfunção nos ribossomos.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q4" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q4')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q4').click()">Carregar Imagem</button>
+                <img id="preview-q4" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="a"> 
+                    a) Os ribossomos sintetizam proteínas essenciais, e sua falha compromete a digestão por deficiência de enzimas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="b"> 
+                    b) Os ribossomos produzem lipídios, que revestem o intestino e previnem refluxo gástrico.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="c"> 
+                    c) A função dos ribossomos é absorver os nutrientes, e sua falha impede o transporte de glicose.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="d"> 
+                    d) Os ribossomos são exclusivos das mitocôndrias, e sua falha impede o controle da temperatura corporal.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 5 -->
+        <div class="question">
+            <div class="question-text">5. [Simulador virtual - célula 3D]<br>
+            Você usou um simulador online de uma célula animal em 3D. Ao clicar sobre o retículo endoplasmático rugoso, apareceu a seguinte mensagem: "Estrutura responsável por produzir e transportar proteínas."</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q5" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q5')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q5').click()">Carregar Imagem</button>
+                <img id="preview-q5" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q5" value="a"> 
+                    a) As proteínas continuariam a ser produzidas normalmente no núcleo.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="b"> 
+                    b) A célula não seria capaz de produzir as proteínas que compõem suas estruturas e enzimas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="c"> 
+                    c) A síntese de DNA seria interrompida, causando a morte celular imediata.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="d"> 
+                    d) O material genético se espalharia pelo citoplasma, perdendo a capacidade de codificar enzimas.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 6 -->
+        <div class="question">
+            <div class="question-text">6. [Leitura de tabela - bases nitrogenadas]<br>
+            Complete corretamente a tabela de pares de bases nitrogenadas:</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q6" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q6')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q6').click()">Carregar Imagem</button>
+                <img id="preview-q6" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q6" value="a"> 
+                    a) A-T, T-A, G-C, C-G
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="b"> 
+                    b) A-C, T-G, G-A, C-T
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="c"> 
+                    c) A-U, T-A, G-U, C-A
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="d"> 
+                    d) A-G, T-C, G-A, C-T
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 7 -->
+        <div class="question">
+            <div class="question-text">7. [Contexto histórico e gênero na ciência]<br>
+            Rosalind Franklin foi uma cientista fundamental para o entendimento da estrutura do DNA, mas seu trabalho foi apropriado sem os devidos créditos por Watson e Crick, em 1953.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q7" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q7')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q7').click()">Carregar Imagem</button>
+                <img id="preview-q7" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q7" value="a"> 
+                    a) Franklin se destacou por identificar os pares de bases do RNA.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="b"> 
+                    b) A descoberta da dupla hélice do DNA só foi possível graças às imagens de cristalografia obtidas por Franklin.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="c"> 
+                    c) Crick e Watson criaram a técnica de raios X usada por Franklin para visualizar os cromossomos.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="d"> 
+                    d) O trabalho de Franklin foi ignorado porque sua teoria se opunha à existência do DNA.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 8 -->
+        <div class="question">
+            <div class="question-text">8. [Aplicação biotecnológica]<br>
+            Uma empresa de genética vegetal alterou a sequência de DNA de uma planta para que ela resistisse a pragas sem uso de agrotóxicos. Após a análise, foi verificado que a planta expressava uma nova proteína não presente anteriormente.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q8" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q8')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q8').click()">Carregar Imagem</button>
+                <img id="preview-q8" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q8" value="a"> 
+                    a) O DNA é imutável, e a modificação gerou um erro que beneficiou a planta.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="b"> 
+                    b) Os ribossomos da planta foram substituídos por proteínas sintéticas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="c"> 
+                    c) A alteração na sequência de nucleotídeos levou à formação de novos códons, gerando proteínas diferentes.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="d"> 
+                    d) A fotossíntese foi aumentada, ativando genes latentes da planta.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 9 (Discursiva) -->
+        <div class="question">
+            <div class="question-text">9. [Dilema ético + Genética forense]<br>
+            Um laboratório de genética ajudou a solucionar um crime a partir do DNA presente em um fio de cabelo encontrado na cena. O material genético foi comparado com um banco de dados criminal.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q9" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q9')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q9').click()">Carregar Imagem</button>
+                <img id="preview-q9" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="discursive">
+                <p>Explique como o DNA pode ser usado para identificar uma pessoa. Em seguida, discuta uma possível questão ética envolvendo o uso de bancos de dados genéticos em investigações criminais.</p>
+                <textarea name="q9" placeholder="Digite sua resposta aqui..."></textarea>
+            </div>
+        </div>
+
+        <!-- Questão 10 (Discursiva) -->
+        <div class="question">
+            <div class="question-text">10. [Análise e síntese + estrutura celular]<br>
+            Durante um experimento, uma aluna notou que, em células vegetais, estruturas verdes chamadas cloroplastos estavam sempre voltadas para a luz.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q10" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q10')">
+                <button class="upload-btn" onclick="document.getElementById('upload-q10').click()">Carregar Imagem</button>
+                <img id="preview-q10" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="discursive">
+                <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
+                <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
+    <div id="result"></div>
+    
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <h2>Dashboard de Análise de Desempenho</h2>
+        
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="student">Análise Individual</button>
+            <button class="tab-button" data-tab="class">Desempenho da Turma</button>
+        </div>
+        
+        <div id="student-tab" class="tab-content active">
+            <div class="dashboard-controls">
+                <div class="dashboard-group">
+                    <label for="dashboard-grade">Série:</label>
+                    <select id="dashboard-grade">
+                        <option value="9A">9°A</option>
+                        <option value="9B">9°B</option>
+                        <option value="9C">9°C</option>
+                    </select>
+                </div>
+                
+                <div class="dashboard-group">
+                    <label for="dashboard-student">Aluno:</label>
+                    <select id="dashboard-student">
+                        <option value="">Selecione um aluno</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="student-chart"></canvas>
+            </div>
+            
+            <div class="weaknesses">
+                <h3>Principais Dificuldades</h3>
+                <div id="weaknesses-list">
+                    <p>Selecione um aluno para visualizar suas dificuldades.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="class-tab" class="tab-content">
+            <div class="dashboard-controls">
+                <div class="dashboard-group">
+                    <label for="class-grade">Série:</label>
+                    <select id="class-grade">
+                        <option value="9A">9°A</option>
+                        <option value="9B">9°B</option>
+                        <option value="9C">9°C</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="class-chart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dados dos alunos por série
+        const studentsData = {
+            '9A': [
+                {number: '1', name: 'ÁGATHA NIKOLLE DA SILVA RAMOS'},
+                {number: '2', name: 'AMANDA BEATRIZ LEAL MOURAD'},
+                {number: '4', name: 'ANNA NICOLY BENVINDO DOS SANTOS'},
+                {number: '5', name: 'ARTHUR DOS SANTOS'},
+                {number: '6', name: 'BEATRIZ UCHOA DOS SANTOS'},
+                {number: '7', name: 'BRUNO EDUARDO NOGUEIRA DE OLIVEIRA'},
+                {number: '8', name: 'CARLOS EDUARDO BELMIRO DOS SANTOS'},
+                {number: '9', name: 'CHRISTIAN DAVI DE OLIVEIRA'},
+                {number: '11', name: 'ERICK HENRIQUE RIBEIRO GONÇALVES'},
+                {number: '12', name: 'FILIPE RODRIGUES SANTOS'},
+                {number: '13', name: 'GABRIEL ALMEIDA MOSCARDINI'},
+                {number: '14', name: 'GIOVANA MOTA VAZ DE JESUS'},
+                {number: '15', name: 'GUILHERME DA SILVA GUIMARÃES'},
+                {number: '16', name: 'HELOÍSA LEAL DOS REIS'},
+                {number: '17', name: 'IAGO ANJOS DE JESUS'},
+                {number: '18', name: 'IGNACIO LINS SANTOS'},
+                {number: '19', name: 'ISADORA DE SOUZA SILVA'},
+                {number: '20', name: 'JOAO VICTOR BATISTA DUARTE'},
+                {number: '21', name: 'JULIANA SANTOS LIMA'},
+                {number: '25', name: 'MANUELA VITÓRIA LIMA DOS SANTOS'},
+                {number: '26', name: 'MIGUEL ALVES OLIVEIRA'},
+                {number: '27', name: 'NIKOLAS ANTONIO'},
+                {number: '28', name: 'ORIANA JOSE TUAREZ RENGEL'},
+                {number: '31', name: 'RAFAELLA VITÓRIA EXPEDITA DE ANDRADE MARQUES'},
+                {number: '33', name: 'RAYLAN DE JESUS BARBOSA'},
+                {number: '34', name: 'REBECA DOS SANTOS SOUSA'},
+                {number: '35', name: 'RICHARD JOSÉ DOS SANTOS'},
+                {number: '36', name: 'SARA CRISTINA PASSOS MARTINS'},
+                {number: '37', name: 'VANESSA CARDOSO DOS SANTOS'},
+                {number: '41', name: 'JULIA DIAS AZEVEDO'},
+                {number: '42', name: 'SAMARA HELEN DA SILVA'},
+                {number: '44', name: 'LUIS MATHEUS DA SILVA RAMOS'}
+            ],
+            '9B': [
+                {number: '1', name: 'ALEJANDRO VIEIRA LIMA'},
+                {number: '2', name: 'ALEX GUSTAVO DA SILVA VIEIRA'},
+                {number: '3', name: 'ALLAN BEZERRA DE LIMA'},
+                {number: '6', name: 'ARTHUR DE JESUS NASCIMENTO'},
+                {number: '8', name: 'ARTHUR MARYANO MENDES'},
+                {number: '9', name: 'CARLOS EDUARDO OLIVEIRA SABATERRA'},
+                {number: '10', name: 'DARYO PALMA GREGORIO'},
+                {number: '13', name: 'EDUARDA DE SOUSA OLIVEIRA'},
+                {number: '16', name: 'GIOVANNA MARTINEZ FERREIRA'},
+                {number: '17', name: 'GRAZIELLE VITÓRIA SILVA FIGUEIREDO'},
+                {number: '20', name: 'JULLIA OLIVEIRA DE SOUZA'},
+                {number: '21', name: 'KARINA DE JESUS SANTANA'},
+                {number: '24', name: 'LEONARDO JUNIOR ALBUQUERQUE DA SILVA'},
+                {number: '27', name: 'MARCOS DE OLIVEIRA CARVALHO'},
+                {number: '28', name: 'MARIA EDUARDA SILVA SOUZA'},
+                {number: '29', name: 'MOISES DOS SANTOS BOMFIM'},
+                {number: '30', name: 'NAHYMÊ VITORIA TAVARES DOS SANTOS'},
+                {number: '31', name: 'NICOLAS LUAN MENDES'},
+                {number: '32', name: 'PEDRO HENRIQUE ARRABAL MANZARO'},
+                {number: '33', name: 'PIETRO RAMON DE PAIVA MAGALHÃES LEITÃO'},
+                {number: '34', name: 'SOFIA DE FRANCA COSTA'},
+                {number: '35', name: 'TATIANA DA SILVA RODRIGUES'},
+                {number: '36', name: 'VITOR HUGO DOMINGOS SANTOS'},
+                {number: '37', name: 'WAGNER SILVA MEIRA'},
+                {number: '38', name: 'YASMIM ANDRADE DOS SANTOS'}
+            ],
+            '9C': [
+                {number: '2', name: 'ALEXANDRE SERAFIM JUNIOR'},
+                {number: '3', name: 'ANA LUIZA DO NASCIMENTO'},
+                {number: '5', name: 'ARTHUR EMANUEL ALMEIDA REIS'},
+                {number: '7', name: 'CARLOS AUGUSTO DIAS DE MENDONÇA'},
+                {number: '9', name: 'DAPHINE SINDIFER RODRIGUES SILVA'},
+                {number: '12', name: 'ELOISA DE OLIVEIRA CARVALHO'},
+                {number: '13', name: 'ENZO BAPTISTA MAIA'},
+                {number: '14', name: 'EVELLYN ANGELINA CAVALCANTE DE OLIVEIRA'},
+                {number: '16', name: 'GABRIEL VICTOR OLIVEIRA SANTOS'},
+                {number: '17', name: 'GIOVANNA SOUSA DA SILVA'},
+                {number: '18', name: 'GUSTAVO FURLAN GUEDES DA SILVA'},
+                {number: '23', name: 'KAUÃ BRYAN MAZARIO BARBEIRO'},
+                {number: '25', name: 'KAUAN ALAMBERT GOMES DE SOUSA'},
+                {number: '26', name: 'KEMILLY CARVALHO DA FONSECA BRITO'},
+                {number: '27', name: 'KLAIVYN WALLAS ARAUJO ESPIRITO SANTO'},
+                {number: '28', name: 'LORHANNY CAVALCANTE SANTOS'},
+                {number: '29', name: 'MANUELLA LELIS DA SILVA SIMAO'},
+                {number: '33', name: 'MONALISA DOS SANTOS BALDUINO'},
+                {number: '34', name: 'NATHAN SANTANA MONTEMOR'},
+                {number: '35', name: 'NICOLAS PYETRO CASTRO DE ALMEIDA SOUZA'},
+                {number: '36', name: 'NICOLLAS JHAMAL DA SILVA ALVES'},
+                {number: '37', name: 'SARAH SILVA ROGER'},
+                {number: '38', name: 'SERGIO RICARDO SILVA DE SOUZA'},
+                {number: '40', name: 'VINICIUS COSTA SILVA'},
+                {number: '41', name: 'VITÓRIA SILVA VIEIRA'},
+                {number: '42', name: 'FELIPE RITIELLI NEVES DA SILVA'},
+                {number: '43', name: 'JAQUELYNE PEREIRA GONCALVES'},
+                {number: '44', name: 'KRYSTOFER LEITE DA SILVA'}
+            ]
+        };
+
+        // Respostas corretas
+        const correctAnswers = {
+            q1: "b",
+            q2: "c",
+            q3: "c",
+            q4: "a",
+            q5: "b",
+            q6: "a",
+            q7: "b",
+            q8: "c"
+        };
+
+        // Função para pré-visualizar imagens carregadas
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Preencher número do aluno automaticamente
+        function preencherNumero() {
+            const selectAluno = document.getElementById('alunos');
+            const inputNumero = document.getElementById('numero');
+            const selectSerie = document.getElementById('serie');
+            
+            if (selectAluno.value) {
+                const selectedOption = selectAluno.options[selectAluno.selectedIndex];
+                inputNumero.value = selectedOption.value;
+                selectSerie.value = selectedOption.getAttribute('data-grade');
+            } else {
+                inputNumero.value = '';
+            }
+        }
+
+        // Configurar data atual
+        document.getElementById('data').valueAsDate = new Date();
+
+        // Submeter formulário
+        function submitForm() {
+            const aluno = document.getElementById('alunos').value;
+            const nome = document.getElementById('alunos').options[document.getElementById('alunos').selectedIndex].text;
+            const numero = document.getElementById('numero').value;
+            const serie = document.getElementById('serie').value;
+            const data = document.getElementById('data').value;
+            
+            if (!aluno) {
+                alert('Por favor, selecione seu nome na lista.');
+                return;
+            }
+            
+            let score = 0;
+            let totalQuestions = Object.keys(correctAnswers).length;
+            let results = {};
+            
+            // Verificar respostas
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                
+                if (selectedOption) {
+                    results[questionName] = selectedOption.value;
+                    if (selectedOption.value === correctAnswers[questionName]) {
+                        score++;
+                        document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
+                            if (opt.value === correctAnswers[questionName]) {
+                                opt.parentElement.classList.add('correct');
+                            }
+                        });
+                    } else {
+                        document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
+                            if (opt.value === selectedOption.value) {
+                                opt.parentElement.classList.add('incorrect');
+                            }
+                            if (opt.value === correctAnswers[questionName]) {
+                                opt.parentElement.classList.add('correct');
+                            }
+                        });
+                    }
+                } else {
+                    results[questionName] = null;
+                    document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
+                        if (opt.value === correctAnswers[questionName]) {
+                            opt.parentElement.classList.add('correct');
+                        }
+                    });
+                }
+            }
+            
+            // Calcular porcentagem
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            // Mostrar resultado
+            document.getElementById('result').innerHTML = `
+                <p>${nome}, você acertou ${score} de ${totalQuestions} questões (${percentage}%).</p>
+                <p>As questões discursivas serão avaliadas separadamente pelo professor.</p>
+            `;
+            
+            // Desabilitar botão de envio
+            document.getElementById('submit-btn').disabled = true;
+            
+            // Mostrar dashboard
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Inicializar gráficos
+            initializeCharts(percentage, results);
+        }
+
+        // Inicializar gráficos do dashboard
+        function initializeCharts(percentage, results) {
+            // Gráfico individual
+            const studentCtx = document.getElementById('student-chart').getContext('2d');
+            const studentChart = new Chart(studentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Acertos', 'Erros'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Desempenho Individual',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico da turma (dados fictícios)
+            const classCtx = document.getElementById('class-chart').getContext('2d');
+            const classChart = new Chart(classCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+                    datasets: [{
+                        label: 'Número de Alunos',
+                        data: [2, 5, 8, 10, 5],
+                        backgroundColor: '#004aad',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Número de Alunos'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Faixa de Desempenho'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Desempenho da Turma',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Listar dificuldades (baseado nas questões erradas)
+            const weaknessesList = document.getElementById('weaknesses-list');
+            weaknessesList.innerHTML = '';
+            
+            let hasWeaknesses = false;
+            for (const question in results) {
+                if (results[question] !== correctAnswers[question]) {
+                    const weaknessItem = document.createElement('div');
+                    weaknessItem.className = 'weakness-item';
+                    weaknessItem.textContent = `Dificuldade na questão ${question.replace('q', '')}: ${getQuestionTopic(question)}`;
+                    weaknessesList.appendChild(weaknessItem);
+                    hasWeaknesses = true;
+                }
+            }
+            
+            if (!hasWeaknesses) {
+                weaknessesList.innerHTML = '<p>Parabéns! Você não apresentou dificuldades significativas nesta atividade.</p>';
+            }
+        }
+
+        // Retorna o tópico da questão (simulação)
+        function getQuestionTopic(questionId) {
+            const topics = {
+                q1: "Função das mitocôndrias",
+                q2: "Ciclo celular e duplicação do DNA",
+                q3: "DNA e doenças hereditárias",
+                q4: "Função dos ribossomos",
+                q5: "Retículo endoplasmático rugoso",
+                q6: "Pares de bases nitrogenadas",
+                q7: "História da descoberta do DNA",
+                q8: "Biotecnologia e modificação genética"
+            };
+            return topics[questionId] || "Tópico não especificado";
+        }
+
+        // Configurar abas do dashboard
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remover classe active de todos os botões e conteúdos
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Adicionar classe active ao botão e conteúdo clicado
+                this.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Preencher select de alunos no dashboard
+        document.getElementById('dashboard-grade').addEventListener('change', function() {
+            const grade = this.value;
+            const studentSelect = document.getElementById('dashboard-student');
+            
+            studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';
+            
+            studentsData[grade].forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.number;
+                option.textContent = `${student.number} - ${student.name}`;
+                studentSelect.appendChild(option);
+            });
+        });
+
+        // Inicializar select de alunos para a primeira série
+        document.getElementById('dashboard-grade').dispatchEvent(new Event('change'));
+    </script>
+</body>
+</html>

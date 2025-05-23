@@ -12,14 +12,14 @@
             margin: 0 auto;
             padding: 20px;
             color: #333;
-            background-color: #e6f2ff;
+            background: linear-gradient(to bottom, #006400, #000000);
         }
         .header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 15px;
             border-bottom: 2px solid #004aad;
-            background-color: white;
+            background: linear-gradient(to right, #87CEFA, #C0C0C0);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -29,7 +29,7 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 30px;
-            background: white;
+            background: linear-gradient(to right, #87CEFA, #C0C0C0);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -63,7 +63,7 @@
             font-size: 16px;
         }
         .question {
-            background: #f0f8ff;
+            background: linear-gradient(to right, #87CEFA, #C0C0C0);
             margin-bottom: 30px;
             padding: 25px;
             border-radius: 8px;
@@ -402,7 +402,6 @@
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q1" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q1')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q1').click()">Carregar Imagem</button>
                 <img id="preview-q1" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -428,12 +427,10 @@
 
         <!-- Questão 2 -->
         <div class="question">
-            <div class="question-text">2. [Leitura de gráfico - duplicação do DNA]<br>
-            Observe o gráfico a seguir, que representa a quantidade de DNA ao longo do ciclo celular de uma célula eucariota:</div>
+            <div class="question-text">2. Observe o gráfico a seguir, que representa a quantidade de DNA ao longo do ciclo celular de uma célula eucariota:</div>
             
             <div class="image-upload-container">
-                <input type="file" id="upload-q2" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q2')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q2').click()">Carregar Imagem</button>
+                <input type="file" id="upload-q2" accept="Se você quiser, posso salvar essa imagem com o nome ciclo_celular_dna.png para você baixar e usar. Deseja isso?">
                 <img id="preview-q2" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -459,12 +456,10 @@
 
         <!-- Questão 3 -->
         <div class="question">
-            <div class="question-text">3. [Cenário com inteligência artificial]<br>
-            Uma empresa desenvolveu um sistema de IA para prever doenças hereditárias a partir da análise do DNA de recém-nascidos. O sistema lê a sequência de bases nitrogenadas e identifica mutações associadas a doenças.</div>
+            <div class="question-text">3.Uma empresa desenvolveu um sistema de IA para prever doenças hereditárias a partir da análise do DNA de recém-nascidos. O sistema lê a sequência de bases nitrogenadas e identifica mutações associadas a doenças.</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q3" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q3')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q3').click()">Carregar Imagem</button>
                 <img id="preview-q3" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -490,12 +485,10 @@
 
         <!-- Questão 4 -->
         <div class="question">
-            <div class="question-text">4. [Estudo de caso clínico]<br>
-            Um paciente com deficiência na produção de proteínas digestivas foi diagnosticado com disfunção nos ribossomos.</div>
+            <div class="question-text">4.Um paciente com deficiência na produção de proteínas digestivas foi diagnosticado com disfunção nos ribossomos.</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q4" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q4')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q4').click()">Carregar Imagem</button>
                 <img id="preview-q4" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -521,12 +514,10 @@
 
         <!-- Questão 5 -->
         <div class="question">
-            <div class="question-text">5. [Simulador virtual - célula 3D]<br>
-            Você usou um simulador online de uma célula animal em 3D. Ao clicar sobre o retículo endoplasmático rugoso, apareceu a seguinte mensagem: "Estrutura responsável por produzir e transportar proteínas."</div>
+            <div class="question-text">5.Você usou um simulador online de uma célula animal em 3D. Ao clicar sobre o retículo endoplasmático rugoso, apareceu a seguinte mensagem: "Estrutura responsável por produzir e transportar proteínas."</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q5" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q5')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q5').click()">Carregar Imagem</button>
                 <img id="preview-q5" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -552,12 +543,10 @@
 
         <!-- Questão 6 -->
         <div class="question">
-            <div class="question-text">6. [Leitura de tabela - bases nitrogenadas]<br>
-            Complete corretamente a tabela de pares de bases nitrogenadas:</div>
+            <div class="question-text">6.Assinale a alternativa que apresenta a sequência de bases nitrogenadas, que combina com a seguinte sequência de pares de bases:T-A, A-T, C-G, G-C</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q6" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q6')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q6').click()">Carregar Imagem</button>
                 <img id="preview-q6" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -583,12 +572,10 @@
 
         <!-- Questão 7 -->
         <div class="question">
-            <div class="question-text">7. [Contexto histórico e gênero na ciência]<br>
-            Rosalind Franklin foi uma cientista fundamental para o entendimento da estrutura do DNA, mas seu trabalho foi apropriado sem os devidos créditos por Watson e Crick, em 1953.</div>
+            <div class="question-text">7.Rosalind Franklin foi uma cientista fundamental para o entendimento da estrutura do DNA, mas seu trabalho foi apropriado sem os devidos créditos por Watson e Crick, em 1953.</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q7" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q7')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q7').click()">Carregar Imagem</button>
                 <img id="preview-q7" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -614,12 +601,10 @@
 
         <!-- Questão 8 -->
         <div class="question">
-            <div class="question-text">8. [Aplicação biotecnológica]<br>
-            Uma empresa de genética vegetal alterou a sequência de DNA de uma planta para que ela resistisse a pragas sem uso de agrotóxicos. Após a análise, foi verificado que a planta expressava uma nova proteína não presente anteriormente.</div>
+            <div class="question-text">8.Uma empresa de genética vegetal alterou a sequência de DNA de uma planta para que ela resistisse a pragas sem uso de agrotóxicos. Após a análise, foi verificado que a planta expressava uma nova proteína não presente anteriormente.</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q8" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q8')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q8').click()">Carregar Imagem</button>
                 <img id="preview-q8" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -645,12 +630,10 @@
 
         <!-- Questão 9 (Discursiva) -->
         <div class="question">
-            <div class="question-text">9. [Dilema ético + Genética forense]<br>
-            Um laboratório de genética ajudou a solucionar um crime a partir do DNA presente em um fio de cabelo encontrado na cena. O material genético foi comparado com um banco de dados criminal.</div>
+            <div class="question-text">9.Um laboratório de genética ajudou a solucionar um crime a partir do DNA presente em um fio de cabelo encontrado na cena. O material genético foi comparado com um banco de dados criminal.</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q9" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q9')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q9').click()">Carregar Imagem</button>
                 <img id="preview-q9" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             
@@ -662,12 +645,10 @@
 
         <!-- Questão 10 (Discursiva) -->
         <div class="question">
-            <div class="question-text">10. [Análise e síntese + estrutura celular]<br>
-            Durante um experimento, uma aluna notou que, em células vegetais, estruturas verdes chamadas cloroplastos estavam sempre voltadas para a luz.</div>
+            <div class="question-text">10.Durante um experimento, uma aluna notou que, em células vegetais, estruturas verdes chamadas cloroplastos estavam sempre voltadas para a luz.</div>
             
             <div class="image-upload-container">
                 <input type="file" id="upload-q10" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q10')">
-                <button class="upload-btn" onclick="document.getElementById('upload-q10').click()">Carregar Imagem</button>
                 <img id="preview-q10" class="preview-image" alt="Pré-visualização da imagem">
             </div>
             

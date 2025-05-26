@@ -1,1914 +1,1079 @@
-
-
-<!DOCTYPE html>
-<html lang="pt-br">
+!DOCTYPE html>
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AGENDAMENTO DE APARELHOS</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-  <style>
-    :root {
-      --azul-escuro: #0a2463;
-      --azul-medio: #3e92cc;
-      --azul-claro: #d6eaff;
-      --verde: #4caf50;
-      --vermelho: #f44336;
-      --cinza-escuro: #333;
-      --cinza-claro: #f5f5f5;
-      --branco: #ffffff;
-      --branco-brilhante: rgba(255, 255, 255, 0.9);
-      --verde-disponivel: #2ecc71;
-      --azul-agendado: #3498db;
-      --azul-selecionado: #1a5276;
-      --fundo-cinza: #f0f0f0;
-      --entregue: #d4edda;
-      --nao-entregue: #f8d7da;
-      --expirado: #fff3cd;
-      --recente: #ffebee;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
-
-    body {
-      background: linear-gradient(to bottom, var(--azul-escuro) 0%, var(--azul-escuro) 50%, #111 50%, #111 100%);
-      color: var(--cinza-claro);
-      min-height: 100vh;
-      padding: 20px;
-    }
-
-    h2 {
-      color: var(--branco);
-      margin-bottom: 20px;
-      text-align: center;
-      text-transform: uppercase;
-    }
-
-    h3 {
-      color: #000000;
-      margin: 0.4cm 0;
-      text-align: center;
-      text-transform: uppercase;
-      font-size: 0.9em;
-    }
-
-    .container {
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .form-container {
-      flex: 1;
-      min-width: 300px;
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      color: var(--cinza-escuro);
-    }
-
-    .calendar-container {
-      flex: 1;
-      min-width: 300px;
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      color: var(--cinza-escuro);
-    }
-
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group {
-      flex: 1;
-      min-width: 220px;
-      position: relative;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--azul-escuro);
-    }
-
-    .form-group input,
-    .form-group select:not(#aula) {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid var(--branco-brilhante);
-      border-radius: 8px;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      background-color: var(--branco);
-    }
-
-    /* Estilo específico para o campo "Aula" */
-    .form-group select#aula {
-      width: 120px;
-      padding: 8px 10px;
-    }
-
-    .form-group input[type="time"] {
-      width: 120px;
-      padding: 8px 10px;
-    }
-
-    /* Estilo para o campo data com tamanho ajustável */
-    .form-group input[type="text"]#dataAgendamento {
-      width: auto;
-      min-width: 100px;
-      padding: 8px 10px;
-    }
-
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--azul-medio);
-      box-shadow: 0 0 0 3px rgba(62, 146, 204, 0.2);
-      outline: none;
-    }
-
-    /* Estilo para dropdown com cores alternadas */
-    .form-group select option:nth-child(odd) {
-      background-color: var(--azul-claro);
-    }
-    
-    .form-group select option:nth-child(even) {
-      background-color: var(--branco);
-    }
-
-    .calendar {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      margin-bottom: 0.4cm;
-    }
-
-    .calendar th,
-    .calendar td {
-      width: 40px;
-      height: 40px;
-      text-align: center;
-      vertical-align: middle;
-      border: 1px solid var(--branco-brilhante);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      background-color: var(--branco);
-      padding: 10px;
-    }
-
-    .calendar th {
-      background-color: var(--azul-claro);
-      border: 1px solid var(--branco-brilhante);
-    }
-
-    .calendar td.disponivel {
-      background-color: var(--verde-disponivel);
-      color: white;
-      cursor: default;
-      border: 1px solid var(--branco-brilhante);
-    }
-
-    .calendar td.agendado {
-      background-color: var(--azul-agendado);
-      color: white;
-      border: 1px solid var(--branco-brilhante);
-      cursor: default;
-    }
-
-    .calendar td.selecionado {
-      background-color: var(--azul-selecionado);
-      color: white;
-      font-weight: bold;
-      border: 1px solid var(--branco-brilhante);
-      cursor: default;
-    }
-
-    .calendar td.indisponivel {
-      background-color: #ccc;
-      cursor: not-allowed;
-      color: #666;
-      border: 1px solid var(--branco-brilhante);
-    }
-
-    .calendar td:hover:not(.indisponivel) {
-      opacity: 0.8;
-    }
-
-    /* Estilos para a tabela de histórico */
-    .historico-table {
-      width: 100%;
-      border-collapse: collapse;
-      table-layout: fixed;
-    }
-
-    .historico-table th,
-    .historico-table td {
-      border: 1px solid #ccc;
-      padding: 8px;
-      text-align: center;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      font-size: 0.8em;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .historico-table th {
-      background-color: var(--azul-claro);
-      color: #000;
-      font-weight: bold;
-    }
-
-    .historico-table td {
-      color: #000;
-    }
-
-    .historico-table tr.excluido td {
-      color: var(--vermelho);
-    }
-
-    .historico-table tr.entregue {
-      background-color: var(--entregue);
-    }
-
-    .historico-table tr.nao-entregue {
-      background-color: var(--nao-entregue);
-    }
-    
-    .historico-table tr.expirado {
-      background-color: var(--expirado);
-    }
-    
-    .historico-table tr.recente {
-      background-color: var(--recente);
-    }
-
-    /* Definindo larguras específicas para cada coluna */
-    .historico-table th:nth-child(1),
-    .historico-table td:nth-child(1) {
-      width: 10%;
-    }
-
-    .historico-table th:nth-child(2),
-    .historico-table td:nth-child(2) {
-      width: 15%;
-    }
-
-    .historico-table th:nth-child(3),
-    .historico-table td:nth-child(3) {
-      width: 8%;
-    }
-
-    .historico-table th:nth-child(4),
-    .historico-table td:nth-child(4) {
-      width: 12%;
-    }
-
-    .historico-table th:nth-child(5),
-    .historico-table td:nth-child(5) {
-      width: 20%;
-    }
-
-    .historico-table th:nth-child(6),
-    .historico-table td:nth-child(6) {
-      width: 10%;
-    }
-    
-    .historico-table th:nth-child(7),
-    .historico-table td:nth-child(7) {
-      width: 10%;
-    }
-    
-    .historico-table th:nth-child(8),
-    .historico-table td:nth-child(8) {
-      width: 15%;
-    }
-
-    /* Estilos para os botões */
-    .buttons-container {
-      display: flex;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .btn-cadastrar {
-      background-color: var(--azul-medio);
-      color: white;
-    }
-
-    .btn-cadastrar:hover {
-      background-color: #2c7ebd;
-    }
-
-    .btn-cadastrar:active {
-      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-limpar {
-      background-color: #f0f0f0;
-      color: #333;
-    }
-
-    .btn-limpar:hover {
-      background-color: #e0e0e0;
-    }
-
-    .btn-limpar:active {
-      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-excluir {
-      background-color: var(--vermelho);
-      color: white;
-    }
-
-    .btn-excluir:hover {
-      background-color: #d32f2f;
-    }
-
-    .btn-excluir:active {
-      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
-    }
-    
-    .btn-entregar {
-      background-color: var(--verde);
-      color: white;
-    }
-
-    .btn-entregar:hover {
-      background-color: #3d8b40;
-    }
-
-    /* Estilos para o calendário pop-up */
-    .datepicker-container {
-      position: relative;
-    }
-
-    .datepicker-popup {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 1000;
-      background-color: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      width: 300px;
-    }
-
-    .datepicker-popup.active {
-      display: block;
-    }
-
-    .datepicker-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .datepicker-nav {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .datepicker-title {
-      font-weight: bold;
-    }
-
-    .datepicker-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
-    }
-
-    .datepicker-weekday {
-      text-align: center;
-      font-weight: bold;
-      padding: 5px;
-    }
-
-    .datepicker-day {
-      text-align: center;
-      padding: 5px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    .datepicker-day:hover {
-      background-color: var(--azul-claro);
-    }
-
-    .datepicker-day.selected {
-      background-color: var(--azul-medio);
-      color: white;
-    }
-
-    .datepicker-day.disabled {
-      color: #ccc;
-      cursor: not-allowed;
-    }
-
-    .datepicker-today {
-      font-weight: bold;
-    }
-
-    .datepicker-other-month {
-      color: #aaa;
-    }
-
-    .datepicker-input {
-      cursor: pointer;
-    }
-
-    .conflict-message {
-      color: var(--vermelho);
-      font-weight: bold;
-      margin-top: 10px;
-      text-align: center;
-      display: none;
-    }
-    
-    /* Estilos para o modal de devolução */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1001;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-content {
-      background-color: #fefefe;
-      margin: 15% auto;
-      padding: 20px;
-      border: 1px solid #888;
-      border-radius: 8px;
-      width: 80%;
-      max-width: 500px;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close:hover {
-      color: black;
-    }
-
-    .modal-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    
-    /* Estilo para o botão de exportar */
-    .export-buttons {
-      margin-bottom: 15px;
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade de Ciências - 9º Ano</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background: linear-gradient(to bottom, #006400, #000000);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #004aad;
+            background: linear-gradient(to right, #87CEFA, #C0C0C0);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #87CEFA, #C0C0C0);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            align-items: flex-end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group-nome {
+            flex: 3;
+            min-width: 300px;
+        }
+        .form-group-numero {
+            width: 80px;
+        }
+        .form-group-data {
+            width: 150px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #004aad;
+            font-size: 16px;
+        }
+        select, input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .question {
+            background: linear-gradient(to right, #87CEFA, #C0C0C0);
+            margin-bottom: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 8px 8px 15px rgba(0,0,0,0.15), -3px 0 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #004aad;
+            border-bottom: 4px solid #004aad;
+            position: relative;
+        }
+        .question:before {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: -8px;
+            right: 8px;
+            top: 8px;
+            background: rgba(0,0,0,0.05);
+            z-index: -1;
+            border-radius: 8px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #004aad;
+            font-size: 16px;
+        }
+        .image-upload-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .upload-btn {
+            background-color: #004aad;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #003882;
+        }
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 15px;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px solid #ddd;
+            display: none;
+        }
+        .options {
+            margin-left: 0;
+        }
+        .option {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+        .option:hover {
+            background-color: #f0f0f0;
+        }
+        .correct {
+            background-color: #d4edda;
+        }
+        .incorrect {
+            background-color: #f8d7da;
+        }
+        button {
+            display: block;
+            margin: 30px auto;
+            padding: 12px 30px;
+            background-color: #004aad;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            background-color: #003882;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #result {
+            text-align: center;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 4px;
+            background-color: #e7f3ff;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .enem-stamp {
+            background-color: #004aad;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .discursive {
+            margin-top: 20px;
+            background-color: white;
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            margin-top: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .dashboard h2 {
+            text-align: center;
+            color: #004aad;
+            margin-bottom: 20px;
+        }
+        .dashboard-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .dashboard-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .chart-container {
+            width: 100%;
+            height: 400px;
+            margin: 20px 0;
+        }
+        .weaknesses {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .weaknesses h3 {
+            margin-top: 0;
+            color: #004aad;
+        }
+        .weakness-item {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            border-left: 3px solid #004aad;
+        }
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #e9ecef;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .tab-button.active {
+            background-color: #004aad;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <h2>AGENDAMENTO DE APARELHOS</h2>
-  <div class="container">
-    <div class="form-container">
-      <div class="form-row">
-        <div class="form-group">
-          <label>PROFESSOR:</label>
-          <select id="professor" onchange="atualizarEmail()">
-            <option>Selecione</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>EMAIL:</label>
-          <input type="email" id="email-professor" readonly>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>APARELHO:</label>
-          <select id="equipamentoAgendamento" onchange="atualizarMarca()">
-            <option value="">Selecione</option>
-            <option value="TABLET">TABLET</option>
-            <option value="SMARTPHONE">SMARTPHONE</option>
-            <option value="CHROMEBOOK">CHROMEBOOK</option>
-            <option value="NOTEBOOK">NOTEBOOK</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>MARCA:</label>
-          <input type="text" id="marca" readonly>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>N° DE APARELHOS:</label>
-          <input type="number" id="quantidadeAgendamento" min="1" value="1">
-        </div>
-        
-        <div class="form-group datepicker-container">
-          <label>DATA:</label>
-          <input type="text" id="dataAgendamento" class="datepicker-input" readonly placeholder="Clique para selecionar">
-          <div class="datepicker-popup" id="datepickerPopup">
-            <div class="datepicker-header">
-              <button class="datepicker-nav" id="prevMonth">&lt;</button>
-              <div class="datepicker-title" id="datepickerMonthYear"></div>
-              <button class="datepicker-nav" id="nextMonth">&gt;</button>
+    <div class="header">
+        <h1><strong>E.E.PROFª WANDA MASCAGNI DE SÁ</strong></h1>
+        <div class="form-container">
+            <div class="form-group form-group-nome">
+                <label>NOME:</label>
+                <select id="alunos" onchange="preencherNumero()">
+                    <option value="">Selecione seu nome</option>
+                    <!-- 9º Ano A -->
+                    <option value="1" data-grade="9A">ÁGATHA NIKOLLE DA SILVA RAMOS</option>
+                    <option value="2" data-grade="9A">AMANDA BEATRIZ LEAL MOURAD</option>
+                    <option value="4" data-grade="9A">ANNA NICOLY BENVINDO DOS SANTOS</option>
+                    <option value="5" data-grade="9A">ARTHUR DOS SANTOS</option>
+                    <option value="6" data-grade="9A">BEATRIZ UCHOA DOS SANTOS</option>
+                    <option value="7" data-grade="9A">BRUNO EDUARDO NOGUEIRA DE OLIVEIRA</option>
+                    <option value="8" data-grade="9A">CARLOS EDUARDO BELMIRO DOS SANTOS</option>
+                    <option value="9" data-grade="9A">CHRISTIAN DAVI DE OLIVEIRA</option>
+                    <option value="11" data-grade="9A">ERICK HENRIQUE RIBEIRO GONÇALVES</option>
+                    <option value="12" data-grade="9A">FILIPE RODRIGUES SANTOS</option>
+                    <option value="13" data-grade="9A">GABRIEL ALMEIDA MOSCARDINI</option>
+                    <option value="14" data-grade="9A">GIOVANA MOTA VAZ DE JESUS</option>
+                    <option value="15" data-grade="9A">GUILHERME DA SILVA GUIMARÃES</option>
+                    <option value="16" data-grade="9A">HELOÍSA LEAL DOS REIS</option>
+                    <option value="17" data-grade="9A">IAGO ANJOS DE JESUS</option>
+                    <option value="18" data-grade="9A">IGNACIO LINS SANTOS</option>
+                    <option value="19" data-grade="9A">ISADORA DE SOUZA SILVA</option>
+                    <option value="20" data-grade="9A">JOAO VICTOR BATISTA DUARTE</option>
+                    <option value="21" data-grade="9A">JULIANA SANTOS LIMA</option>
+                    <option value="25" data-grade="9A">MANUELA VITÓRIA LIMA DOS SANTOS</option>
+                    <option value="26" data-grade="9A">MIGUEL ALVES OLIVEIRA</option>
+                    <option value="27" data-grade="9A">NIKOLAS ANTONIO</option>
+                    <option value="28" data-grade="9A">ORIANA JOSE TUAREZ RENGEL</option>
+                    <option value="31" data-grade="9A">RAFAELLA VITÓRIA EXPEDITA DE ANDRADE MARQUES</option>
+                    <option value="33" data-grade="9A">RAYLAN DE JESUS BARBOSA</option>
+                    <option value="34" data-grade="9A">REBECA DOS SANTOS SOUSA</option>
+                    <option value="35" data-grade="9A">RICHARD JOSÉ DOS SANTOS</option>
+                    <option value="36" data-grade="9A">SARA CRISTINA PASSOS MARTINS</option>
+                    <option value="37" data-grade="9A">VANESSA CARDOSO DOS SANTOS</option>
+                    <option value="41" data-grade="9A">JULIA DIAS AZEVEDO</option>
+                    <option value="42" data-grade="9A">SAMARA HELEN DA SILVA</option>
+                    <option value="44" data-grade="9A">LUIS MATHEUS DA SILVA RAMOS</option>
+                    
+                    <!-- 9º Ano B -->
+                    <option value="1" data-grade="9B">ALEJANDRO VIEIRA LIMA</option>
+                    <option value="2" data-grade="9B">ALEX GUSTAVO DA SILVA VIEIRA</option>
+                    <option value="3" data-grade="9B">ALLAN BEZERRA DE LIMA</option>
+                    <option value="6" data-grade="9B">ARTHUR DE JESUS NASCIMENTO</option>
+                    <option value="8" data-grade="9B">ARTHUR MARYANO MENDES</option>
+                    <option value="9" data-grade="9B">CARLOS EDUARDO OLIVEIRA SABATERRA</option>
+                    <option value="10" data-grade="9B">DARYO PALMA GREGORIO</option>
+                    <option value="13" data-grade="9B">EDUARDA DE SOUSA OLIVEIRA</option>
+                    <option value="16" data-grade="9B">GIOVANNA MARTINEZ FERREIRA</option>
+                    <option value="17" data-grade="9B">GRAZIELLE VITÓRIA SILVA FIGUEIREDO</option>
+                    <option value="20" data-grade="9B">JULLIA OLIVEIRA DE SOUZA</option>
+                    <option value="21" data-grade="9B">KARINA DE JESUS SANTANA</option>
+                    <option value="24" data-grade="9B">LEONARDO JUNIOR ALBUQUERQUE DA SILVA</option>
+                    <option value="27" data-grade="9B">MARCOS DE OLIVEIRA CARVALHO</option>
+                    <option value="28" data-grade="9B">MARIA EDUARDA SILVA SOUZA</option>
+                    <option value="29" data-grade="9B">MOISES DOS SANTOS BOMFIM</option>
+                    <option value="30" data-grade="9B">NAHYMÊ VITORIA TAVARES DOS SANTOS</option>
+                    <option value="31" data-grade="9B">NICOLAS LUAN MENDES</option>
+                    <option value="32" data-grade="9B">PEDRO HENRIQUE ARRABAL MANZARO</option>
+                    <option value="33" data-grade="9B">PIETRO RAMON DE PAIVA MAGALHÃES LEITÃO</option>
+                    <option value="34" data-grade="9B">SOFIA DE FRANCA COSTA</option>
+                    <option value="35" data-grade="9B">TATIANA DA SILVA RODRIGUES</option>
+                    <option value="36" data-grade="9B">VITOR HUGO DOMINGOS SANTOS</option>
+                    <option value="37" data-grade="9B">WAGNER SILVA MEIRA</option>
+                    <option value="38" data-grade="9B">YASMIM ANDRADE DOS SANTOS</option>
+                    
+                    <!-- 9º Ano C -->
+                    <option value="2" data-grade="9C">ALEXANDRE SERAFIM JUNIOR</option>
+                    <option value="3" data-grade="9C">ANA LUIZA DO NASCIMENTO</option>
+                    <option value="5" data-grade="9C">ARTHUR EMANUEL ALMEIDA REIS</option>
+                    <option value="7" data-grade="9C">CARLOS AUGUSTO DIAS DE MENDONÇA</option>
+                    <option value="9" data-grade="9C">DAPHINE SINDIFER RODRIGUES SILVA</option>
+                    <option value="12" data-grade="9C">ELOISA DE OLIVEIRA CARVALHO</option>
+                    <option value="13" data-grade="9C">ENZO BAPTISTA MAIA</option>
+                    <option value="14" data-grade="9C">EVELLYN ANGELINA CAVALCANTE DE OLIVEIRA</option>
+                    <option value="16" data-grade="9C">GABRIEL VICTOR OLIVEIRA SANTOS</option>
+                    <option value="17" data-grade="9C">GIOVANNA SOUSA DA SILVA</option>
+                    <option value="18" data-grade="9C">GUSTAVO FURLAN GUEDES DA SILVA</option>
+                    <option value="23" data-grade="9C">KAUÃ BRYAN MAZARIO BARBEIRO</option>
+                    <option value="25" data-grade="9C">KAUAN ALAMBERT GOMES DE SOUSA</option>
+                    <option value="26" data-grade="9C">KEMILLY CARVALHO DA FONSECA BRITO</option>
+                    <option value="27" data-grade="9C">KLAIVYN WALLAS ARAUJO ESPIRITO SANTO</option>
+                    <option value="28" data-grade="9C">LORHANNY CAVALCANTE SANTOS</option>
+                    <option value="29" data-grade="9C">MANUELLA LELIS DA SILVA SIMAO</option>
+                    <option value="33" data-grade="9C">MONALISA DOS SANTOS BALDUINO</option>
+                    <option value="34" data-grade="9C">NATHAN SANTANA MONTEMOR</option>
+                    <option value="35" data-grade="9C">NICOLAS PYETRO CASTRO DE ALMEIDA SOUZA</option>
+                    <option value="36" data-grade="9C">NICOLLAS JHAMAL DA SILVA ALVES</option>
+                    <option value="37" data-grade="9C">SARAH SILVA ROGER</option>
+                    <option value="38" data-grade="9C">SERGIO RICARDO SILVA DE SOUZA</option>
+                    <option value="40" data-grade="9C">VINICIUS COSTA SILVA</option>
+                    <option value="41" data-grade="9C">VITÓRIA SILVA VIEIRA</option>
+                    <option value="42" data-grade="9C">FELIPE RITIELLI NEVES DA SILVA</option>
+                    <option value="43" data-grade="9C">JAQUELYNE PEREIRA GONCALVES</option>
+                    <option value="44" data-grade="9C">KRYSTOFER LEITE DA SILVA</option>
+                </select>
             </div>
-            <div class="datepicker-grid" id="datepickerWeekdays"></div>
-            <div class="datepicker-grid" id="datepickerDays"></div>
-          </div>
+            
+            <div class="form-group form-group-numero">
+                <label>N°:</label>
+                <input type="text" id="numero" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>SÉRIE:</label>
+                <select id="serie">
+                    <option value="9A">9°A</option>
+                    <option value="9B">9°B</option>
+                    <option value="9C">9°C</option>
+                </select>
+            </div>
+            
+            <div class="form-group form-group-data">
+                <label>DATA:</label>
+                <input type="date" id="data">
+            </div>
         </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>TURMA:</label>
-          <select id="studentClass" class="form-control" required onchange="atualizarSala()">
-            <option value="">Selecione a turma</option>
-            <option value="6° ANO A MANHA">6° ANO A MANHA</option>
-            <option value="6° ANO B MANHA">6° ANO B MANHA</option>
-            <option value="6° ANO C MANHA">6° ANO C MANHA</option>
-            <option value="6° ANO D MANHA">6° ANO D MANHA</option>
-            <option value="6° ANO E TARDE">6° ANO E TARDE</option>
-            <option value="6° ANO F TARDE">6° ANO F TARDE</option>
-            <option value="7° ANO A TARDE">7° ANO A TARDE</option>
-            <option value="7° ANO B TARDE">7° ANO B TARDE</option>
-            <option value="7° ANO C TARDE">7° ANO C TARDE</option>
-            <option value="7° ANO D TARDE">7° ANO D TARDE</option>
-            <option value="7° ANO E TARDE">7° ANO E TARDE</option>
-            <option value="7° ANO F TARDE">7° ANO F TARDE</option>
-            <option value="8° ANO A TARDE">8° ANO A TARDE</option>
-            <option value="8° ANO B TARDE">8° ANO B TARDE</option>
-            <option value="8° ANO C TARDE">8° ANO C TARDE</option>
-            <option value="8° ANO D TARDE">8° ANO D TARDE</option>
-            <option value="8° ANO E TARDE">8° ANO E TARDE</option>
-            <option value="9° ANO A TARDE">9° ANO A TARDE</option>
-            <option value="9° ANO B TARDE">9° ANO B TARDE</option>
-            <option value="9° ANO C TARDE">9° ANO C TARDE</option>
-            <option value="9° ANO D TARDE">9° ANO D TARDE</option>
-            <option value="1ª SERIE A MANHA">1ª SERIE A MANHA</option>
-            <option value="1ª SERIE B MANHA">1ª SERIE B MANHA</option>
-            <option value="1ª SERIE C MANHA">1ª SERIE C MANHA</option>
-            <option value="1ª SERIE D MANHA">1ª SERIE D MANHA</option>
-            <option value="1ª SERIE E MANHA">1ª SERIE E MANHA</option>
-            <option value="1ª SERIE F MANHA">1ª SERIE F MANHA</option>
-            <option value="1ª SERIE G TARDE">1ª SERIE G TARDE</option>
-            <option value="1ª SERIE H NOITE">1ª SERIE H NOITE</option>
-            <option value="1ª SERIE I NOITE">1ª SERIE I NOITE</option>
-            <option value="2ª SERIE A MANHA">2ª SERIE A MANHA</option>
-            <option value="2ª SERIE B MANHA">2ª SERIE B MANHA</option>
-            <option value="2ª SERIE C MANHA">2ª SERIE C MANHA</option>
-            <option value="2ª SERIE D MANHA">2ª SERIE D MANHA</option>
-            <option value="2ª SERIE E MANHA">2ª SERIE E MANHA</option>
-            <option value="2ª SERIE F NOITE">2ª SERIE F NOITE</option>
-            <option value="2ª SERIE G NOITE">2ª SERIE G NOITE</option>
-            <option value="2ª SERIE H NOITE">2ª SERIE H NOITE</option>
-            <option value="2ª SERIE I NOITE">2ª SERIE I NOITE</option>
-            <option value="3ª SERIE A MANHA">3ª SERIE A MANHA</option>
-            <option value="3ª SERIE B MANHA">3ª SERIE B MANHA</option>
-            <option value="3ª SERIE C MANHA">3ª SERIE C MANHA</option>
-            <option value="3ª SERIE D NOITE">3ª SERIE D NOITE</option>
-            <option value="3ª SERIE E NOITE">3ª SERIE E NOITE</option>
-            <option value="3ª SERIE F NOITE">3ª SERIE F NOITE</option>
-            <option value="3ª SERIE G NOITE">3ª SERIE G NOITE</option>
-            <option value="4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA">4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA</option>
-          </select>
-        </div>
-        
-        <div class="form-group">
-          <label>SALA:</label>
-          <input type="text" id="sala" readonly>
-        </div>
-      </div>
-
-      <!-- CAMPO AULA ADICIONADO -->
-      <div class="form-row">
-        <div class="form-group">
-          <label>AULA:</label>
-          <select id="aula" disabled>
-            <option value="">Selecione a turma primeiro</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="conflict-message" id="conflictMessage">
-        Já existe um agendamento para este local/horário!
-      </div>
-
-      <div class="buttons-container">
-        <button class="btn btn-cadastrar" onclick="agendarEquipamento()">AGENDAR</button>
-        <button class="btn btn-limpar" onclick="limparFormulario()">LIMPAR</button>
-      </div>
+        <h2><strong>ATIVIDADE DE CIÊNCIAS (2° BIMESTRE)</strong></h2>
     </div>
 
-    <div class="calendar-container">
-      <div class="export-buttons">
-        <button class="btn btn-cadastrar" onclick="exportarParaPDF()">Exportar para PDF</button>
-        <button class="btn btn-cadastrar" onclick="exportarParaCSV()">Exportar para CSV</button>
-      </div>
-      
-      <div style="margin-bottom: 20px;">
-        <select id="monthSelect"></select>
-        <select id="yearSelect"></select>
-      </div>
+    <div id="questions">
+        <!-- Questão 1 -->
+        <div class="question">
+            <div class="question-text">1.Uma matéria da Agência Fapesp traz o seguinte título: "COVID longa está ligada a dano duradouro na mitocôndria — a fábrica de energia das células".</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q1" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q1')">
+                <img id="preview-q1" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q1" value="a"> 
+                    a) O dano mitocondrial afeta a produção de anticorpos, impedindo a regeneração de células do sangue.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="b"> 
+                    b) A diminuição da produção de energia afeta o funcionamento de células em tecidos com alta demanda energética, como músculos e cérebro.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="c"> 
+                    c) A destruição da mitocôndria impede a digestão intracelular, causando acúmulo de resíduos tóxicos.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q1" value="d"> 
+                    d) A mitocôndria danificada altera a estrutura da parede celular, impedindo a entrada de nutrientes.
+                </label>
+            </div>
+        </div>
 
-      <table class="calendar">
-        <thead>
-          <tr>
-            <th>Dom</th>
-            <th>Seg</th>
-            <th>Ter</th>
-            <th>Qua</th>
-            <th>Qui</th>
-            <th>Sex</th>
-            <th>Sáb</th>
-          </tr>
-        </thead>
-        <tbody id="calendarBody">
-          <!-- Dias serão inseridos via JavaScript -->
-        </tbody>
-      </table>
+        <!-- Questão 2 -->
+        <div class="question">
+            <div class="question-text">2. Observe o gráfico a seguir, que representa a quantidade de DNA ao longo do ciclo celular de uma célula eucariota:</div>
+             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgS8Lc3goYosFNCNVpHE9pS10hV6dCaPBHkR_Nq_dWS3jQd49HJjzaXUVEMo-lQFI7uRWXpFQS-I0Db3n9eS7MWmvdHVyWUefejBWxirMEi7o5i3JE5Wiy9b9BauE2eyeLpZHTyoNsxolUVhbpz-zeFo8kKoKDzbVyW03PAXIGRMA5FEa4OQ93VsnLg5IGN/s644/ciclo_celular_dna.png.png"></center><br>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q2" value="a"> 
+                    a) Durante a fase G1 a célula está se dividindo, por isso há pico na quantidade de DNA.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="b"> 
+                    b) A duplicação do DNA ocorre na fase M, preparando a célula para se especializar.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="c"> 
+                    c) O pico na fase S indica a replicação do DNA, essencial para garantir o material genético nas células-filhas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q2" value="d"> 
+                    d) A queda na fase G2 indica que o DNA está sendo transformado em RNA para ser transmitido às células filhas.
+                </label>
+            </div>
+        </div>
 
-      <h3>HISTÓRICO DE AGENDAMENTOS</h3>
-      <table class="historico-table">
-        <thead>
-          <tr>
-            <th>DATA</th>
-            <th>TURMA</th>
-            <th>N° APARELHOS</th>
-            <th>APARELHO</th>
-            <th>PROFESSOR</th>
-            <th>AULA(s)</th>
-            <th>ENTREGA</th>
-            <th>AÇÃO</th>
-          </tr>
-        </thead>
-        <tbody id="historico-body">
-          <!-- Histórico dinâmico -->
-        </tbody>
-      </table>
+        <!-- Questão 3 -->
+        <div class="question">
+            <div class="question-text">3.Uma empresa desenvolveu um sistema de IA para prever doenças hereditárias a partir da análise do DNA de recém-nascidos. O sistema lê a sequência de bases nitrogenadas e identifica mutações associadas a doenças.</div>
+             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvyaiJFYO_8vEF42t15w8y4I0k2_TnN9yUkhERVLBEbfeCrHe-9XlPsWO9Kcr03Lb4jvmNkNY7-MLavEggGNAyXBZV5OhwHfkCk5IU5XMx9v8pAEy6grnib_3x3v7BbqlDFzc6COFZPEdnDtAZc2dUk1hPL6RMEbGcFWtbO6iXdHguFJxV4Rb4QTqodYLK/s140/elyx-elyxyak.webp"></center><br>
+            <div class="image-upload-container">
+                <input type="file" id="upload-q3" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q3')">
+                <img id="preview-q3" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q3" value="a"> 
+                    a) A sequência de bases nitrogenadas no DNA determina a cor da pele e do cabelo, mas não influencia o risco de doenças.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="b"> 
+                    b) O DNA é formado por proteínas que reagem com enzimas e geram características hereditárias.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="c"> 
+                    c) As trincas de nucleotídeos (códons) definem a sequência de aminoácidos das proteínas, e mutações podem alterar essas funções.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q3" value="d"> 
+                    d) As organelas celulares modificam o DNA constantemente, o que justifica a necessidade de atualizações em tempo real.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 4 -->
+        <div class="question">
+            <div class="question-text">4.Um paciente com deficiência na produção de proteínas digestivas foi diagnosticado com disfunção nos ribossomos.</div>
+            <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9jz51Zc5l2hKEpx5_myNmVUZ1_TI2Eare7i0c_KkLzI5HD1bUE9O-h4zm3SJS0oBvNwgUEW2DFzqcV7QFSjs59QwJpViYM2VvfFRFFxIkqaSS5gudS9CkZ6pDU0r_DwIVXPq6RSSI7Y1Pxu0aiP0BP4FfUJ98L1NNQAzV2EGmahwWaKM1SwqLdihNDg88/s603/C0044367-Dna_compaction-removebg-preview.png"</center><br><br>
+                        <div class="options">
+                <label class="option">
+                    <input type="radio" name="q4" value="a"> 
+                    a) Os ribossomos sintetizam proteínas essenciais, e sua falha compromete a digestão por deficiência de enzimas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="b"> 
+                    b) Os ribossomos produzem lipídios, que revestem o intestino e previnem refluxo gástrico.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="c"> 
+                    c) A função dos ribossomos é absorver os nutrientes, e sua falha impede o transporte de glicose.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q4" value="d"> 
+                    d) Os ribossomos são exclusivos das mitocôndrias, e sua falha impede o controle da temperatura corporal.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 5 -->
+        <div class="question">
+            <div class="question-text">5.Você usou um simulador online de uma célula animal em 3D. Ao clicar sobre o retículo endoplasmático rugoso, apareceu a seguinte mensagem: "Estrutura responsável por produzir e transportar proteínas."</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q5" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q5')">
+                <img id="preview-q5" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q5" value="a"> 
+                    a) As proteínas continuariam a ser produzidas normalmente no núcleo.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="b"> 
+                    b) A célula não seria capaz de produzir as proteínas que compõem suas estruturas e enzimas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="c"> 
+                    c) A síntese de DNA seria interrompida, causando a morte celular imediata.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q5" value="d"> 
+                    d) O material genético se espalharia pelo citoplasma, perdendo a capacidade de codificar enzimas.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 6 -->
+        <div class="question">
+            <div class="question-text">6.Assinale a alternativa que apresenta a sequência de bases nitrogenadas, que combina com a seguinte sequência de pares de bases:T-A, A-T, C-G, G-C</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q6" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q6')">
+                <img id="preview-q6" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q6" value="a"> 
+                    a) A-T, T-A, G-C, C-G
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="b"> 
+                    b) A-C, T-G, G-A, C-T
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="c"> 
+                    c) A-U, T-A, G-U, C-A
+                </label>
+                <label class="option">
+                    <input type="radio" name="q6" value="d"> 
+                    d) A-G, T-C, G-A, C-T
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 7 -->
+        <div class="question">
+            <div class="question-text">7.Rosalind Franklin foi uma cientista fundamental para o entendimento da estrutura do DNA, mas seu trabalho foi apropriado sem os devidos créditos por Watson e Crick, em 1953.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q7" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q7')">
+                <img id="preview-q7" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q7" value="a"> 
+                    a) Franklin se destacou por identificar os pares de bases do RNA.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="b"> 
+                    b) A descoberta da dupla hélice do DNA só foi possível graças às imagens de cristalografia obtidas por Franklin.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="c"> 
+                    c) Crick e Watson criaram a técnica de raios X usada por Franklin para visualizar os cromossomos.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q7" value="d"> 
+                    d) O trabalho de Franklin foi ignorado porque sua teoria se opunha à existência do DNA.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 8 -->
+        <div class="question">
+            <div class="question-text">8.Uma empresa de genética vegetal alterou a sequência de DNA de uma planta para que ela resistisse a pragas sem uso de agrotóxicos. Após a análise, foi verificado que a planta expressava uma nova proteína não presente anteriormente.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q8" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q8')">
+                <img id="preview-q8" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="options">
+                <label class="option">
+                    <input type="radio" name="q8" value="a"> 
+                    a) O DNA é imutável, e a modificação gerou um erro que beneficiou a planta.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="b"> 
+                    b) Os ribossomos da planta foram substituídos por proteínas sintéticas.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="c"> 
+                    c) A alteração na sequência de nucleotídeos levou à formação de novos códons, gerando proteínas diferentes.
+                </label>
+                <label class="option">
+                    <input type="radio" name="q8" value="d"> 
+                    d) A fotossíntese foi aumentada, ativando genes latentes da planta.
+                </label>
+            </div>
+        </div>
+
+        <!-- Questão 9 (Discursiva) -->
+        <div class="question">
+            <div class="question-text">9.Um laboratório de genética ajudou a solucionar um crime a partir do DNA presente em um fio de cabelo encontrado na cena. O material genético foi comparado com um banco de dados criminal.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q9" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q9')">
+                <img id="preview-q9" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="discursive">
+                <p>Explique como o DNA pode ser usado para identificar uma pessoa. Em seguida, discuta uma possível questão ética envolvendo o uso de bancos de dados genéticos em investigações criminais.</p>
+                <textarea name="q9" placeholder="Digite sua resposta aqui..."></textarea>
+            </div>
+        </div>
+
+        <!-- Questão 10 (Discursiva) -->
+        <div class="question">
+            <div class="question-text">10.Durante um experimento, uma aluna notou que, em células vegetais, estruturas verdes chamadas cloroplastos estavam sempre voltadas para a luz.</div>
+            
+            <div class="image-upload-container">
+                <input type="file" id="upload-q10" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q10')">
+                <img id="preview-q10" class="preview-image" alt="Pré-visualização da imagem">
+            </div>
+            
+            <div class="discursive">
+                <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
+ <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
+                <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Modal para confirmação de devolução -->
-  <div id="devolucaoModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="fecharModal()">&times;</span>
-      <h3>Finalizar Agendamento</h3>
-      <p id="modalText"></p>
-      <div class="form-group">
-        <label for="horaEntregaModal">Hora da Entrega:</label>
-        <input type="time" id="horaEntregaModal" value="">
-      </div>
-      <div class="modal-buttons">
-        <button class="btn btn-limpar" onclick="fecharModal()">Cancelar</button>
-        <button class="btn btn-entregar" onclick="finalizarAgendamento()">Confirmar</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Inicializa o jsPDF
-    const { jsPDF } = window.jspdf;
+    <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
+    <div id="result"></div>
     
-    // Banco de dados simulado para equipamentos
-    const sistemaDB = {
-      equipamentos: {
-        "1": { id: "1", categoria: "TABLET", quantidade_disponivel: 10, localizacao: "LABORATÓRIO 1", status: "Disponível", agendamentos: [] },
-        "2": { id: "2", categoria: "SMARTPHONE", quantidade_disponivel: 15, localizacao: "LABORATÓRIO 1", status: "Disponível", agendamentos: [] },
-        "3": { id: "3", categoria: "CHROMEBOOK", quantidade_disponivel: 5, localizacao: "LABORATÓRIO 2", status: "Disponível", agendamentos: [] },
-        "4": { id: "4", categoria: "NOTEBOOK", quantidade_disponivel: 8, localizacao: "LABORATÓRIO 2", status: "Disponível", agendamentos: [] },
-        "5": { id: "5", categoria: "TABLET", quantidade_disponivel: 12, localizacao: "SALA 1", status: "Disponível", agendamentos: [] }
-      },
-      agendamentos: [],
-      historico: []
-    };
-
-    // Funções de integração fornecidas
-    function verificarDisponibilidade(categoria, quantidade, local) {
-      const equipamentos = sistemaDB.equipamentos;
-      let disponivel = 0;
-
-      for (const id in equipamentos) {
-        const eq = equipamentos[id];
-        if (eq.categoria === categoria && eq.localizacao === local && eq.status === "Disponível") {
-          disponivel += eq.quantidade_disponivel;
-        }
-      }
-      return disponivel >= quantidade;
-    }
-
-    function registrarAgendamento(agendamento) {
-      const { categoria, quantidade, local } = agendamento;
-      let quantidadeRestante = quantidade;
-
-      // Atualiza o estoque
-      for (const id in sistemaDB.equipamentos) {
-        const eq = sistemaDB.equipamentos[id];
-        if (eq.categoria === categoria && eq.localizacao === local && eq.status === "Disponível") {
-          const reservar = Math.min(quantidadeRestante, eq.quantidade_disponivel);
-          eq.quantidade_disponivel -= reservar;
-          eq.status = eq.quantidade_disponivel > 0 ? "Disponível" : "Em uso";
-          quantidadeRestante -= reservar;
-
-          // Vincula o agendamento ao equipamento
-          eq.agendamentos.push({
-            id: agendamento.id,
-            quantidade: reservar,
-            data: agendamento.data
-          });
-
-          if (quantidadeRestante === 0) break;
-        }
-      }
-
-      // Adiciona ao histórico
-      sistemaDB.agendamentos.push(agendamento);
-      sistemaDB.historico.push({
-        tipo: "agendamento",
-        equipamento: categoria,
-        local,
-        quantidade,
-        data: new Date().toISOString(),
-        detalhes: `Agendado por ${agendamento.professor}`
-      });
-
-      salvarBancoDados();
-      atualizarListaEquipamentos(); // Atualiza a UI
-    }
-
-    function finalizarAgendamento(idAgendamento) {
-      const agendamento = sistemaDB.agendamentos.find(ag => ag.id === idAgendamento);
-      if (!agendamento) return;
-
-      // Libera os equipamentos
-      for (const id in sistemaDB.equipamentos) {
-        const eq = sistemaDB.equipamentos[id];
-        const agendamentoEquip = eq.agendamentos.find(ag => ag.id === idAgendamento);
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <h2>Dashboard de Análise de Desempenho</h2>
         
-        if (agendamentoEquip) {
-          eq.quantidade_disponivel += agendamentoEquip.quantidade;
-          eq.status = "Disponível";
-          eq.agendamentos = eq.agendamentos.filter(ag => ag.id !== idAgendamento);
-        }
-      }
-
-      // Atualiza o status do agendamento
-      agendamento.status = "Finalizado";
-      sistemaDB.historico.push({
-        tipo: "devolucao",
-        equipamento: agendamento.categoria,
-        local: agendamento.local,
-        quantidade: agendamento.quantidade,
-        data: new Date().toISOString()
-      });
-
-      salvarBancoDados();
-      atualizarListaAgendamentos(); // Atualiza a UI
-    }
-
-    function validarConflitos(novoAgendamento) {
-      return sistemaDB.agendamentos.some(ag => (
-        ag.local === novoAgendamento.local &&
-        ag.data === novoAgendamento.data &&
-        ag.status !== "Finalizado"
-      ));
-    }
-
-    function agendarEquipamento() {
-      const professor = document.getElementById("professor").value;
-      const aparelho = document.getElementById("equipamentoAgendamento").value;
-      const turma = document.getElementById("studentClass").value;
-      const numAparelhos = parseInt(document.getElementById("quantidadeAgendamento").value);
-      const data = document.getElementById("dataAgendamento").value;
-      const sala = document.getElementById("sala").value;
-      const aula = document.getElementById("aula").value;
-      
-      if (!professor || professor === "Selecione" || !aparelho || !turma || !numAparelhos || !data || !sala || !aula) {
-        alert("Preencha todos os campos obrigatórios do formulário antes de agendar!");
-        return;
-      }
-
-      const [dia, mes, ano] = data.split('/');
-      const key = `${ano}-${mes}`;
-      
-      if (!agendamentos[key]) {
-        agendamentos[key] = [];
-      }
-      
-      const id = gerarIdUnico();
-      
-      const novoAgendamento = { 
-        id,
-        dia: parseInt(dia),
-        aparelho,
-        professor,
-        turma,
-        numAparelhos,
-        aula,
-        sala,
-        horaRetirada: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) // Hora atual como padrão
-      };
-      
-      agendamentos[key].push(novoAgendamento);
-      
-      // Salva no localStorage
-      salvarAgendamentos();
-      
-      // Atualiza o calendário e o histórico
-      renderCalendarBody(parseInt(ano), parseInt(mes) - 1);
-      
-      // Limpa a seleção
-      if (selectedDay) {
-        selectedDay.classList.remove('selecionado');
-        selectedDay.classList.add('agendado');
-        selectedDay = null;
-      }
-      selectedDate = null;
-      document.getElementById('dataAgendamento').value = '';
-      
-      alert("Agendamento realizado com sucesso!");
-    }
-
-    // Funções auxiliares
-    function salvarBancoDados() {
-      localStorage.setItem('sistemaDB', JSON.stringify(sistemaDB));
-    }
-
-    function carregarBancoDados() {
-      const dados = localStorage.getItem('sistemaDB');
-      if (dados) {
-        Object.assign(sistemaDB, JSON.parse(dados));
-      }
-    }
-
-    function atualizarListaEquipamentos() {
-      console.log("Atualizando lista de equipamentos...");
-    }
-
-    function atualizarListaAgendamentos() {
-      console.log("Atualizando lista de agendamentos...");
-    }
-
-    // Dados dos professores
-    const teacherEmails = {
-      "ADEMAR RIBEIRO DE SOUZA": "ademarribeirosouza@prof.educacao.sp.gov.br",
-      "ALEX LUTH PEREIRA MARANHAO": "luth@prof.educacao.sp.gov.br",
-      "ALEXANDRE SILVA LIMA": "alexandresilvalima@prof.educacao.sp.gov.br",
-      "ALEXSANDRA PAULA VARELLA DE SOUZA": "avarella@prof.educacao.sp.gov.br",
-      "ALINE CARDOSO": "aline.cardoso@servidor.educacao.sp.gov.br",
-      "ALISON VASCONCELOS BESERRA": "alisonv@prof.educacao.sp.gov.br",
-      "AMAURI TEODORO DE OLIVEIRA": "amaurit@prof.educacao.sp.gov.br",
-      "ANA PAULA DE OLIVEIRA SOUZA": "ana.souza59@servidor.educacao.sp.gov.br",
-      "ANA PAULA DOS SANTOS": "paulasantosa@prof.educacao.sp.gov.br",
-      "ANDRE LUIZ TAVARES": "andreltavares@prof.educacao.sp.gov.br",
-      "ANDREIA DOS SANTOS FREITAS": "sanfreitas@prof.educacao.sp.gov.br",
-      "ANDREIA MADUREIRA REIS": "andreiamadureira@prof.educacao.sp.gov.br",
-      "ANTONIO CARLS DE OLIVEIRA": "antoniocarloso@prof.educacao.sp.gov.br",
-      "ANTONIO RAMOS DE ARAUJO": "antonioramosaraujo@prof.educacao.sp.gov.br",
-      "ANTONIO WILTON WANDERLEY CABRAL": "antoniowilton@prof.educacao.sp.gov.br",
-      "AUGUSTO LINO PESSOA NETO": "augustolino@prof.educacao.sp.gov.br",
-      "AUREA MARIA DE JESUS MARQUES": "aureamaria@prof.educacao.sp.gov.br",
-      "CAROLINA PERNOMIAN PARUSSOLO": "carolinapernomian@prof.educacao.sp.gov.br",
-      "CASSIA OLIVEIRA ANTONIAZI": "cassiaosilva@prof.educacao.sp.gov.br",
-      "CICERO FERREIRA": "cicero.ferreira@servidor.educacao.sp.gov.br",
-      "DANIEL DE FREITAS ALMEIDA": "danielalmeida@prof.educacao.sp.gov.br",
-      "DANIEL LOPES BARBOSA": "daniellopesbarbosa@prof.educacao.sp.gov.br",
-      "DANIELA FERREIRA LIMA": "danielaflima@prof.educacao.sp.gov.br",
-      "EDIANE VIEIRA DA SILVA": "ediane@prof.educacao.sp.gov.br",
-      "EDILEUSA NUNES PEREIRA": "edileusa@prof.educacao.sp.gov.br",
-      "EDUARDO HENRIQUE DA FONSECA": "henriquefonseca@prof.educacao.sp.gov.br",
-      "ELIANE SANTOS SILVA": "essantos@prof.educacao.sp.gov.br",
-      "ELIAS MONTEIRO DA SILVA": "elias1@prof.educacao.sp.gov.br",
-      "ELISABETE APARECIDA PIRES": "elisabetepires@prof.educacao.sp.gov.br",
-      "ELZA DE FARIA PEREIRA": "elzafariapereira@prof.educacao.sp.gov.br",
-      "EMERSON GABLER DE ALMEIDA": "egabler@prof.educacao.sp.gov.br",
-      "ERINEIDE LEITE ARAGAO NERY": "erineidearagao@prof.educacao.sp.gov.br",
-      "EUZELI ARAUJO DE OLIVEIRA": "euzeli@prof.educacao.sp.gov.br",
-      "FABIANO AUGUSTO PIEDADE": "fabianoaugusto@prof.educacao.sp.gov.br",
-      "FABIO CAMILO": "camilof@prof.educacao.sp.gov.br",
-      "FERNANDO JOSE DA SILVA FILHO": "fernandojs@prof.educacao.sp.gov.br",
-      "FLAVIA CRISTINA APARECIDA BICHLER": "flaviacri@prof.educacao.sp.gov.br",
-      "FLAVIO CARDOSO FLEURY": "flaviofleury@prof.educacao.sp.gov.br",
-      "GABRIELA SERIGHELLI DE MELO": "gabrielaserighelli@prof.educacao.sp.gov.br",
-      "GENILTON DE OLIVEIRA SILVA": "genilton@prof.educacao.sp.gov.br",
-      "GIANI CRISTINA DO PRADO": "gianiprado@prof.educacao.sp.gov.br",
-      "INGRYD CAROLINA SUGUIMOTO VIEIRA": "ingryd@prof.educacao.sp.gov.br",
-      "IVANILDES DOS SANTOS OSHIKAWA": "oshikawa@prof.educacao.sp.gov.br",
-      "JANINA DOS PASSOS BRAGA DE ALMEIDA": "janinabraga@prof.educacao.sp.gov.br",
-      "JUAREZ GOMES DE MAGALHAES FILHO": "juarezgomes@prof.educacao.sp.gov.br",
-      "JUREMA SOLEDADE FURINI SANTOS": "juremas@prof.educacao.sp.gov.br",
-      "KATIUSCIA ALVES BOMFIM": "katiusciabomfim@prof.educacao.sp.gov.br",
-      "KETHY REGINA DA SILVA DOMINGOS COSTA": "kethy@prof.educacao.sp.gov.br",
-      "LUANA CAROLINE ALVES LIMA": "luanalima01@prof.educacao.sp.gov.br",
-      "LUANA DE FREITAS SILVA": "luanafreitas@prof.educacao.sp.gov.br",
-      "LUCIANA NOVAIS CORREIA SANTOS": "novaiscorreia@prof.educacao.sp.gov.br",
-      "LUCIANO MOREIRA DE AZEVEDO": "lucianomoreira@prof.educacao.sp.gov.br",
-      "MARCELO FERNANDES DA SILVA": "marcelofs@prof.educacao.sp.gov.br",
-      "MARCIEL DA SILVA": "marcielsilva@prof.educacao.sp.gov.br",
-      "MARIA HELENA CUNHA MORO": "marcunha@prof.educacao.sp.gov.br",
-      "MARIA QUITÉRIA FERREIRA DOS SANTOS": "quiteriasantos@prof.educacao.sp.gov.br",
-      "MARINA DA CONCEICAO FRANCISCO SILVA": "marinafrancisco@prof.educacao.sp.gov.br",
-      "MAURICIO DE BARROS SANTOS": "mauriciobsantos@prof.educacao.sp.gov.br",
-      "MICHELE DE PINHO MORAES": "michelepinho@prof.educacao.sp.gov.br",
-      "MOISES ANTONIO DE BARROS": "moisesbarros@prof.educacao.sp.gov.br",
-      "PATRICIA GOMES ROCHA RIBEIRO": "patriciag@prof.educacao.sp.gov.br",
-      "PAULO ROBERTO DA SILVA ITO": "pauloito@prof.educacao.sp.gov.br",
-      "PEDRO ZANOTTI FILHO": "pedrozanotti@prof.educacao.sp.gov.br",
-      "RAUL PEREIRA VILERA JUNIOR": "vilera@prof.educacao.sp.gov.br",
-      "REGIANE CURTI DE SOUZA OLIVEIRA": "regianecurti@prof.educacao.sp.gov.br",
-      "REGINA DA SILVA CASTRO": "reginasilvacastro@prof.educacao.sp.gov.br",
-      "RICARDO AMERICO DA SILVA": "ricardoamerico@prof.educacao.sp.gov.br",
-      "ROBERTO SALGADO": "robertosalgado@prof.educacao.sp.gov.br",
-      "RODRIGO VIEIRA": "rodrigovieira1@prof.educacao.sp.gov.br",
-      "ROSANGELA CAFASSO MOREIRA": "cafasso@prof.educacao.sp.gov.br",
-      "ROSIMERY DE SOUZA PESSOA": "rosimerypessoa@prof.educacao.sp.gov.br",
-      "ROSMARA DA SILVA CARDOSO": "rosmaracardoso@prof.educacao.sp.gov.br",
-      "SANDRA CRISTINA MACEDO MORAES": "sandracristinamacedo@prof.educacao.sp.gov.br",
-      "SELMA GOMES DA SILVA": "selmagomess@prof.educacao.sp.gov.br",
-      "SERGIO AGRIPINO VILLA NOVA": "sergioagripino@prof.educacao.sp.gov.br",
-      "SOLANGE ALMEIDA DA SILVA": "almeidafazio@prof.educacao.sp.gov.br",
-      "SUELI SILVE PEREIRA": "suelisilve@prof.educacao.sp.gov.br",
-      "SUZINEIDE SILVA DE FREITAS": "suzineidefreitas@prof.educacao.sp.gov.br",
-      "THIAGO FABIANO BRITO": "thiagofabiano@prof.educacao.sp.gov.br",
-      "TITTO AUGUSTO NASCIMENTO SILVA": "titto@prof.educacao.sp.gov.br",
-      "VANDERSON HYPPOLITO": "vhypolito@prof.educacao.sp.gov.br",
-      "VANESSA IVETE GOMES DOS SANTOS": "vanessaivete@prof.educacao.sp.gov.br",
-      "VANIA PENHA DE BARROS": "vaniapenha@prof.educacao.sp.gov.br",
-      "VIVIANE LEAL CAMERA DE MORAES": "camera@prof.educacao.sp.gov.br",
-      "WILSON LUIZ DE SOUZA COSTA": "wilsonluizsouza@prof.educacao.sp.gov.br",
-      "WILSON RODRIGUES MOTA": "wmota@prof.educacao.sp.gov.br"
-    };
-
-    // Dados dos aparelhos
-    const marcas = {
-      "TABLET": "POSITIVO",
-      "SMARTPHONE": "POSITIVO",
-      "CHROMEBOOK": "SAMSUNG",
-      "NOTEBOOK": "POSITIVO"
-    };
-
-    // Dados das salas por turma e período
-    const salasPorTurmaPeriodo = {
-      // 6° ANO
-      "6° ANO A MANHA": "Sala 1",
-      "6° ANO B MANHA": "Sala 2",
-      "6° ANO C MANHA": "Sala 3",
-      "6° ANO D MANHA": "Sala 4",
-      "6° ANO E TARDE": "Sala 1",
-      "6° ANO F TARDE": "Sala 2",
-      
-      // 7° ANO
-      "7° ANO A TARDE": "Sala 3",
-      "7° ANO B TARDE": "Sala 4",
-      "7° ANO C TARDE": "Sala 5",
-      "7° ANO D TARDE": "Sala 6",
-      "7° ANO E TARDE": "Sala 7",
-      "7° ANO F TARDE": "Sala 8",
-      
-      // 8° ANO
-      "8° ANO A TARDE": "Sala 10",
-      "8° ANO B TARDE": "Sala 11",
-      "8° ANO C TARDE": "Sala 12",
-      "8° ANO D TARDE": "Sala 13",
-      "8° ANO E TARDE": "Sala 14",
-      
-      // 9° ANO
-      "9° ANO A TARDE": "Sala 15",
-      "9° ANO B TARDE": "Sala 16",
-      "9° ANO C TARDE": "Sala 17",
-      "9° ANO D TARDE": "Sala 18",
-      
-      // 1ª SÉRIE
-      "1ª SERIE A MANHA": "Sala 10",
-      "1ª SERIE B MANHA": "Sala 11",
-      "1ª SERIE C MANHA": "Sala 12",
-      "1ª SERIE D MANHA": "Sala 13",
-      "1ª SERIE E MANHA": "Sala 14",
-      "1ª SERIE F MANHA": "Sala 15",
-      "1ª SERIE G TARDE": "Sala 9",
-      "1ª SERIE H NOITE": "Sala 9",
-      "1ª SERIE I NOITE": "Sala 602",
-      
-      // 2ª SÉRIE
-      "2ª SERIE A MANHA": "Sala 5",
-      "2ª SERIE B MANHA": "Sala 6",
-      "2ª SERIE C MANHA": "Sala 7",
-      "2ª SERIE D MANHA": "Sala 8",
-      "2ª SERIE E MANHA": "Sala 9",
-      "2ª SERIE F NOITE": "Sala 1",
-      "2ª SERIE G NOITE": "Sala 2",
-      "2ª SERIE H NOITE": "Sala 3",
-      "2ª SERIE I NOITE": "Sala 4",
-      
-      // 3ª SÉRIE
-      "3ª SERIE A MANHA": "Sala 16",
-      "3ª SERIE B MANHA": "Sala 17",
-      "3ª SERIE C MANHA": "Sala 18",
-      "3ª SERIE D NOITE": "Sala 5",
-      "3ª SERIE E NOITE": "Sala 6",
-      "3ª SERIE F NOITE": "Sala 7",
-      "3ª SERIE G NOITE": "Sala 8",
-      
-      // ADMINISTRAÇÃO
-      "4050 - ADMINISTRAÇÃO - 2ª SERIE A MANHA": "Laboratório 1"
-    };
-
-    // Chave para armazenamento local
-    const LOCAL_STORAGE_KEY = 'agendamentos_aparelhos';
-    const LOCAL_STORAGE_KEY_EXCLUIDOS = 'agendamentos_excluidos';
-
-    // Carrega agendamentos do localStorage ou inicializa vazio
-    let agendamentos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
-    let historicoExcluidos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_EXCLUIDOS)) || [];
-
-    const monthNames = [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-
-    const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-
-    const monthSelect = document.getElementById('monthSelect');
-    const yearSelect = document.getElementById('yearSelect');
-    let selectedDay = null;
-    let selectedDate = null;
-
-    // Variáveis para o calendário pop-up
-    let currentPopupDate = new Date();
-    let popupSelectedDate = null;
-    
-    // Variáveis para o modal de devolução
-    let agendamentoParaDevolver = null;
-
-    // Função para salvar agendamentos no localStorage
-    function salvarAgendamentos() {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(agendamentos));
-      localStorage.setItem(LOCAL_STORAGE_KEY_EXCLUIDOS, JSON.stringify(historicoExcluidos));
-    }
-
-    // Função para verificar se uma data está dentro do período de 15 dias
-    function estaDentroDoPeriodo(dataAgendamento) {
-      const hoje = new Date();
-      const dataAgendamentoObj = new Date(dataAgendamento);
-      const diferencaDias = Math.floor((hoje - dataAgendamentoObj) / (1000 * 60 * 60 * 24));
-      
-      return diferencaDias <= 15;
-    }
-
-    // Função para formatar a data no formato YYYY-MM-DD
-    function formatarDataParaComparacao(dia, mes, ano) {
-      return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
-    }
-
-    // Função para verificar conflito de agendamento
-    function verificarConflitoAgendamento(turma, data, aula) {
-      const [dia, mes, ano] = data.split('/');
-      const key = `${ano}-${mes}`;
-      
-      if (!agendamentos[key]) return false;
-      
-      return agendamentos[key].some(agendamento => 
-        agendamento.dia === parseInt(dia) && 
-        agendamento.turma === turma && 
-        agendamento.aula === aula
-      );
-    }
-
-    // Funções do formulário
-    function atualizarMarca() {
-      const tipo = document.getElementById("equipamentoAgendamento").value;
-      document.getElementById("marca").value = marcas[tipo] || "";
-    }
-
-    function atualizarSala() {
-      const turma = document.getElementById("studentClass").value;
-      const aulaSelect = document.getElementById("aula");
-      
-      // Limpa e desabilita o campo aula inicialmente
-      aulaSelect.innerHTML = '<option value="">Selecione a aula</option>';
-      aulaSelect.disabled = true;
-      
-      // Verifica se a turma existe no mapeamento
-      if (salasPorTurmaPeriodo[turma]) {
-        document.getElementById("sala").value = salasPorTurmaPeriodo[turma];
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="student">Análise Individual</button>
+            <button class="tab-button" data-tab="class">Desempenho da Turma</button>
+        </div>
         
-        // Habilita o campo aula e preenche com as opções adequadas
-        aulaSelect.disabled = false;
-        
-        // Determina o período da turma
-        const periodo = turma.includes("MANHA") ? "MANHA" : 
-                       turma.includes("TARDE") ? "TARDE" : 
-                       turma.includes("NOITE") ? "NOITE" : "";
-        
-        // Cria as opções de aula baseadas no período
-        if (periodo === "MANHA" || periodo === "TARDE") {
-          // 6 aulas para manhã e tarde
-          for (let i = 1; i <= 6; i++) {
-            const option = document.createElement("option");
-            option.value = `${i}ª Aula`;
-            option.textContent = `${i}ª Aula`;
-            aulaSelect.appendChild(option);
-          }
-        } else if (periodo === "NOITE") {
-          // 5 aulas para noite
-          for (let i = 1; i <= 5; i++) {
-            const option = document.createElement("option");
-            option.value = `${i}ª Aula`;
-            option.textContent = `${i}ª Aula`;
-            aulaSelect.appendChild(option);
-          }
-        }
-      } else {
-        document.getElementById("sala").value = "Sala não definida";
-      }
-      
-      // Verifica se há conflito de agendamento
-      verificarConflito();
-    }
-
-    function abrirRelogio(idCampo) {
-      const campo = document.getElementById(idCampo);
-      if (campo && typeof campo.showPicker === 'function') {
-        campo.showPicker();
-      } else {
-        campo.focus();
-      }
-    }
-
-    function atualizarEmail() {
-      const nome = document.getElementById("professor").value;
-      document.getElementById("email-professor").value = teacherEmails[nome] || "";
-    }
-
-    function gerarOpcoesProfessores() {
-      const select = document.getElementById("professor");
-      Object.keys(teacherEmails).forEach(nome => {
-        const option = document.createElement("option");
-        option.value = nome;
-        option.textContent = nome;
-        select.appendChild(option);
-      });
-    }
-
-    // Função para verificar conflito quando os campos relevantes mudam
-    function verificarConflito() {
-      const turma = document.getElementById("studentClass").value;
-      const data = document.getElementById("dataAgendamento").value;
-      const aula = document.getElementById("aula").value;
-      const conflictMessage = document.getElementById("conflictMessage");
-      
-      if (turma && data && aula) {
-        const conflito = verificarConflitoAgendamento(turma, data, aula);
-        conflictMessage.style.display = conflito ? "block" : "none";
-      } else {
-        conflictMessage.style.display = "none";
-      }
-    }
-
-    // Funções do calendário pop-up
-    function initDatepicker() {
-      const datepickerInput = document.getElementById('dataAgendamento');
-      const datepickerPopup = document.getElementById('datepickerPopup');
-      const prevMonthBtn = document.getElementById('prevMonth');
-      const nextMonthBtn = document.getElementById('nextMonth');
-      const datepickerMonthYear = document.getElementById('datepickerMonthYear');
-      const datepickerWeekdays = document.getElementById('datepickerWeekdays');
-      const datepickerDays = document.getElementById('datepickerDays');
-
-      // Preenche os dias da semana
-      datepickerWeekdays.innerHTML = weekdays.map(day => 
-        `<div class="datepicker-weekday">${day}</div>`
-      ).join('');
-
-      // Mostra/oculta o popup
-      datepickerInput.addEventListener('click', () => {
-        datepickerPopup.classList.toggle('active');
-        renderDatepicker();
-      });
-
-      // Navegação do calendário
-      prevMonthBtn.addEventListener('click', () => {
-        currentPopupDate.setMonth(currentPopupDate.getMonth() - 1);
-        renderDatepicker();
-      });
-
-      nextMonthBtn.addEventListener('click', () => {
-        currentPopupDate.setMonth(currentPopupDate.getMonth() + 1);
-        renderDatepicker();
-      });
-
-      // Fecha o popup quando clicar fora
-      document.addEventListener('click', (e) => {
-        if (!datepickerPopup.contains(e.target) && e.target !== datepickerInput) {
-          datepickerPopup.classList.remove('active');
-        }
-      });
-
-      function renderDatepicker() {
-        const year = currentPopupDate.getFullYear();
-        const month = currentPopupDate.getMonth();
-        
-        datepickerMonthYear.textContent = `${monthNames[month]} ${year}`;
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
-        
-        let daysHtml = '';
-        const today = new Date();
-        
-        // Dias do mês anterior (se necessário)
-        for (let i = 0; i < firstDay; i++) {
-          daysHtml += `<div class="datepicker-day datepicker-other-month disabled">${daysInPrevMonth - firstDay + i + 1}</div>`;
-        }
-        
-        // Dias do mês atual
-        for (let i = 1; i <= daysInMonth; i++) {
-          const date = new Date(year, month, i);
-          const isToday = date.toDateString() === today.toDateString();
-          const isSelected = popupSelectedDate && date.toDateString() === popupSelectedDate.toDateString();
-          const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
-          
-          let dayClass = 'datepicker-day';
-          if (isToday) dayClass += ' datepicker-today';
-          if (isSelected) dayClass += ' selected';
-          if (isPast) dayClass += ' disabled';
-          
-          daysHtml += `<div class="${dayClass}" data-day="${i}">${i}</div>`;
-        }
-        
-        // Dias do próximo mês (se necessário)
-        const totalCells = 42; // 6 semanas * 7 dias
-        const remainingCells = totalCells - (firstDay + daysInMonth);
-        for (let i = 1; i <= remainingCells; i++) {
-          daysHtml += `<div class="datepicker-day datepicker-other-month disabled">${i}</div>`;
-        }
-        
-        datepickerDays.innerHTML = daysHtml;
-        
-        // Adiciona eventos aos dias
-        document.querySelectorAll('.datepicker-day:not(.disabled)').forEach(day => {
-          day.addEventListener('click', () => {
-            const dayNum = parseInt(day.getAttribute('data-day'));
-            popupSelectedDate = new Date(year, month, dayNum);
+        <div id="student-tab" class="tab-content active">
+            <div class="dashboard-controls">
+                <div class="dashboard-group">
+                    <label for="dashboard-grade">Série:</label>
+                    <select id="dashboard-grade">
+                        <option value="9A">9°A</option>
+                        <option value="9B">9°B</option>
+                        <option value="9C">9°C</option>
+                    </select>
+                </div>
+                
+                <div class="dashboard-group">
+                    <label for="dashboard-student">Aluno:</label>
+                    <select id="dashboard-student">
+                        <option value="">Selecione um aluno</option>
+                    </select>
+                </div>
+            </div>
             
-            // Atualiza o campo de data
-            const formattedDay = String(dayNum).padStart(2, '0');
-            const formattedMonth = String(month + 1).padStart(2, '0');
-            selectedDate = `${formattedDay}/${formattedMonth}/${year}`;
-            datepickerInput.value = selectedDate;
+            <div class="chart-container">
+                <canvas id="student-chart"></canvas>
+            </div>
             
-            // Fecha o popup
-            datepickerPopup.classList.remove('active');
+            <div class="weaknesses">
+                <h3>Principais Dificuldades</h3>
+                <div id="weaknesses-list">
+                    <p>Selecione um aluno para visualizar suas dificuldades.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="class-tab" class="tab-content">
+            <div class="dashboard-controls">
+                <div class="dashboard-group">
+                    <label for="class-grade">Série:</label>
+                    <select id="class-grade">
+                        <option value="9A">9°A</option>
+                        <option value="9B">9°B</option>
+                        <option value="9C">9°C</option>
+                    </select>
+                </div>
+            </div>
             
-            // Atualiza o calendário principal
-            updateMainCalendarSelection(year, month + 1, dayNum);
-            
-            // Verifica se há conflito
-            verificarConflito();
-          });
-        });
-      }
-    }
+            <div class="chart-container">
+                <canvas id="class-chart"></canvas>
+            </div>
+        </div>
+    </div>
 
-    function updateMainCalendarSelection(year, month, day) {
-      // Atualiza os seletores de mês/ano se necessário
-      if (parseInt(yearSelect.value) !== year || parseInt(monthSelect.value) + 1 !== month) {
-        yearSelect.value = year;
-        monthSelect.value = month - 1;
-        renderCalendarBody(year, month - 1);
-      }
-      
-      // Encontra e seleciona o dia no calendário principal
-      const calendarBody = document.getElementById('calendarBody');
-      const cells = calendarBody.querySelectorAll('td');
-      
-      cells.forEach(cell => {
-        if (parseInt(cell.textContent) === day) {
-          // Remove seleção anterior
-          if (selectedDay) {
-            selectedDay.classList.remove('selecionado');
-            const agendamentosDoMes = getAgendamentos(parseInt(yearSelect.value), parseInt(monthSelect.value));
-            if (!agendamentosDoMes.find(d => d.dia === parseInt(selectedDay.textContent))) {
-              selectedDay.classList.add('disponivel');
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Dados dos alunos por série
+        const studentsData = {
+            '9A': [
+                {number: '1', name: 'ÁGATHA NIKOLLE DA SILVA RAMOS'},
+                {number: '2', name: 'AMANDA BEATRIZ LEAL MOURAD'},
+                {number: '4', name: 'ANNA NICOLY BENVINDO DOS SANTOS'},
+                {number: '5', name: 'ARTHUR DOS SANTOS'},
+                {number: '6', name: 'BEATRIZ UCHOA DOS SANTOS'},
+                {number: '7', name: 'BRUNO EDUARDO NOGUEIRA DE OLIVEIRA'},
+                {number: '8', name: 'CARLOS EDUARDO BELMIRO DOS SANTOS'},
+                {number: '9', name: 'CHRISTIAN DAVI DE OLIVEIRA'},
+                {number: '11', name: 'ERICK HENRIQUE RIBEIRO GONÇALVES'},
+                {number: '12', name: 'FILIPE RODRIGUES SANTOS'},
+                {number: '13', name: 'GABRIEL ALMEIDA MOSCARDINI'},
+                {number: '14', name: 'GIOVANA MOTA VAZ DE JESUS'},
+                {number: '15', name: 'GUILHERME DA SILVA GUIMARÃES'},
+                {number: '16', name: 'HELOÍSA LEAL DOS REIS'},
+                {number: '17', name: 'IAGO ANJOS DE JESUS'},
+                {number: '18', name: 'IGNACIO LINS SANTOS'},
+                {number: '19', name: 'ISADORA DE SOUZA SILVA'},
+                {number: '20', name: 'JOAO VICTOR BATISTA DUARTE'},
+                {number: '21', name: 'JULIANA SANTOS LIMA'},
+                {number: '25', name: 'MANUELA VITÓRIA LIMA DOS SANTOS'},
+                {number: '26', name: 'MIGUEL ALVES OLIVEIRA'},
+                {number: '27', name: 'NIKOLAS ANTONIO'},
+                {number: '28', name: 'ORIANA JOSE TUAREZ RENGEL'},
+                {number: '31', name: 'RAFAELLA VITÓRIA EXPEDITA DE ANDRADE MARQUES'},
+                {number: '33', name: 'RAYLAN DE JESUS BARBOSA'},
+                {number: '34', name: 'REBECA DOS SANTOS SOUSA'},
+                {number: '35', name: 'RICHARD JOSÉ DOS SANTOS'},
+                {number: '36', name: 'SARA CRISTINA PASSOS MARTINS'},
+                {number: '37', name: 'VANESSA CARDOSO DOS SANTOS'},
+                {number: '41', name: 'JULIA DIAS AZEVEDO'},
+                {number: '42', name: 'SAMARA HELEN DA SILVA'},
+                {number: '44', name: 'LUIS MATHEUS DA SILVA RAMOS'}
+            ],
+            '9B': [
+                {number: '1', name: 'ALEJANDRO VIEIRA LIMA'},
+                {number: '2', name: 'ALEX GUSTAVO DA SILVA VIEIRA'},
+                {number: '3', name: 'ALLAN BEZERRA DE LIMA'},
+                {number: '6', name: 'ARTHUR DE JESUS NASCIMENTO'},
+                {number: '8', name: 'ARTHUR MARYANO MENDES'},
+                {number: '9', name: 'CARLOS EDUARDO OLIVEIRA SABATERRA'},
+                {number: '10', name: 'DARYO PALMA GREGORIO'},
+                {number: '13', name: 'EDUARDA DE SOUSA OLIVEIRA'},
+                {number: '16', name: 'GIOVANNA MARTINEZ FERREIRA'},
+                {number: '17', name: 'GRAZIELLE VITÓRIA SILVA FIGUEIREDO'},
+                {number: '20', name: 'JULLIA OLIVEIRA DE SOUZA'},
+                {number: '21', name: 'KARINA DE JESUS SANTANA'},
+                {number: '24', name: 'LEONARDO JUNIOR ALBUQUERQUE DA SILVA'},
+                {number: '27', name: 'MARCOS DE OLIVEIRA CARVALHO'},
+                {number: '28', name: 'MARIA EDUARDA SILVA SOUZA'},
+                {number: '29', name: 'MOISES DOS SANTOS BOMFIM'},
+                {number: '30', name: 'NAHYMÊ VITORIA TAVARES DOS SANTOS'},
+                {number: '31', name: 'NICOLAS LUAN MENDES'},
+                {number: '32', name: 'PEDRO HENRIQUE ARRABAL MANZARO'},
+                {number: '33', name: 'PIETRO RAMON DE PAIVA MAGALHÃES LEITÃO'},
+                {number: '34', name: 'SOFIA DE FRANCA COSTA'},
+                {number: '35', name: 'TATIANA DA SILVA RODRIGUES'},
+                {number: '36', name: 'VITOR HUGO DOMINGOS SANTOS'},
+                {number: '37', name: 'WAGNER SILVA MEIRA'},
+                {number: '38', name: 'YASMIM ANDRADE DOS SANTOS'}
+            ],
+            '9C': [
+                {number: '2', name: 'ALEXANDRE SERAFIM JUNIOR'},
+                {number: '3', name: 'ANA LUIZA DO NASCIMENTO'},
+                {number: '5', name: 'ARTHUR EMANUEL ALMEIDA REIS'},
+                {number: '7', name: 'CARLOS AUGUSTO DIAS DE MENDONÇA'},
+                {number: '9', name: 'DAPHINE SINDIFER RODRIGUES SILVA'},
+                {number: '12', name: 'ELOISA DE OLIVEIRA CARVALHO'},
+                {number: '13', name: 'ENZO BAPTISTA MAIA'},
+                {number: '14', name: 'EVELLYN ANGELINA CAVALCANTE DE OLIVEIRA'},
+                {number: '16', name: 'GABRIEL VICTOR OLIVEIRA SANTOS'},
+                {number: '17', name: 'GIOVANNA SOUSA DA SILVA'},
+                {number: '18', name: 'GUSTAVO FURLAN GUEDES DA SILVA'},
+                {number: '23', name: 'KAUÃ BRYAN MAZARIO BARBEIRO'},
+                {number: '25', name: 'KAUAN ALAMBERT GOMES DE SOUSA'},
+                {number: '26', name: 'KEMILLY CARVALHO DA FONSECA BRITO'},
+                {number: '27', name: 'KLAIVYN WALLAS ARAUJO ESPIRITO SANTO'},
+                {number: '28', name: 'LORHANNY CAVALCANTE SANTOS'},
+                {number: '29', name: 'MANUELLA LELIS DA SILVA SIMAO'},
+                {number: '33', name: 'MONALISA DOS SANTOS BALDUINO'},
+                {number: '34', name: 'NATHAN SANTANA MONTEMOR'},
+                {number: '35', name: 'NICOLAS PYETRO CASTRO DE ALMEIDA SOUZA'},
+                {number: '36', name: 'NICOLLAS JHAMAL DA SILVA ALVES'},
+                {number: '37', name: 'SARAH SILVA ROGER'},
+                {number: '38', name: 'SERGIO RICARDO SILVA DE SOUZA'},
+                {number: '40', name: 'VINICIUS COSTA SILVA'},
+                {number: '41', name: 'VITÓRIA SILVA VIEIRA'},
+                {number: '42', name: 'FELIPE RITIELLI NEVES DA SILVA'},
+                {number: '43', name: 'JAQUELYNE PEREIRA GONCALVES'},
+                {number: '44', name: 'KRYSTOFER LEITE DA SILVA'}
+            ]
+        };
+
+        // Respostas corretas
+        const correctAnswers = {
+            q1: "b",
+            q2: "c",
+            q3: "c",
+            q4: "a",
+            q5: "b",
+            q6: "a",
+            q7: "b",
+            q8: "c"
+        };
+
+        // Função para pré-visualizar imagens carregadas
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(file);
             }
-          }
-          
-          // Adiciona nova seleção
-          cell.classList.add('selecionado');
-          cell.classList.remove('disponivel');
-          selectedDay = cell;
         }
-      });
-    }
 
-    // Funções do calendário principal
-    function populateMonthYearSelectors() {
-      const currentYear = new Date().getFullYear();
-
-      for (let y = currentYear - 1; y <= currentYear + 2; y++) {
-        const option = document.createElement('option');
-        option.value = y;
-        option.textContent = y;
-        yearSelect.appendChild(option);
-      }
-
-      monthNames.forEach((name, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = name;
-        monthSelect.appendChild(option);
-      });
-
-      const now = new Date();
-      monthSelect.value = now.getMonth();
-      yearSelect.value = now.getFullYear();
-    }
-
-    function getAgendamentos(year, month) {
-      const key = `${year}-${String(month + 1).padStart(2, '0')}`;
-      return agendamentos[key] || [];
-    }
-
-    function renderHistorico(agendamentosDoMes) {
-      const historicoBody = document.getElementById('historico-body');
-      historicoBody.innerHTML = '';
-      
-      // Adiciona agendamentos atuais
-      agendamentosDoMes.forEach(({ dia, aparelho, professor, turma, numAparelhos, aula, horaEntrega, id }) => {
-        const row = document.createElement('tr');
-        
-        const formattedDay = String(dia).padStart(2, '0');
-        const formattedMonth = String(parseInt(monthSelect.value) + 1).padStart(2, '0');
-        const formattedDate = `${formattedDay}/${formattedMonth}/${yearSelect.value}`;
-        const dataAgendamento = formatarDataParaComparacao(dia, parseInt(monthSelect.value) + 1, yearSelect.value);
-        
-        // Adiciona classe de status de entrega
-        if (horaEntrega) {
-          row.classList.add('entregue');
-        } else {
-          row.classList.add('nao-entregue');
+        // Preencher número do aluno automaticamente
+        function preencherNumero() {
+            const selectAluno = document.getElementById('alunos');
+            const inputNumero = document.getElementById('numero');
+            const selectSerie = document.getElementById('serie');
+            
+            if (selectAluno.value) {
+                const selectedOption = selectAluno.options[selectAluno.selectedIndex];
+                inputNumero.value = selectedOption.value;
+                selectSerie.value = selectedOption.getAttribute('data-grade');
+            } else {
+                inputNumero.value = '';
+            }
         }
-        
-        // Verifica se o agendamento está dentro do período de 15 dias
-        if (estaDentroDoPeriodo(dataAgendamento)) {
-          row.classList.add('recente');
+
+        // Configurar data atual
+        document.getElementById('data').valueAsDate = new Date();
+
+        // Submeter formulário
+        function submitForm() {
+            const aluno = document.getElementById('alunos').value;
+            const nome = document.getElementById('alunos').options[document.getElementById('alunos').selectedIndex].text;
+            const numero = document.getElementById('numero').value;
+            const serie = document.getElementById('serie').value;
+            const data = document.getElementById('data').value;
+            
+            if (!aluno) {
+                alert('Por favor, selecione seu nome na lista.');
+                return;
+            }
+            
+            let score = 0;
+            let totalQuestions = Object.keys(correctAnswers).length;
+            let results = {};
+            
+            // Verificar respostas
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionName = 'q' + i;
+                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
+                
+                if (selectedOption) {
+                    results[questionName] = selectedOption.value;
+                    if (selectedOption.value === correctAnswers[questionName]) {
+                        score++;
+                        document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
+                            if (opt.value === correctAnswers[questionName]) {
+                                opt.parentElement.classList.add('correct');
+                            }
+                        });
+                    } else {
+                        document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
+                            if (opt.value === selectedOption.value) {
+                                opt.parentElement.classList.add('incorrect');
+                            }
+                            if (opt.value === correctAnswers[questionName]) {
+                                opt.parentElement.classList.add('correct');
+                            }
+                        });
+                    }
+                } else {
+                    results[questionName] = null;
+                    document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
+                        if (opt.value === correctAnswers[questionName]) {
+                            opt.parentElement.classList.add('correct');
+                        }
+                    });
+                }
+            }
+            
+            // Calcular porcentagem
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            // Mostrar resultado
+            document.getElementById('result').innerHTML = `
+                <p>${nome}, você acertou ${score} de ${totalQuestions} questões (${percentage}%).</p>
+                <p>As questões discursivas serão avaliadas separadamente pelo professor.</p>
+            `;
+            
+            // Desabilitar botão de envio
+            document.getElementById('submit-btn').disabled = true;
+            
+            // Mostrar dashboard
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Inicializar gráficos
+            initializeCharts(percentage, results);
         }
-        
-        // Verifica se o agendamento está expirado (mais de 15 dias)
-        if (!estaDentroDoPeriodo(dataAgendamento)) {
-          row.classList.add('expirado');
+
+        // Inicializar gráficos do dashboard
+        function initializeCharts(percentage, results) {
+            // Gráfico individual
+            const studentCtx = document.getElementById('student-chart').getContext('2d');
+            const studentChart = new Chart(studentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Acertos', 'Erros'],
+                    datasets: [{
+                        data: [percentage, 100 - percentage],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Desempenho Individual',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Gráfico da turma (dados fictícios)
+            const classCtx = document.getElementById('class-chart').getContext('2d');
+            const classChart = new Chart(classCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
+                    datasets: [{
+                        label: 'Número de Alunos',
+                        data: [2, 5, 8, 10, 5],
+                        backgroundColor: '#004aad',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Número de Alunos'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Faixa de Desempenho'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Desempenho da Turma',
+                            font: {
+                                size: 16
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Listar dificuldades (baseado nas questões erradas)
+            const weaknessesList = document.getElementById('weaknesses-list');
+            weaknessesList.innerHTML = '';
+            
+            let hasWeaknesses = false;
+            for (const question in results) {
+                if (results[question] !== correctAnswers[question]) {
+                    const weaknessItem = document.createElement('div');
+                    weaknessItem.className = 'weakness-item';
+                    weaknessItem.textContent = `Dificuldade na questão ${question.replace('q', '')}: ${getQuestionTopic(question)}`;
+                    weaknessesList.appendChild(weaknessItem);
+                    hasWeaknesses = true;
+                }
+            }
+            
+            if (!hasWeaknesses) {
+                weaknessesList.innerHTML = '<p>Parabéns! Você não apresentou dificuldades significativas nesta atividade.</p>';
+            }
         }
-        
-        row.innerHTML = `
-          <td>${formattedDate}</td>
-          <td>${turma}</td>
-          <td>${numAparelhos}</td>
-          <td>${aparelho}</td>
-          <td>${professor}</td>
-          <td>${aula}</td>
-          <td>${horaEntrega || 'Não entregue'}</td>
-          <td>
-            ${!horaEntrega ? `<button class="btn btn-entregar" onclick="abrirModalDevolucao('${id}')">ENTREGAR</button>` : ''}
-            <button class="btn btn-excluir" onclick="excluirAgendamento('${id}')" ${!estaDentroDoPeriodo(dataAgendamento) ? 'disabled' : ''}>EXCLUIR</button>
-          </td>
-        `;
-        historicoBody.appendChild(row);
-      });
-      
-      // Adiciona agendamentos excluídos (apenas do mês atual)
-      const currentMonthKey = `${yearSelect.value}-${String(parseInt(monthSelect.value) + 1).padStart(2, '0')}`;
-      historicoExcluidos
-        .filter(item => item.mesAno === currentMonthKey)
-        .forEach(({ dia, aparelho, professor, turma, numAparelhos, aula, horaEntrega, dataExclusao }) => {
-          const row = document.createElement('tr');
-          row.classList.add('excluido');
-          
-          const formattedDay = String(dia).padStart(2, '0');
-          const formattedMonth = String(parseInt(monthSelect.value) + 1).padStart(2, '0');
-          const formattedDate = `${formattedDay}/${formattedMonth}/${yearSelect.value}`;
-          const dataAgendamento = formatarDataParaComparacao(dia, parseInt(monthSelect.value) + 1, yearSelect.value);
-          
-          // Verifica se o agendamento está dentro do período de 15 dias
-          if (estaDentroDoPeriodo(dataAgendamento)) {
-            row.classList.add('recente');
-          }
-          
-          // Verifica se o agendamento está expirado (mais de 15 dias)
-          if (!estaDentroDoPeriodo(dataAgendamento)) {
-            row.classList.add('expirado');
-          }
-          
-          row.innerHTML = `
-            <td>${formattedDate}</td>
-            <td>${turma}</td>
-            <td>${numAparelhos}</td>
-            <td>${aparelho}</td>
-            <td>${professor}</td>
-            <td>${aula}</td>
-            <td>${horaEntrega || 'Não entregue'}</td>
-            <td>EXCLUÍDO</td>
-          `;
-          historicoBody.appendChild(row);
+
+        // Retorna o tópico da questão (simulação)
+        function getQuestionTopic(questionId) {
+            const topics = {
+                q1: "Função das mitocôndrias",
+                q2: "Ciclo celular e duplicação do DNA",
+                q3: "DNA e doenças hereditárias",
+                q4: "Função dos ribossomos",
+                q5: "Retículo endoplasmático rugoso",
+                q6: "Pares de bases nitrogenadas",
+                q7: "História da descoberta do DNA",
+                q8: "Biotecnologia e modificação genética"
+            };
+            return topics[questionId] || "Tópico não especificado";
+        }
+
+        // Configurar abas do dashboard
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Remover classe active de todos os botões e conteúdos
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Adicionar classe active ao botão e conteúdo clicado
+                this.classList.add('active');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
         });
-    }
 
-    function renderCalendarBody(year, month) {
-      const calendarBody = document.getElementById('calendarBody');
-      calendarBody.innerHTML = '';
-
-      const date = new Date(year, month, 1);
-      const firstDay = date.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-      const agendamentosDoMes = getAgendamentos(year, month);
-
-      let day = 1;
-      let currentRow = document.createElement('tr');
-      
-      // Células vazias para os dias do mês anterior
-      for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement('td');
-        emptyCell.innerHTML = daysInPrevMonth - firstDay + i + 1;
-        emptyCell.classList.add('indisponivel');
-        currentRow.appendChild(emptyCell);
-      }
-
-      // Dias do mês atual
-      while (day <= daysInMonth) {
-        // Se chegarmos ao domingo (0), criamos uma nova linha
-        if (currentRow.children.length === 7) {
-          calendarBody.appendChild(currentRow);
-          currentRow = document.createElement('tr');
-        }
-
-        const cell = document.createElement('td');
-        cell.textContent = day;
-
-        const agendado = agendamentosDoMes.find(d => d.dia === day);
-        if (agendado) {
-          cell.classList.add('agendado');
-          cell.title = `${agendado.aparelho} - ${agendado.professor}`;
-        } else {
-          cell.classList.add('disponivel');
-          cell.style.cursor = 'default';
-        }
-
-        currentRow.appendChild(cell);
-        day++;
-      }
-
-      // Preenche as células restantes na última linha com dias do próximo mês
-      while (currentRow.children.length < 7) {
-        const nextMonthDay = document.createElement('td');
-        nextMonthDay.innerHTML = day - daysInMonth;
-        nextMonthDay.classList.add('indisponivel');
-        currentRow.appendChild(nextMonthDay);
-        day++;
-      }
-
-      // Adiciona a última linha se ela tiver conteúdo
-      if (currentRow.children.length > 0) {
-        calendarBody.appendChild(currentRow);
-      }
-
-      renderHistorico(agendamentosDoMes);
-    }
-
-    function gerarIdUnico() {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    async function cadastrarAgendamento() {
-      const professor = document.getElementById("professor").value;
-      const aparelho = document.getElementById("equipamentoAgendamento").value;
-      const turma = document.getElementById("studentClass").value;
-      const numAparelhos = document.getElementById("quantidadeAgendamento").value;
-      const aula = document.getElementById("aula").value;
-      const sala = document.getElementById("sala").value;
-      const horaRetirada = document.getElementById("hora-retirada").value;
-      const horaEntrega = document.getElementById("hora-entrega").value;
-      
-      if (!professor || !aparelho || !turma || !numAparelhos || !selectedDate || !sala || !horaRetirada) {
-        alert("Preencha todos os campos obrigatórios do formulário antes de agendar!");
-        return;
-      }
-      
-      // Verifica se já existe agendamento para esta turma, data e aula
-      if (verificarConflitoAgendamento(turma, selectedDate, aula)) {
-        alert("Já existe um agendamento para esta turma nesta data e aula!");
-        return;
-      }
-      
-      const [dia, mes, ano] = selectedDate.split('/');
-      const key = `${ano}-${mes}`;
-      
-      if (!agendamentos[key]) {
-        agendamentos[key] = [];
-      }
-      
-      const id = gerarIdUnico();
-      
-      const novoAgendamento = { 
-        id,
-        dia: parseInt(dia),
-        aparelho,
-        professor,
-        turma,
-        numAparelhos: parseInt(numAparelhos),
-        aula,
-        sala,
-        horaRetirada,
-        horaEntrega
-      };
-      
-      agendamentos[key].push(novoAgendamento);
-      
-      // Salva no localStorage
-      salvarAgendamentos();
-      
-      // Atualiza o calendário e o histórico
-      renderCalendarBody(parseInt(ano), parseInt(mes) - 1);
-      
-      // Limpa a seleção
-      if (selectedDay) {
-        selectedDay.classList.remove('selecionado');
-        selectedDay.classList.add('agendado');
-        selectedDay = null;
-      }
-      selectedDate = null;
-      document.getElementById('dataAgendamento').value = '';
-      
-      // Gera documento PDF
-      gerarDocumentoPDF(novoAgendamento);
-      
-      alert("Agendamento cadastrado com sucesso!");
-    }
-
-    function excluirAgendamento(id) {
-      if (!confirm("Tem certeza que deseja excluir este agendamento?")) {
-        return;
-      }
-      
-      // Encontra e remove o agendamento
-      for (const key in agendamentos) {
-        const index = agendamentos[key].findIndex(ag => ag.id === id);
-        if (index !== -1) {
-          const [agendamentoExcluido] = agendamentos[key].splice(index, 1);
-          
-          // Adiciona ao histórico de excluídos com a data de exclusão
-          const [ano, mes] = key.split('-');
-          historicoExcluidos.push({
-            ...agendamentoExcluido,
-            mesAno: key,
-            dataExclusao: new Date().toISOString()
-          });
-          
-          // Salva no localStorage
-          salvarAgendamentos();
-          
-          // Atualiza a exibição
-          renderCalendarBody(parseInt(ano), parseInt(mes) - 1);
-          break;
-        }
-      }
-    }
-    
-     // Funções para controle de devolução
-    function abrirModalDevolucao(id) {
-      // Encontra o agendamento
-      for (const key in agendamentos) {
-        const agendamento = agendamentos[key].find(ag => ag.id === id);
-        if (agendamento) {
-          agendamentoParaDevolver = agendamento;
-          
-          // Preenche o modal
-          document.getElementById('modalText').textContent = 
-            `Confirmar devolução de ${agendamento.numAparelhos} ${agendamento.aparelho}(s) pelo professor ${agendamento.professor}?`;
-          
-          // Define a hora atual como padrão
-          const now = new Date();
-          const horaAtual = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-          document.getElementById('horaEntregaModal').value = horaAtual;
-          
-          // Mostra o modal
-          document.getElementById('devolucaoModal').style.display = 'block';
-          break;
-        }
-      }
-    }
-    
-    function fecharModal() {
-      document.getElementById('devolucaoModal').style.display = 'none';
-      agendamentoParaDevolver = null;
-    }
-    
-    function finalizarAgendamento() {
-      if (!agendamentoParaDevolver) return;
-      
-      const horaEntrega = document.getElementById('horaEntregaModal').value;
-      if (!horaEntrega) {
-        alert("Informe a hora da entrega!");
-        return;
-      }
-      
-      // Atualiza o agendamento com a hora de entrega
-      const [dia, mes, ano] = [
-        agendamentoParaDevolver.dia,
-        parseInt(monthSelect.value) + 1,
-        yearSelect.value
-      ];
-      const key = `${ano}-${String(mes).padStart(2, '0')}`;
-      
-      const index = agendamentos[key].findIndex(ag => ag.id === agendamentoParaDevolver.id);
-      if (index !== -1) {
-        agendamentos[key][index].horaEntrega = horaEntrega;
-        
-        // Salva no localStorage
-        salvarAgendamentos();
-        
-        // Atualiza a exibição
-        renderCalendarBody(parseInt(ano), parseInt(mes) - 1);
-        
-        // Gera documento PDF
-        gerarDocumentoPDF(agendamentos[key][index]);
-      }
-      
-      fecharModal();
-      alert("Devolução registrada com sucesso!");
-    }
-
-    // Função para gerar documento PDF
-    function gerarDocumentoPDF(agendamento) {
-      const doc = new jsPDF();
-      
-      // Cabeçalho
-      doc.setFontSize(18);
-      doc.setTextColor(10, 36, 99); // Azul escuro
-      doc.text("TERMO DE EMPRÉSTIMO DE EQUIPAMENTOS", 105, 20, null, null, 'center');
-      
-      // Logo ou informações da escola
-      doc.setFontSize(12);
-      doc.setTextColor(0, 0, 0);
-      doc.text("ESCOLA ESTADUAL - NOME DA ESCOLA", 105, 30, null, null, 'center');
-      doc.text("Departamento de Tecnologia", 105, 36, null, null, 'center');
-      
-      // Linha divisória
-      doc.setDrawColor(10, 36, 99);
-      doc.setLineWidth(0.5);
-      doc.line(20, 42, 190, 42);
-      
-      // Dados do agendamento
-      doc.setFontSize(12);
-      doc.text("PROFESSOR: " + agendamento.professor, 20, 50);
-      doc.text("EMAIL: " + teacherEmails[agendamento.professor] || "Não informado", 20, 58);
-      
-      doc.text("TURMA: " + agendamento.turma, 20, 66);
-      doc.text("SALA: " + agendamento.sala, 20, 74);
-      
-      doc.text("EQUIPAMENTO: " + agendamento.aparelho + " - " + marcas[agendamento.aparelho], 20, 82);
-      doc.text("QUANTIDADE: " + agendamento.numAparelhos, 20, 90);
-      
-      const dataFormatada = `${agendamento.dia.toString().padStart(2, '0')}/${(parseInt(monthSelect.value) + 1).toString().padStart(2, '0')}/${yearSelect.value}`;
-      doc.text("DATA: " + dataFormatada, 20, 98);
-      doc.text("AULA: " + agendamento.aula, 20, 106);
-      
-      doc.text("HORA DE RETIRADA: " + agendamento.horaRetirada, 20, 114);
-      doc.text("HORA DE ENTREGA: " + (agendamento.horaEntrega || "Não entregue"), 20, 122);
-      
-      // Linha divisória
-      doc.line(20, 130, 190, 130);
-      
-      // Termos e condições
-      doc.setFontSize(10);
-      doc.text("DECLARO QUE RECEBI O(S) EQUIPAMENTO(S) EM PERFEITO ESTADO E ME COMPROMETO A:", 20, 138);
-      doc.text("- Utilizar o(s) equipamento(s) exclusivamente para fins pedagógicos;", 25, 146);
-      doc.text("- Zelar pela conservação e segurança do(s) equipamento(s);", 25, 154);
-      doc.text("- Devolver o(s) equipamento(s) no prazo combinado;", 25, 162);
-      doc.text("- Comunicar imediatamente qualquer problema ou dano ocorrido.", 25, 170);
-      
-      // Assinaturas
-      doc.setFontSize(12);
-      doc.text("__________________________________________", 50, 190);
-      doc.text("Assinatura do Professor", 105, 198, null, null, 'center');
-      
-      
-      // Data e hora de geração
-      const agora = new Date();
-      doc.setFontSize(8);
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Documento gerado em: ${agora.toLocaleString()}`, 105, 285, null, null, 'center');
-      
-      // Salva o PDF
-      const nomeArquivo = `Termo_${agendamento.professor.replace(/\s+/g, '_')}_${dataFormatada.replace(/\//g, '-')}.pdf`;
-      doc.save(nomeArquivo);
-    }
-    
-    // Função para exportar todos os agendamentos para PDF
-    function exportarParaPDF() {
-      const doc = new jsPDF();
-      
-      // Cabeçalho
-      doc.setFontSize(18);
-      doc.setTextColor(10, 36, 99);
-      doc.text("RELATÓRIO DE AGENDAMENTOS", 105, 20, null, null, 'center');
-      
-      doc.setFontSize(12);
-      doc.text(`Período: ${monthNames[parseInt(monthSelect.value)]} de ${yearSelect.value}`, 105, 30, null, null, 'center');
-      
-      // Tabela de agendamentos
-      const agendamentosDoMes = getAgendamentos(parseInt(yearSelect.value), parseInt(monthSelect.value));
-      
-      if (agendamentosDoMes.length === 0) {
-        doc.setFontSize(12);
-        doc.text("Nenhum agendamento encontrado para este período.", 105, 40, null, null, 'center');
-      } else {
-        // Cabeçalhos da tabela
-        const headers = [
-          "Data", 
-          "Turma", 
-          "Qtd", 
-          "Equipamento", 
-          "Professor", 
-          "Aula", 
-          "Entrega"
-        ];
-        
-        // Dados da tabela
-        const data = agendamentosDoMes.map(ag => {
-          const diaFormatado = ag.dia.toString().padStart(2, '0');
-          const mesFormatado = (parseInt(monthSelect.value) + 1).toString().padStart(2, '0');
-          return [
-            `${diaFormatado}/${mesFormatado}/${yearSelect.value}`,
-            ag.turma,
-            ag.numAparelhos.toString(),
-            ag.aparelho,
-            ag.professor,
-            ag.aula,
-            ag.horaEntrega || "Não entregue"
-          ];
+        // Preencher select de alunos no dashboard
+        document.getElementById('dashboard-grade').addEventListener('change', function() {
+            const grade = this.value;
+            const studentSelect = document.getElementById('dashboard-student');
+            
+            studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';
+            
+            studentsData[grade].forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.number;
+                option.textContent = `${student.number} - ${student.name}`;
+                studentSelect.appendChild(option);
+            });
         });
-        
-        // Adiciona a tabela ao PDF
-        doc.autoTable({
-          head: [headers],
-          body: data,
-          startY: 40,
-          theme: 'grid',
-          headStyles: {
-            fillColor: [10, 36, 99],
-            textColor: 255,
-            fontStyle: 'bold'
-          },
-          alternateRowStyles: {
-            fillColor: [240, 240, 240]
-          },
-          margin: { top: 40 }
-        });
-      }
-      
-      // Data e hora de geração
-      const agora = new Date();
-      doc.setFontSize(8);
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Relatório gerado em: ${agora.toLocaleString()}`, 105, 285, null, null, 'center');
-      
-      // Salva o PDF
-      const nomeArquivo = `Relatorio_Agendamentos_${monthNames[parseInt(monthSelect.value)]}_${yearSelect.value}.pdf`;
-      doc.save(nomeArquivo);
-    }
-    
-    // Função para exportar para CSV
-    function exportarParaCSV() {
-      const agendamentosDoMes = getAgendamentos(parseInt(yearSelect.value), parseInt(monthSelect.value));
-      
-      if (agendamentosDoMes.length === 0) {
-        alert("Nenhum agendamento encontrado para este período.");
-        return;
-      }
-      
-      // Cabeçalhos
-      let csv = "Data,Turma,Quantidade,Equipamento,Professor,Aula,Hora Retirada,Hora Entrega,Sala\n";
-      
-      // Dados
-      agendamentosDoMes.forEach(ag => {
-        const diaFormatado = ag.dia.toString().padStart(2, '0');
-        const mesFormatado = (parseInt(monthSelect.value) + 1).toString().padStart(2, '0');
-        const data = `${diaFormatado}/${mesFormatado}/${yearSelect.value}`;
-        
-        csv += `"${data}","${ag.turma}","${ag.numAparelhos}","${ag.aparelho}","${ag.professor}","${ag.aula}","${ag.horaRetirada}","${ag.horaEntrega || ''}","${ag.sala}"\n`;
-      });
-      
-      // Cria o arquivo CSV
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', `Agendamentos_${monthNames[parseInt(monthSelect.value)]}_${yearSelect.value}.csv`);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
 
-    function limparFormulario() {
-      document.getElementById("professor").value = "Selecione";
-      document.getElementById("email-professor").value = "";
-      document.getElementById("equipamentoAgendamento").value = "";
-      document.getElementById("marca").value = "";
-      document.getElementById("quantidadeAgendamento").value = "1";
-      document.getElementById("studentClass").value = "";
-      document.getElementById("sala").value = "";
-      document.getElementById("hora-retirada").value = "";
-      document.getElementById("hora-entrega").value = "";
-      document.getElementById("aula").value = "1ª Aula";
-      document.getElementById("conflictMessage").style.display = "none";
-      
-      // Limpa a seleção de data
-      if (selectedDay) {
-        selectedDay.classList.remove('selecionado');
-        const agendamentosDoMes = getAgendamentos(parseInt(yearSelect.value), parseInt(monthSelect.value));
-        if (!agendamentosDoMes.find(d => d.dia === parseInt(selectedDay.textContent))) {
-          selectedDay.classList.add('disponivel');
-        }
-        selectedDay = null;
-      }
-      selectedDate = null;
-      document.getElementById('dataAgendamento').value = '';
-      popupSelectedDate = null;
-    }
-
-    // Inicialização
-    carregarBancoDados();
-    gerarOpcoesProfessores();
-    populateMonthYearSelectors();
-    renderCalendarBody(Number(yearSelect.value), Number(monthSelect.value));
-    initDatepicker();
-
-    // Adiciona listeners para verificar conflito quando os campos mudam
-    document.getElementById("studentClass").addEventListener("change", verificarConflito);
-    document.getElementById("aula").addEventListener("change", verificarConflito);
-    document.getElementById("dataAgendamento").addEventListener("change", verificarConflito);
-
-    monthSelect.addEventListener('change', () => {
-      renderCalendarBody(Number(yearSelect.value), Number(monthSelect.value));
-    });
-
-    yearSelect.addEventListener('change', () => {
-      renderCalendarBody(Number(yearSelect.value), Number(monthSelect.value));
-    });
-  </script>
+        // Inicializar select de alunos para a primeira série
+        document.getElementById('dashboard-grade').dispatchEvent(new Event('change'));
+    </script>
 </body>
 </html>

@@ -211,7 +211,7 @@
                 <label>NOME:</label>
                 <select id="alunos" onchange="preencherNumero()">
                     <option value="">Selecione seu nome</option>
-                   <!-- 9º Ano A -->
+                    <!-- 9º Ano A -->
                     <option value="1" data-grade="9A">ÁGATHA NIKOLLE DA SILVA RAMOS</option>
                     <option value="2" data-grade="9A">AMANDA BEATRIZ LEAL MOURAD</option>
                     <option value="4" data-grade="9A">ANNA NICOLY BENVINDO DOS SANTOS</option>
@@ -251,7 +251,7 @@
                     <option value="3" data-grade="9B">ALLAN BEZERRA DE LIMA</option>
                     <option value="6" data-grade="9B">ARTHUR DE JESUS NASCIMENTO</option>
                     <option value="8" data-grade="9B">ARTHUR MARYANO MENDES</option>
-                    <option value="9" data-grade="9B">CARLOS EDUARDO OLIVEIRA SABATERRA</option>
+                    <option value="9" data-grade="9B">CAROS EDUARDO OLIVEIRA SABATERRA</option>
                     <option value="10" data-grade="9B">DARYO PALMA GREGORIO</option>
                     <option value="13" data-grade="9B">EDUARDA DE SOUSA OLIVEIRA</option>
                     <option value="16" data-grade="9B">GIOVANNA MARTINEZ FERREIRA</option>
@@ -303,7 +303,6 @@
                     <option value="44" data-grade="9C">KRYSTOFER LEITE DA SILVA</option>
                 </select>
             </div>
-            </div>
             
             <div class="form-group form-group-numero">
                 <label>N°:</label>
@@ -327,6 +326,7 @@
         <h2><strong>ATIVIDADE DE CIÊNCIAS (2° BIMESTRE)</strong></h2>
     </div>
 
+    
     <div id="questions">
         <!-- Questão 1 -->
         <div class="question">
@@ -577,17 +577,16 @@
             
             <div class="discursive">
                 <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
+ <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
                 <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
             </div>
-        </div>
-    </div>
+
 
     <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
     <div id="result"></div>
 
     <script>
-    // Dados dos alunos por série
+        // Dados dos alunos por série
         const studentsData = {
             '9A': [
                 {number: '1', name: 'ÁGATHA NIKOLLE DA SILVA RAMOS'},
@@ -726,31 +725,26 @@
         document.getElementById('data').valueAsDate = new Date();
 
         function submitForm() {
-            const aluno = document.getElementById('alunos').value;
-            const nome = document.getElementById('alunos').options[document.getElementById('alunos').selectedIndex].text;
+            const alunoSelect = document.getElementById('alunos');
+            const nome = alunoSelect.options[alunoSelect.selectedIndex].text;
             const numero = document.getElementById('numero').value;
             const serie = document.getElementById('serie').value;
-            const data = document.getElementById('data').value;
             
-            if (!aluno) {
+            if (!alunoSelect.value) {
                 alert('Por favor, selecione seu nome na lista.');
                 return;
             }
             
             let score = 0;
-            let totalQuestions = Object.keys(correctAnswers).length;
-            let results = {};
+            const totalQuestions = Object.keys(correctAnswers).length;
             
             // Verificar respostas
             for (let i = 1; i <= totalQuestions; i++) {
                 const questionName = 'q' + i;
                 const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
                 
-                if (selectedOption) {
-                    results[questionName] = selectedOption.value;
-                    if (selectedOption.value === correctAnswers[questionName]) {
-                        score++;
-                    }
+                if (selectedOption && selectedOption.value === correctAnswers[questionName]) {
+                    score++;
                 }
             }
             
@@ -758,6 +752,7 @@
             
             document.getElementById('result').innerHTML = `
                 <p>${nome}, você acertou ${score} de ${totalQuestions} questões (${percentage}%).</p>
+                <p>As questões discursivas serão avaliadas separadamente.</p>
             `;
             
             document.getElementById('submit-btn').disabled = true;
@@ -766,17 +761,17 @@
             sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
         }
 
-        function sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage) {
-            const scriptURL = 'https://script.google.com/macros/s/SEU_SCRIPT_ID/exec';
+        function sendToGoogleSheets(nome, numero, serie, acertos, total, porcentagem) {
+            const scriptURL = 'https://script.google.com/macros/s/SUA_ID_DE_SCRIPT/exec';
             
             const data = {
                 spreadsheetId: '1cw_3Kifufgt42yHsPea3pU_rw8QMgxhqmZY71P8byG4',
                 nome: nome,
                 numero: numero,
                 serie: serie,
-                acertos: score,
-                total: totalQuestions,
-                porcentagem: percentage,
+                acertos: acertos,
+                total: total,
+                porcentagem: porcentagem,
                 data: new Date().toLocaleDateString('pt-BR')
             };
 
@@ -788,8 +783,19 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => console.log('Sucesso!'))
-            .catch(error => console.error('Erro:', error));
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao enviar dados');
+                }
+                return response;
+            })
+            .then(() => console.log('Dados enviados com sucesso!'))
+            .catch(error => {
+                console.error('Erro:', error);
+                document.getElementById('result').innerHTML += `
+                    <p style="color: red;">Erro ao enviar dados. Por favor, informe o professor.</p>
+                `;
+            });
         }
     </script>
 </body>

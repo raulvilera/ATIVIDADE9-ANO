@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +14,7 @@
             color: #333;
             background: linear-gradient(to bottom, #006400, #000000);
         }
+        
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -23,6 +25,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        
         .form-container {
             display: flex;
             flex-wrap: wrap;
@@ -34,20 +37,25 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             align-items: flex-end;
         }
+        
         .form-group {
             display: flex;
             flex-direction: column;
         }
+        
         .form-group-nome {
             flex: 3;
             min-width: 300px;
         }
+        
         .form-group-numero {
             width: 80px;
         }
+        
         .form-group-data {
             width: 150px;
         }
+        
         label {
             display: block;
             margin-bottom: 5px;
@@ -55,12 +63,14 @@
             color: #004aad;
             font-size: 16px;
         }
+        
         select, input {
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 16px;
         }
+        
         .question {
             background: linear-gradient(to right, #87CEFA, #C0C0C0);
             margin-bottom: 30px;
@@ -71,6 +81,7 @@
             border-bottom: 4px solid #004aad;
             position: relative;
         }
+        
         .question:before {
             content: "";
             position: absolute;
@@ -82,29 +93,19 @@
             z-index: -1;
             border-radius: 8px;
         }
+        
         .question-text {
             font-weight: bold;
             margin-bottom: 20px;
             color: #004aad;
             font-size: 16px;
         }
+        
         .image-upload-container {
             margin: 20px 0;
             text-align: center;
         }
-        .upload-btn {
-            background-color: #004aad;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-        .upload-btn:hover {
-            background-color: #003882;
-        }
+        
         .preview-image {
             max-width: 100%;
             max-height: 300px;
@@ -114,9 +115,11 @@
             border: 1px solid #ddd;
             display: none;
         }
+        
         .options {
             margin-left: 0;
         }
+        
         .option {
             margin-bottom: 12px;
             padding: 12px;
@@ -128,19 +131,24 @@
             background-color: white;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+        
         .option input[type="radio"] {
             margin-right: 12px;
             transform: scale(1.2);
         }
+        
         .option:hover {
             background-color: #f0f0f0;
         }
+        
         .correct {
             background-color: #d4edda;
         }
+        
         .incorrect {
             background-color: #f8d7da;
         }
+        
         button {
             display: block;
             margin: 30px auto;
@@ -154,13 +162,16 @@
             transition: background-color 0.3s;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
+        
         button:hover {
             background-color: #003882;
         }
+        
         button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
         }
+        
         #result {
             text-align: center;
             font-weight: bold;
@@ -171,15 +182,7 @@
             font-size: 16px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .enem-stamp {
-            background-color: #004aad;
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
+        
         .discursive {
             margin-top: 20px;
             background-color: white;
@@ -187,6 +190,7 @@
             border-radius: 6px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        
         textarea {
             width: 100%;
             min-height: 100px;
@@ -207,7 +211,7 @@
                 <label>NOME:</label>
                 <select id="alunos" onchange="preencherNumero()">
                     <option value="">Selecione seu nome</option>
-                    <!-- 9º Ano A -->
+                   <!-- 9º Ano A -->
                     <option value="1" data-grade="9A">ÁGATHA NIKOLLE DA SILVA RAMOS</option>
                     <option value="2" data-grade="9A">AMANDA BEATRIZ LEAL MOURAD</option>
                     <option value="4" data-grade="9A">ANNA NICOLY BENVINDO DOS SANTOS</option>
@@ -299,6 +303,7 @@
                     <option value="44" data-grade="9C">KRYSTOFER LEITE DA SILVA</option>
                 </select>
             </div>
+            </div>
             
             <div class="form-group form-group-numero">
                 <label>N°:</label>
@@ -323,266 +328,14 @@
     </div>
 
     <div id="questions">
-        <!-- Questão 1 -->
-        <div class="question">
-            <div class="question-text">1.Uma matéria da Agência Fapesp traz o seguinte título: "COVID longa está ligada a dano duradouro na mitocôndria — a fábrica de energia das células".</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q1" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q1')">
-                <img id="preview-q1" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q1" value="a"> 
-                    a) O dano mitocondrial afeta a produção de anticorpos, impedindo a regeneração de células do sangue.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="b"> 
-                    b) A diminuição da produção de energia afeta o funcionamento de células em tecidos com alta demanda energética, como músculos e cérebro.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="c"> 
-                    c) A destruição da mitocôndria impede a digestão intracelular, causando acúmulo de resíduos tóxicos.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="d"> 
-                    d) A mitocôndria danificada altera a estrutura da parede celular, impedindo a entrada de nutrientes.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 2 -->
-        <div class="question">
-            <div class="question-text">2. Observe o gráfico a seguir, que representa a quantidade de DNA ao longo do ciclo celular de uma célula eucariota:</div>
-             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgS8Lc3goYosFNCNVpHE9pS10hV6dCaPBHkR_Nq_dWS3jQd49HJjzaXUVEMo-lQFI7uRWXpFQS-I0Db3n9eS7MWmvdHVyWUefejBWxirMEi7o5i3JE5Wiy9b9BauE2eyeLpZHTyoNsxolUVhbpz-zeFo8kKoKDzbVyW03PAXIGRMA5FEa4OQ93VsnLg5IGN/s644/ciclo_celular_dna.png.png"></center><br>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q2" value="a"> 
-                    a) Durante a fase G1 a célula está se dividindo, por isso há pico na quantidade de DNA.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q2" value="b"> 
-                    b) A duplicação do DNA ocorre na fase M, preparando a célula para se especializar.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q2" value="c"> 
-                    c) O pico na fase S indica a replicação do DNA, essencial para garantir o material genético nas células-filhas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q2" value="d"> 
-                    d) A queda na fase G2 indica que o DNA está sendo transformado em RNA para ser transmitido às células filhas.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 3 -->
-        <div class="question">
-            <div class="question-text">3.Uma empresa desenvolveu um sistema de IA para prever doenças hereditárias a partir da análise do DNA de recém-nascidos. O sistema lê a sequência de bases nitrogenadas e identifica mutações associadas a doenças.</div>
-             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvyaiJFYO_8vEF42t15w8y4I0k2_TnN9yUkhERVLBEbfeCrHe-9XlPsWO9Kcr03Lb4jvmNkNY7-MLavEggGNAyXBZV5OhwHfkCk5IU5XMx9v8pAEy6grnib_3x3v7BbqlDFzc6COFZPEdnDtAZc2dUk1hPL6RMEbGcFWtbO6iXdHguFJxV4Rb4QTqodYLK/s140/elyx-elyxyak.webp"></center><br>
-            <div class="image-upload-container">
-                <input type="file" id="upload-q3" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q3')">
-                <img id="preview-q3" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q3" value="a"> 
-                    a) A sequência de bases nitrogenadas no DNA determina a cor da pele e do cabelo, mas não influencia o risco de doenças.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q3" value="b"> 
-                    b) O DNA é formado por proteínas que reagem com enzimas e geram características hereditárias.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q3" value="c"> 
-                    c) As trincas de nucleotídeos (códons) definem a sequência de aminoácidos das proteínas, e mutações podem alterar essas funções.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q3" value="d"> 
-                    d) As organelas celulares modificam o DNA constantemente, o que justifica a necessidade de atualizações em tempo real.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 4 -->
-        <div class="question">
-            <div class="question-text">4.Um paciente com deficiência na produção de proteínas digestivas foi diagnosticado com disfunção nos ribossomos.</div>
-            <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9jz51Zc5l2hKEpx5_myNmVUZ1_TI2Eare7i0c_KkLzI5HD1bUE9O-h4zm3SJS0oBvNwgUEW2DFzqcV7QFSjs59QwJpViYM2VvfFRFFxIkqaSS5gudS9CkZ6pDU0r_DwIVXPq6RSSI7Y1Pxu0aiP0BP4FfUJ98L1NNQAzV2EGmahwWaKM1SwqLdihNDg88/s603/C0044367-Dna_compaction-removebg-preview.png"</center><br><br>
-                        <div class="options">
-                <label class="option">
-                    <input type="radio" name="q4" value="a"> 
-                    a) Os ribossomos sintetizam proteínas essenciais, e sua falha compromete a digestão por deficiência de enzimas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q4" value="b"> 
-                    b) Os ribossomos produzem lipídios, que revestem o intestino e previnem refluxo gástrico.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q4" value="c"> 
-                    c) A função dos ribossomos é absorver os nutrientes, e sua falha impede o transporte de glicose.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q4" value="d"> 
-                    d) Os ribossomos são exclusivos das mitocôndrias, e sua falha impede o controle da temperatura corporal.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 5 -->
-        <div class="question">
-            <div class="question-text">5.Você usou um simulador online de uma célula animal em 3D. Ao clicar sobre o retículo endoplasmático rugoso, apareceu a seguinte mensagem: "Estrutura responsável por produzir e transportar proteínas."</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q5" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q5')">
-                <img id="preview-q5" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q5" value="a"> 
-                    a) As proteínas continuariam a ser produzidas normalmente no núcleo.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q5" value="b"> 
-                    b) A célula não seria capaz de produzir as proteínas que compõem suas estruturas e enzimas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q5" value="c"> 
-                    c) A síntese de DNA seria interrompida, causando a morte celular imediata.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q5" value="d"> 
-                    d) O material genético se espalharia pelo citoplasma, perdendo a capacidade de codificar enzimas.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 6 -->
-        <div class="question">
-            <div class="question-text">6.Assinale a alternativa que apresenta a sequência de bases nitrogenadas, que combina com a seguinte sequência de pares de bases:T-A, A-T, C-G, G-C</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q6" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q6')">
-                <img id="preview-q6" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q6" value="a"> 
-                    a) A-T, T-A, G-C, C-G
-                </label>
-                <label class="option">
-                    <input type="radio" name="q6" value="b"> 
-                    b) A-C, T-G, G-A, C-T
-                </label>
-                <label class="option">
-                    <input type="radio" name="q6" value="c"> 
-                    c) A-U, T-A, G-U, C-A
-                </label>
-                <label class="option">
-                    <input type="radio" name="q6" value="d"> 
-                    d) A-G, T-C, G-A, C-T
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 7 -->
-        <div class="question">
-            <div class="question-text">7.Rosalind Franklin foi uma cientista fundamental para o entendimento da estrutura do DNA, mas seu trabalho foi apropriado sem os devidos créditos por Watson e Crick, em 1953.</div>
-             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMVYCboQKn9FoJ760DVzd3GWjkNjkTl6Q4Hcur927s-wLjkbBQ5HWONPWAoBA4Po5-_R9-1xKmexBjWEfvSArisJh2zrPKnGc4JwsjrDDs6sHa2vVDnr5yrh2hMjXiVHTqAl-Aaq7xBcr-EW3mAMn1jNxo8jFHIdbPw1ou_467OWFsency_0NGGZF1e5Sw/s813/Captura%20de%20tela%202025-05-25%20223541.png"</center><br><br>
-            <div class="image-upload-container">
-                <input type="file" id="upload-q7" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q7')">
-                <img id="preview-q7" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q7" value="a"> 
-                    a) Franklin se destacou por identificar os pares de bases do RNA.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q7" value="b"> 
-                    b) A descoberta da dupla hélice do DNA só foi possível graças às imagens de cristalografia obtidas por Franklin.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q7" value="c"> 
-                    c) Crick e Watson criaram a técnica de raios X usada por Franklin para visualizar os cromossomos.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q7" value="d"> 
-                    d) O trabalho de Franklin foi ignorado porque sua teoria se opunha à existência do DNA.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 8 -->
-        <div class="question">
-            <div class="question-text">8.Uma empresa de genética vegetal alterou a sequência de DNA de uma planta para que ela resistisse a pragas sem uso de agrotóxicos. Após a análise, foi verificado que a planta expressava uma nova proteína não presente anteriormente.</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q8" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q8')">
-                <img id="preview-q8" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q8" value="a"> 
-                    a) O DNA é imutável, e a modificação gerou um erro que beneficiou a planta.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q8" value="b"> 
-                    b) Os ribossomos da planta foram substituídos por proteínas sintéticas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q8" value="c"> 
-                    c) A alteração na sequência de nucleotídeos levou à formação de novos códons, gerando proteínas diferentes.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q8" value="d"> 
-                    d) A fotossíntese foi aumentada, ativando genes latentes da planta.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 9 (Discursiva) -->
-        <div class="question">
-            <div class="question-text">9.Um laboratório de genética ajudou a solucionar um crime a partir do DNA presente em um fio de cabelo encontrado na cena. O material genético foi comparado com um banco de dados criminal.</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q9" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q9')">
-                <img id="preview-q9" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="discursive">
-                <p>Explique como o DNA pode ser usado para identificar uma pessoa. Em seguida, discuta uma possível questão ética envolvendo o uso de bancos de dados genéticos em investigações criminais.</p>
-                <textarea name="q9" placeholder="Digite sua resposta aqui..."></textarea>
-            </div>
-        </div>
-
-        <!-- Questão 10 (Discursiva) -->
-        <div class="question">
-            <div class="question-text">10.Durante um experimento, uma aluna notou que, em células vegetais, estruturas verdes chamadas cloroplastos estavam sempre voltadas para a luz.</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q10" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q10')">
-                <img id="preview-q10" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="discursive">
-                <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
-                <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
-            </div>
-        </div>
+        <!-- Questões aqui (como no seu exemplo original) -->
     </div>
 
     <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
     <div id="result"></div>
 
     <script>
-        // Dados dos alunos por série
+    // Dados dos alunos por série
         const studentsData = {
             '9A': [
                 {number: '1', name: 'ÁGATHA NIKOLLE DA SILVA RAMOS'},
@@ -689,24 +442,20 @@
             q8: "c"
         };
 
-        // Função para pré-visualizar imagens carregadas
         function previewImage(input, previewId) {
             const preview = document.getElementById(previewId);
             const file = input.files[0];
             
             if (file) {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
                 }
-                
                 reader.readAsDataURL(file);
             }
         }
 
-        // Preencher número do aluno automaticamente
         function preencherNumero() {
             const selectAluno = document.getElementById('alunos');
             const inputNumero = document.getElementById('numero');
@@ -724,7 +473,6 @@
         // Configurar data atual
         document.getElementById('data').valueAsDate = new Date();
 
-        // Submeter formulário
         function submitForm() {
             const aluno = document.getElementById('alunos').value;
             const nome = document.getElementById('alunos').options[document.getElementById('alunos').selectedIndex].text;
@@ -750,62 +498,34 @@
                     results[questionName] = selectedOption.value;
                     if (selectedOption.value === correctAnswers[questionName]) {
                         score++;
-                        document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
-                            if (opt.value === correctAnswers[questionName]) {
-                                opt.parentElement.classList.add('correct');
-                            }
-                        });
-                    } else {
-                        document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
-                            if (opt.value === selectedOption.value) {
-                                opt.parentElement.classList.add('incorrect');
-                            }
-                            if (opt.value === correctAnswers[questionName]) {
-                                opt.parentElement.classList.add('correct');
-                            }
-                        });
                     }
-                } else {
-                    results[questionName] = null;
-                    document.querySelectorAll(`input[name="${questionName}"]`).forEach(opt => {
-                        if (opt.value === correctAnswers[questionName]) {
-                            opt.parentElement.classList.add('correct');
-                        }
-                    });
                 }
             }
             
-            // Calcular porcentagem
             const percentage = Math.round((score / totalQuestions) * 100);
             
-            // Mostrar resultado
             document.getElementById('result').innerHTML = `
                 <p>${nome}, você acertou ${score} de ${totalQuestions} questões (${percentage}%).</p>
-                <p>As questões discursivas serão avaliadas separadamente pelo professor.</p>
             `;
             
-            // Desabilitar botão de envio
             document.getElementById('submit-btn').disabled = true;
             
-            // Enviar dados para o Google Sheets
+            // Enviar para o Google Sheets
             sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
         }
 
-        // Função para enviar dados para o Google Sheets
         function sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage) {
-            // URL do seu Google Apps Script (substitua pelo seu URL real)
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbylPOd6XI-ncwBQlxOIGxpPRRabUgVvIgxTJZJogku9RMOKDpUljvziyaXcewq3DwIu/exec';
+            const scriptURL = 'https://script.google.com/macros/s/SEU_SCRIPT_ID/exec';
             
             const data = {
+                spreadsheetId: '1cw_3Kifufgt42yHsPea3pU_rw8QMgxhqmZY71P8byG4',
                 nome: nome,
                 numero: numero,
                 serie: serie,
                 acertos: score,
                 total: totalQuestions,
                 porcentagem: percentage,
-                data: new Date().toLocaleDateString('pt-BR'),
-                sheetName: 'DASHBOARD DE DESENVOLVIMENTO',
-                startCell: 'B3' // Começa a gravar a partir da célula B3
+                data: new Date().toLocaleDateString('pt-BR')
             };
 
             fetch(scriptURL, {
@@ -816,8 +536,8 @@
                 },
                 body: JSON.stringify(data)
             })
-            .then(response => console.log('Dados enviados com sucesso!'))
-            .catch(error => console.error('Erro ao enviar dados:', error));
+            .then(response => console.log('Sucesso!'))
+            .catch(error => console.error('Erro:', error));
         }
     </script>
 </body>

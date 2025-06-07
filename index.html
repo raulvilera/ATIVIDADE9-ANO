@@ -197,77 +197,6 @@
             font-size: 16px;
             margin-top: 10px;
         }
-        
-        /* Dashboard Styles */
-        .dashboard {
-            display: none;
-            margin-top: 40px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .dashboard h2 {
-            text-align: center;
-            color: #004aad;
-            margin-bottom: 20px;
-        }
-        .dashboard-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .dashboard-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .chart-container {
-            width: 100%;
-            height: 400px;
-            margin: 20px 0;
-        }
-        .weaknesses {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .weaknesses h3 {
-            margin-top: 0;
-            color: #004aad;
-        }
-        .weakness-item {
-            margin-bottom: 8px;
-            padding-left: 15px;
-            border-left: 3px solid #004aad;
-        }
-        .tab-buttons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .tab-button {
-            padding: 10px 20px;
-            background-color: #e9ecef;
-            border: none;
-            cursor: pointer;
-            margin: 0 5px;
-            border-radius: 4px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        .tab-button.active {
-            background-color: #004aad;
-            color: white;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
     </style>
 </head>
 <body>
@@ -643,7 +572,7 @@
             
             <div class="discursive">
                 <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
- <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
                 <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
             </div>
         </div>
@@ -651,66 +580,7 @@
 
     <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
     <div id="result"></div>
-    
-    <!-- Dashboard -->
-    <div id="dashboard" class="dashboard">
-        <h2>Dashboard de Análise de Desempenho</h2>
-        
-        <div class="tab-buttons">
-            <button class="tab-button active" data-tab="student">Análise Individual</button>
-            <button class="tab-button" data-tab="class">Desempenho da Turma</button>
-        </div>
-        
-        <div id="student-tab" class="tab-content active">
-            <div class="dashboard-controls">
-                <div class="dashboard-group">
-                    <label for="dashboard-grade">Série:</label>
-                    <select id="dashboard-grade">
-                        <option value="9A">9°A</option>
-                        <option value="9B">9°B</option>
-                        <option value="9C">9°C</option>
-                    </select>
-                </div>
-                
-                <div class="dashboard-group">
-                    <label for="dashboard-student">Aluno:</label>
-                    <select id="dashboard-student">
-                        <option value="">Selecione um aluno</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="chart-container">
-                <canvas id="student-chart"></canvas>
-            </div>
-            
-            <div class="weaknesses">
-                <h3>Principais Dificuldades</h3>
-                <div id="weaknesses-list">
-                    <p>Selecione um aluno para visualizar suas dificuldades.</p>
-                </div>
-            </div>
-        </div>
-        
-        <div id="class-tab" class="tab-content">
-            <div class="dashboard-controls">
-                <div class="dashboard-group">
-                    <label for="class-grade">Série:</label>
-                    <select id="class-grade">
-                        <option value="9A">9°A</option>
-                        <option value="9B">9°B</option>
-                        <option value="9C">9°C</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="chart-container">
-                <canvas id="class-chart"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Dados dos alunos por série
         const studentsData = {
@@ -917,162 +787,38 @@
             // Desabilitar botão de envio
             document.getElementById('submit-btn').disabled = true;
             
-            // Mostrar dashboard
-            document.getElementById('dashboard').style.display = 'block';
-            
-            // Inicializar gráficos
-            initializeCharts(percentage, results);
+            // Enviar dados para o Google Sheets
+            sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
         }
 
-        // Inicializar gráficos do dashboard
-        function initializeCharts(percentage, results) {
-            // Gráfico individual
-            const studentCtx = document.getElementById('student-chart').getContext('2d');
-            const studentChart = new Chart(studentCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Acertos', 'Erros'],
-                    datasets: [{
-                        data: [percentage, 100 - percentage],
-                        backgroundColor: ['#28a745', '#dc3545'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Desempenho Individual',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
-            });
+        // Função para enviar dados para o Google Sheets
+        function sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage) {
+            // URL do seu Google Apps Script (substitua pelo seu URL real)
+            const scriptURL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
             
-            // Gráfico da turma (dados fictícios)
-            const classCtx = document.getElementById('class-chart').getContext('2d');
-            const classChart = new Chart(classCtx, {
-                type: 'bar',
-                data: {
-                    labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
-                    datasets: [{
-                        label: 'Número de Alunos',
-                        data: [2, 5, 8, 10, 5],
-                        backgroundColor: '#004aad',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Número de Alunos'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Faixa de Desempenho'
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        title: {
-                            display: true,
-                            text: 'Desempenho da Turma',
-                            font: {
-                                size: 16
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Listar dificuldades (baseado nas questões erradas)
-            const weaknessesList = document.getElementById('weaknesses-list');
-            weaknessesList.innerHTML = '';
-            
-            let hasWeaknesses = false;
-            for (const question in results) {
-                if (results[question] !== correctAnswers[question]) {
-                    const weaknessItem = document.createElement('div');
-                    weaknessItem.className = 'weakness-item';
-                    weaknessItem.textContent = `Dificuldade na questão ${question.replace('q', '')}: ${getQuestionTopic(question)}`;
-                    weaknessesList.appendChild(weaknessItem);
-                    hasWeaknesses = true;
-                }
-            }
-            
-            if (!hasWeaknesses) {
-                weaknessesList.innerHTML = '<p>Parabéns! Você não apresentou dificuldades significativas nesta atividade.</p>';
-            }
-        }
-
-        // Retorna o tópico da questão (simulação)
-        function getQuestionTopic(questionId) {
-            const topics = {
-                q1: "Função das mitocôndrias",
-                q2: "Ciclo celular e duplicação do DNA",
-                q3: "DNA e doenças hereditárias",
-                q4: "Função dos ribossomos",
-                q5: "Retículo endoplasmático rugoso",
-                q6: "Pares de bases nitrogenadas",
-                q7: "História da descoberta do DNA",
-                q8: "Biotecnologia e modificação genética"
+            const data = {
+                nome: nome,
+                numero: numero,
+                serie: serie,
+                acertos: score,
+                total: totalQuestions,
+                porcentagem: percentage,
+                data: new Date().toLocaleDateString('pt-BR'),
+                sheetName: 'DASHBOARD DE DESENVOLVIMENTO',
+                startCell: 'B3' // Começa a gravar a partir da célula B3
             };
-            return topics[questionId] || "Tópico não especificado";
+
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => console.log('Dados enviados com sucesso!'))
+            .catch(error => console.error('Erro ao enviar dados:', error));
         }
-
-        // Configurar abas do dashboard
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-tab');
-                
-                // Remover classe active de todos os botões e conteúdos
-                document.querySelectorAll('.tab-button').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                
-                // Adicionar classe active ao botão e conteúdo clicado
-                this.classList.add('active');
-                document.getElementById(`${tabId}-tab`).classList.add('active');
-            });
-        });
-
-        // Preencher select de alunos no dashboard
-        document.getElementById('dashboard-grade').addEventListener('change', function() {
-            const grade = this.value;
-            const studentSelect = document.getElementById('dashboard-student');
-            
-            studentSelect.innerHTML = '<option value="">Selecione um aluno</option>';
-            
-            studentsData[grade].forEach(student => {
-                const option = document.createElement('option');
-                option.value = student.number;
-                option.textContent = `${student.number} - ${student.name}`;
-                studentSelect.appendChild(option);
-            });
-        });
-
-        // Inicializar select de alunos para a primeira série
-        document.getElementById('dashboard-grade').dispatchEvent(new Event('change'));
     </script>
 </body>
 </html>

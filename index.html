@@ -762,41 +762,52 @@
         }
 
         function sendToGoogleSheets(nome, numero, serie, acertos, total, porcentagem) {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbz8oJEk9it1dEcEvuabz3py99kpWySYUXPU6xj5mlTykFQZUSGtWRPg9279b5fIUga0/exec';
-            
-            const data = {
-                spreadsheetId: '1cw_3Kifufgt42yHsPea3pU_rw8QMgxhqmZY71P8byG4',
-                nome: nome,
-                numero: numero,
-                serie: serie,
-                acertos: acertos,
-                total: total,
-                porcentagem: porcentagem,
-                data: new Date().toLocaleDateString('pt-BR')
-            };
+    const scriptURL = 'https://script.google.com/macros/s/SUA_ID_DE_SCRIPT/exec';
+    
+    const data = {
+        spreadsheetId: '1cw_3Kifufgt42yHsPea3pU_rw8QMgxhqmZY71P8byG4',
+        nome: nome,
+        numero: numero,
+        serie: serie,
+        acertos: acertos,
+        total: total,
+        porcentagem: porcentagem,
+        data: new Date().toLocaleDateString('pt-BR')
+    };
 
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Erro ao enviar dados');
-                }
-                return response;
-            })
-            .then(() => console.log('Dados enviados com sucesso!'))
-            .catch(error => {
-                console.error('Erro:', error);
-                document.getElementById('result').innerHTML += `
-                    <p style="color: red;">Erro ao enviar dados. Por favor, informe o professor.</p>
-                `;
-            });
+    fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Falha na rede');
         }
+        return response.text(); // Alterado para text() pois no-cors não permite acesso ao body
+    })
+    .then(text => {
+        try {
+            const data = JSON.parse(text);
+            if (data.success) {
+                console.log('Dados enviados:', data);
+            } else {
+                throw new Error(data.message || 'Erro no servidor');
+            }
+        } catch {
+            throw new Error('Resposta inválida do servidor');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        document.getElementById('result').innerHTML += `
+            <p style="color: red;">Erro ao enviar dados: ${error.message}. Por favor, informe o professor.</p>
+        `;
+    });
+}
     </script>
 </body>
 </html>

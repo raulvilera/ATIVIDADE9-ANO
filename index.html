@@ -580,7 +580,8 @@
  <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
                 <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
             </div>
-
+        </div>
+    </div>
 
     <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
     <div id="result"></div>
@@ -628,7 +629,7 @@
                 {number: '3', name: 'ALLAN BEZERRA DE LIMA'},
                 {number: '6', name: 'ARTHUR DE JESUS NASCIMENTO'},
                 {number: '8', name: 'ARTHUR MARYANO MENDES'},
-                {number: '9', name: 'CARLOS EDUARDO OLIVEIRA SABATERRA'},
+                {number: '9', name: 'CAROS EDUARDO OLIVEIRA SABATERRA'},
                 {number: '10', name: 'DARYO PALMA GREGORIO'},
                 {number: '13', name: 'EDUARDA DE SOUSA OLIVEIRA'},
                 {number: '16', name: 'GIOVANNA MARTINEZ FERREIRA'},
@@ -724,7 +725,7 @@
         // Configurar data atual
         document.getElementById('data').valueAsDate = new Date();
 
-        function submitForm() {
+        async function submitForm() {
             const alunoSelect = document.getElementById('alunos');
             const nome = alunoSelect.options[alunoSelect.selectedIndex].text;
             const numero = document.getElementById('numero').value;
@@ -758,40 +759,41 @@
             document.getElementById('submit-btn').disabled = true;
             
             // Enviar para o Google Sheets
-            sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
+            try {
+                await sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
+            } catch (error) {
+                console.error('Erro ao enviar dados:', error);
+                document.getElementById('result').innerHTML += `
+                    <p style="color: red;">Erro ao enviar dados: ${error.message}. Por favor, informe o professor.</p>
+                `;
+            }
         }
 
-        function sendToGoogleSheets(nome, numero, serie, acertos, total, porcentagem) {
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbze6tLUdBnMC-N2jWxmRqgEx6l3BoT1rni97g6gdscSB-lfSwhusv9YJ7OcktEr1Tw6/exec';
-  
-  const data = {
-    nome: nome,
-    numero: numero,
-    serie: serie,
-    porcentagem: porcentagem
-  };
+        async function sendToGoogleSheets(nome, numero, serie, acertos, total, porcentagem) {
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbze6tLUdBnMC-N2jWxmRqgEx6l3BoT1rni97g6gdscSB-lfSwhusv9YJ7OcktEr1Tw6/exec';
+            
+            const data = {
+                nome: nome,
+                numero: numero,
+                serie: serie,
+                acertos: acertos,
+                total: total,
+                porcentagem: porcentagem
+            };
 
-  fetch(scriptURL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (!data.success) {
-      throw new Error(data.message);
-    }
-    console.log('Sucesso:', data);
-  })
-  .catch(error => {
-    console.error('Erro:', error);
-    document.getElementById('result').innerHTML += `
-      <p style="color: red;">Erro ao enviar dados: ${error.message}. Por favor, informe o professor.</p>
-    `;
-  });
-}
+            const response = await fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha na comunicação com o servidor');
+            }
+        }
     </script>
 </body>
 </html>

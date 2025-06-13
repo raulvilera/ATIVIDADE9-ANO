@@ -201,6 +201,28 @@
             font-size: 16px;
             margin-top: 10px;
         }
+
+        /* Adicionado: Estilo para o indicador de carregamento */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #004aad;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -577,10 +599,16 @@
             
             <div class="discursive">
                 <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
- <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
                 <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
             </div>
         </div>
+    </div>
+
+    <!-- Adicionado: Indicador de carregamento -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p>Enviando dados...</p>
     </div>
 
     <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
@@ -736,6 +764,10 @@
                 return;
             }
             
+            // Mostrar indicador de carregamento
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('submit-btn').disabled = true;
+            
             let score = 0;
             const totalQuestions = Object.keys(correctAnswers).length;
             
@@ -751,47 +783,60 @@
             
             const percentage = Math.round((score / totalQuestions) * 100);
             
+            // Exibir resultado para o usuário
             document.getElementById('result').innerHTML = `
                 <p>${nome}, você acertou ${score} de ${totalQuestions} questões (${percentage}%).</p>
                 <p>As questões discursivas serão avaliadas separadamente.</p>
             `;
             
-            document.getElementById('submit-btn').disabled = true;
-            
-            // Enviar para o Google Sheets
             try {
-                await sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
+                // Enviar para o Google Sheets
+                const response = await sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
+                
+                if (response && response.success) {
+                    document.getElementById('result').innerHTML += `
+                        <p style="color: green;">Dados enviados com sucesso!</p>
+                    `;
+                } else {
+                    throw new Error(response?.message || 'Erro ao enviar dados');
+                }
             } catch (error) {
                 console.error('Erro ao enviar dados:', error);
                 document.getElementById('result').innerHTML += `
                     <p style="color: red;">Erro ao enviar dados: ${error.message}. Por favor, informe o professor.</p>
                 `;
+            } finally {
+                // Esconder indicador de carregamento
+                document.getElementById('loading').style.display = 'none';
             }
         }
 
         async function sendToGoogleSheets(nome, numero, serie, acertos, total, porcentagem) {
             const scriptURL = 'https://script.google.com/macros/s/AKfycbze6tLUdBnMC-N2jWxmRqgEx6l3BoT1rni97g6gdscSB-lfSwhusv9YJ7OcktEr1Tw6/exec';
             
-            const data = {
-                nome: nome,
-                numero: numero,
-                serie: serie,
-                acertos: acertos,
-                total: total,
-                porcentagem: porcentagem
-            };
+            // Usando FormData para enviar os dados
+            const formData = new FormData();
+            formData.append('nome', nome);
+            formData.append('numero', numero);
+            formData.append('serie', serie);
+            formData.append('acertos', acertos);
+            formData.append('total', total);
+            formData.append('porcentagem', porcentagem);
 
-            const response = await fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
+            try {
+                const response = await fetch(scriptURL, {
+                    method: 'POST',
+                    body: formData
+                });
 
-            if (!response.ok) {
-                throw new Error('Falha na comunicação com o servidor');
+                if (!response.ok) {
+                    throw new Error('Falha na comunicação com o servidor');
+                }
+
+                return await response.json();
+            } catch (error) {
+                console.error('Erro ao enviar para o Google Sheets:', error);
+                throw error;
             }
         }
     </script>

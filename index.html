@@ -1,845 +1,1087 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atividade de Ciências - 9º Ano</title>
+    <title>Atividade de Ciências - 1º Bimestre</title>
     <style>
+        :root {
+            --primary-color: #1a2a6c;
+            --secondary-color: #b21f1f;
+            --accent-color: #fdbb2d;
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --white: #ffffff;
+            --border-color: #dee2e6;
+        }
+        * { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            max-width: 900px;
+            font-family: 'Georgia', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
-            color: #333;
-            background: linear-gradient(to bottom, #006400, #000000);
+            background: var(--white);
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 12px;
         }
-        
-        .header {
+        header {
             text-align: center;
+            border-bottom: 3px double var(--primary-color);
             margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #004aad;
-            background: linear-gradient(to right, #87CEFA, #C0C0C0);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding-bottom: 20px;
         }
-        
-        .form-container {
+        header h1 {
+            margin: 5px 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        header h2 {
+            margin: 5px 0;
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+            font-weight: normal;
+        }
+        .student-panel {
+            background: #eef2ff;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            font-family: sans-serif;
+        }
+        .student-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+        }
+        .fields-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-            background: linear-gradient(to right, #87CEFA, #C0C0C0);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            gap: 16px;
             align-items: flex-end;
         }
-        
-        .form-group {
+        .field-group {
             display: flex;
             flex-direction: column;
+            gap: 5px;
         }
-        
-        .form-group-nome {
-            flex: 3;
-            min-width: 300px;
-        }
-        
-        .form-group-numero {
-            width: 80px;
-        }
-        
-        .form-group-data {
-            width: 150px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
+        .field-group label {
+            font-size: 0.75rem;
             font-weight: bold;
-            color: #004aad;
-            font-size: 16px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        select, input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
-        .question {
-            background: linear-gradient(to right, #87CEFA, #C0C0C0);
-            margin-bottom: 30px;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 8px 8px 15px rgba(0,0,0,0.15), -3px 0 8px rgba(0,0,0,0.1);
-            border-left: 4px solid #004aad;
-            border-bottom: 4px solid #004aad;
-            position: relative;
-        }
-        
-        .question:before {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: -8px;
-            right: 8px;
-            top: 8px;
-            background: rgba(0,0,0,0.05);
-            z-index: -1;
-            border-radius: 8px;
-        }
-        
-        .question-text {
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #004aad;
-            font-size: 16px;
-        }
-        
-        .image-upload-container {
-            margin: 20px 0;
-            text-align: center;
-        }
-        
-        .preview-image {
-            max-width: 100%;
-            max-height: 300px;
-            margin-top: 15px;
+        .field-group select,
+        .field-group input[type="text"] {
+            padding: 10px 14px;
             border-radius: 6px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            border: 1px solid #ddd;
-            display: none;
+            border: 2px solid #aab0d6;
+            font-size: 1rem;
+            background: white;
+            transition: border-color 0.2s;
+            font-family: sans-serif;
         }
-        
-        .options {
-            margin-left: 0;
+        .field-group select:focus,
+        .field-group input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
         }
-        
-        .option {
-            margin-bottom: 12px;
-            padding: 12px;
-            border-radius: 6px;
-            transition: background-color 0.3s;
+        #select-turma { width: 160px; }
+        #select-aluno { width: 420px; }
+        #input-numero { width: 80px; background: #f0f4ff; color: #1a2a6c; font-weight: bold; cursor: default; }
+        .spinner {
+            display: inline-block;
+            width: 15px; height: 15px;
+            border: 3px solid #aab0d6;
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #loading-msg {
+            font-size: 0.85rem;
+            color: #555;
+            margin-top: 10px;
+            min-height: 20px;
             display: flex;
             align-items: center;
-            font-size: 16px;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            gap: 8px;
         }
-        
-        .option input[type="radio"] {
-            margin-right: 12px;
-            transform: scale(1.2);
+        .intro-text {
+            background: #f1f3f5;
+            padding: 20px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 30px;
+            font-style: italic;
         }
-        
-        .option:hover {
-            background-color: #f0f0f0;
+        .question {
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
         }
-        
-        .correct {
-            background-color: #d4edda;
-        }
-        
-        .incorrect {
-            background-color: #f8d7da;
-        }
-        
-        button {
+        .question-header {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
             display: block;
-            margin: 30px auto;
-            padding: 12px 30px;
-            background-color: #004aad;
+        }
+        .context-box {
+            background: #fff9db;
+            padding: 20px;
+            border: 1px solid #ffe066;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: center;
+        }
+        .data-table th { background-color: var(--primary-color); color: white; }
+        .data-table tr:nth-child(even) { background-color: #f8f9fa; }
+        .question-svg {
+            display: block;
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: sans-serif;
+        }
+        .option:hover { background: #e7f5ff; border-color: #74c0fc; }
+        .option input { margin-top: 5px; transform: scale(1.2); }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        button:hover {
-            background-color: #003882;
-        }
-        
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        #result {
-            text-align: center;
+            border-radius: 8px;
+            font-size: 1.3rem;
             font-weight: bold;
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 4px;
-            background-color: #e7f3ff;
-            font-size: 16px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            margin-top: 40px;
+            transition: background 0.3s;
+            text-transform: uppercase;
         }
-        
-        .discursive {
-            margin-top: 20px;
-            background-color: white;
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        /* Adicionado: Estilo para o indicador de carregamento */
-        .loading {
-            display: none;
+        .btn-submit:hover    { background-color: #0d1a4a; }
+        .btn-submit:disabled { background-color: #aaa; cursor: not-allowed; }
+        #result {
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
-            margin: 20px 0;
+            display: none;
+            font-family: sans-serif;
         }
-        
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #004aad;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+        .success { background-color: #d3f9d8; color: #2b8a3e; border: 2px solid #51cf66; }
+        .error   { background-color: #fff5f5; color: #c92a2a; border: 2px solid #ff8787; }
+        #sheets-status {
+            margin-top: 15px;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: none;
+            font-family: sans-serif;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .sending  { background:#e7f5ff; color:#1864ab; border:1px solid #74c0fc; }
+        .sent     { background:#d3f9d8; color:#2b8a3e; border:1px solid #51cf66; }
+        .send-err { background:#fff5f5; color:#c92a2a; border:1px solid #ff8787; }
+        @media print {
+            .btn-submit { display: none; }
+            .container { box-shadow: none; padding: 20px; }
+            body { background: white; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1><strong>E.E.PROFª WANDA MASCAGNI DE SÁ</strong></h1>
-        <div class="form-container">
-            <div class="form-group form-group-nome">
-                <label>NOME:</label>
-                <select id="alunos" onchange="preencherNumero()">
-                    <option value="">Selecione seu nome</option>
-                    <!-- 9º Ano A -->
-                    <option value="1" data-grade="9A">ÁGATHA NIKOLLE DA SILVA RAMOS</option>
-                    <option value="2" data-grade="9A">AMANDA BEATRIZ LEAL MOURAD</option>
-                    <option value="4" data-grade="9A">ANNA NICOLY BENVINDO DOS SANTOS</option>
-                    <option value="5" data-grade="9A">ARTHUR DOS SANTOS</option>
-                    <option value="6" data-grade="9A">BEATRIZ UCHOA DOS SANTOS</option>
-                    <option value="7" data-grade="9A">BRUNO EDUARDO NOGUEIRA DE OLIVEIRA</option>
-                    <option value="8" data-grade="9A">CARLOS EDUARDO BELMIRO DOS SANTOS</option>
-                    <option value="9" data-grade="9A">CHRISTIAN DAVI DE OLIVEIRA</option>
-                    <option value="11" data-grade="9A">ERICK HENRIQUE RIBEIRO GONÇALVES</option>
-                    <option value="12" data-grade="9A">FILIPE RODRIGUES SANTOS</option>
-                    <option value="13" data-grade="9A">GABRIEL ALMEIDA MOSCARDINI</option>
-                    <option value="14" data-grade="9A">GIOVANA MOTA VAZ DE JESUS</option>
-                    <option value="15" data-grade="9A">GUILHERME DA SILVA GUIMARÃES</option>
-                    <option value="16" data-grade="9A">HELOÍSA LEAL DOS REIS</option>
-                    <option value="17" data-grade="9A">IAGO ANJOS DE JESUS</option>
-                    <option value="18" data-grade="9A">IGNACIO LINS SANTOS</option>
-                    <option value="19" data-grade="9A">ISADORA DE SOUZA SILVA</option>
-                    <option value="20" data-grade="9A">JOAO VICTOR BATISTA DUARTE</option>
-                    <option value="21" data-grade="9A">JULIANA SANTOS LIMA</option>
-                    <option value="25" data-grade="9A">MANUELA VITÓRIA LIMA DOS SANTOS</option>
-                    <option value="26" data-grade="9A">MIGUEL ALVES OLIVEIRA</option>
-                    <option value="27" data-grade="9A">NIKOLAS ANTONIO</option>
-                    <option value="28" data-grade="9A">ORIANA JOSE TUAREZ RENGEL</option>
-                    <option value="31" data-grade="9A">RAFAELLA VITÓRIA EXPEDITA DE ANDRADE MARQUES</option>
-                    <option value="33" data-grade="9A">RAYLAN DE JESUS BARBOSA</option>
-                    <option value="34" data-grade="9A">REBECA DOS SANTOS SOUSA</option>
-                    <option value="35" data-grade="9A">RICHARD JOSÉ DOS SANTOS</option>
-                    <option value="36" data-grade="9A">SARA CRISTINA PASSOS MARTINS</option>
-                    <option value="37" data-grade="9A">VANESSA CARDOSO DOS SANTOS</option>
-                    <option value="41" data-grade="9A">JULIA DIAS AZEVEDO</option>
-                    <option value="42" data-grade="9A">SAMARA HELEN DA SILVA</option>
-                    <option value="44" data-grade="9A">LUIS MATHEUS DA SILVA RAMOS</option>
-                    
-                    <!-- 9º Ano B -->
-                    <option value="1" data-grade="9B">ALEJANDRO VIEIRA LIMA</option>
-                    <option value="2" data-grade="9B">ALEX GUSTAVO DA SILVA VIEIRA</option>
-                    <option value="3" data-grade="9B">ALLAN BEZERRA DE LIMA</option>
-                    <option value="6" data-grade="9B">ARTHUR DE JESUS NASCIMENTO</option>
-                    <option value="8" data-grade="9B">ARTHUR MARYANO MENDES</option>
-                    <option value="9" data-grade="9B">CAROS EDUARDO OLIVEIRA SABATERRA</option>
-                    <option value="10" data-grade="9B">DARYO PALMA GREGORIO</option>
-                    <option value="13" data-grade="9B">EDUARDA DE SOUSA OLIVEIRA</option>
-                    <option value="16" data-grade="9B">GIOVANNA MARTINEZ FERREIRA</option>
-                    <option value="17" data-grade="9B">GRAZIELLE VITÓRIA SILVA FIGUEIREDO</option>
-                    <option value="20" data-grade="9B">JULLIA OLIVEIRA DE SOUZA</option>
-                    <option value="21" data-grade="9B">KARINA DE JESUS SANTANA</option>
-                    <option value="24" data-grade="9B">LEONARDO JUNIOR ALBUQUERQUE DA SILVA</option>
-                    <option value="27" data-grade="9B">MARCOS DE OLIVEIRA CARVALHO</option>
-                    <option value="28" data-grade="9B">MARIA EDUARDA SILVA SOUZA</option>
-                    <option value="29" data-grade="9B">MOISES DOS SANTOS BOMFIM</option>
-                    <option value="30" data-grade="9B">NAHYMÊ VITORIA TAVARES DOS SANTOS</option>
-                    <option value="31" data-grade="9B">NICOLAS LUAN MENDES</option>
-                    <option value="32" data-grade="9B">PEDRO HENRIQUE ARRABAL MANZARO</option>
-                    <option value="33" data-grade="9B">PIETRO RAMON DE PAIVA MAGALHÃES LEITÃO</option>
-                    <option value="34" data-grade="9B">SOFIA DE FRANCA COSTA</option>
-                    <option value="35" data-grade="9B">TATIANA DA SILVA RODRIGUES</option>
-                    <option value="36" data-grade="9B">VITOR HUGO DOMINGOS SANTOS</option>
-                    <option value="37" data-grade="9B">WAGNER SILVA MEIRA</option>
-                    <option value="38" data-grade="9B">YASMIM ANDRADE DOS SANTOS</option>
-                    
-                    <!-- 9º Ano C -->
-                    <option value="2" data-grade="9C">ALEXANDRE SERAFIM JUNIOR</option>
-                    <option value="3" data-grade="9C">ANA LUIZA DO NASCIMENTO</option>
-                    <option value="5" data-grade="9C">ARTHUR EMANUEL ALMEIDA REIS</option>
-                    <option value="7" data-grade="9C">CARLOS AUGUSTO DIAS DE MENDONÇA</option>
-                    <option value="9" data-grade="9C">DAPHINE SINDIFER RODRIGUES SILVA</option>
-                    <option value="12" data-grade="9C">ELOISA DE OLIVEIRA CARVALHO</option>
-                    <option value="13" data-grade="9C">ENZO BAPTISTA MAIA</option>
-                    <option value="14" data-grade="9C">EVELLYN ANGELINA CAVALCANTE DE OLIVEIRA</option>
-                    <option value="16" data-grade="9C">GABRIEL VICTOR OLIVEIRA SANTOS</option>
-                    <option value="17" data-grade="9C">GIOVANNA SOUSA DA SILVA</option>
-                    <option value="18" data-grade="9C">GUSTAVO FURLAN GUEDES DA SILVA</option>
-                    <option value="23" data-grade="9C">KAUÃ BRYAN MAZARIO BARBEIRO</option>
-                    <option value="25" data-grade="9C">KAUAN ALAMBERT GOMES DE SOUSA</option>
-                    <option value="26" data-grade="9C">KEMILLY CARVALHO DA FONSECA BRITO</option>
-                    <option value="27" data-grade="9C">KLAIVYN WALLAS ARAUJO ESPIRITO SANTO</option>
-                    <option value="28" data-grade="9C">LORHANNY CAVALCANTE SANTOS</option>
-                    <option value="29" data-grade="9C">MANUELLA LELIS DA SILVA SIMAO</option>
-                    <option value="33" data-grade="9C">MONALISA DOS SANTOS BALDUINO</option>
-                    <option value="34" data-grade="9C">NATHAN SANTANA MONTEMOR</option>
-                    <option value="35" data-grade="9C">NICOLAS PYETRO CASTRO DE ALMEIDA SOUZA</option>
-                    <option value="36" data-grade="9C">NICOLLAS JHAMAL DA SILVA ALVES</option>
-                    <option value="37" data-grade="9C">SARAH SILVA ROGER</option>
-                    <option value="38" data-grade="9C">SERGIO RICARDO SILVA DE SOUZA</option>
-                    <option value="40" data-grade="9C">VINICIUS COSTA SILVA</option>
-                    <option value="41" data-grade="9C">VITÓRIA SILVA VIEIRA</option>
-                    <option value="42" data-grade="9C">FELIPE RITIELLI NEVES DA SILVA</option>
-                    <option value="43" data-grade="9C">JAQUELYNE PEREIRA GONCALVES</option>
-                    <option value="44" data-grade="9C">KRYSTOFER LEITE DA SILVA</option>
+<div class="container">
+
+    <header>
+        <h1>E.E. PROFª WANDA MASCAGNI DE SA</h1>
+        <h2>(ATIVIDADE DE CIÊNCIAS) 1º BIMESTRE</h2>
+    </header>
+
+    <div class="student-panel">
+        <h3>👤 Identificação do Estudante</h3>
+        <div class="fields-row">
+            <div class="field-group">
+                <label for="select-turma">Turma</label>
+                <select id="select-turma" onchange="carregarAlunos()">
+                    <option value="">— Selecione —</option>
+                    <option value="9A">9º A</option>
+                    <option value="9B">9º B</option>
                 </select>
             </div>
-            
-            <div class="form-group form-group-numero">
-                <label>N°:</label>
-                <input type="text" id="numero" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label>SÉRIE:</label>
-                <select id="serie">
-                    <option value="9A">9°A</option>
-                    <option value="9B">9°B</option>
-                    <option value="9C">9°C</option>
+            <div class="field-group">
+                <label for="select-aluno">Nome do Estudante</label>
+                <select id="select-aluno" disabled onchange="preencherNumero()">
+                    <option value="">— selecione a turma primeiro —</option>
                 </select>
             </div>
-            
-            <div class="form-group form-group-data">
-                <label>DATA:</label>
-                <input type="date" id="data">
+            <div class="field-group">
+                <label for="input-numero">Nº</label>
+                <input type="text" id="input-numero" readonly placeholder="—" />
             </div>
         </div>
-        <h2><strong>ATIVIDADE DE CIÊNCIAS (2° BIMESTRE)</strong></h2>
+        <div id="loading-msg"></div>
     </div>
 
-    
-    <div id="questions">
-        <!-- Questão 1 -->
-        <div class="question">
-            <div class="question-text">1.Uma matéria da Agência Fapesp traz o seguinte título: "COVID longa está ligada a dano duradouro na mitocôndria — a fábrica de energia das células".</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q1" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q1')">
-                <img id="preview-q1" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q1" value="a"> 
-                    a) O dano mitocondrial afeta a produção de anticorpos, impedindo a regeneração de células do sangue.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="b"> 
-                    b) A diminuição da produção de energia afeta o funcionamento de células em tecidos com alta demanda energética, como músculos e cérebro.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="c"> 
-                    c) A destruição da mitocôndria impede a digestão intracelular, causando acúmulo de resíduos tóxicos.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q1" value="d"> 
-                    d) A mitocôndria danificada altera a estrutura da parede celular, impedindo a entrada de nutrientes.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 2 -->
-        <div class="question">
-            <div class="question-text">2. Observe o gráfico a seguir, que representa a quantidade de DNA ao longo do ciclo celular de uma célula eucariota:</div>
-             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgS8Lc3goYosFNCNVpHE9pS10hV6dCaPBHkR_Nq_dWS3jQd49HJjzaXUVEMo-lQFI7uRWXpFQS-I0Db3n9eS7MWmvdHVyWUefejBWxirMEi7o5i3JE5Wiy9b9BauE2eyeLpZHTyoNsxolUVhbpz-zeFo8kKoKDzbVyW03PAXIGRMA5FEa4OQ93VsnLg5IGN/s644/ciclo_celular_dna.png.png"></center><br>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q2" value="a"> 
-                    a) Durante a fase G1 a célula está se dividindo, por isso há pico na quantidade de DNA.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q2" value="b"> 
-                    b) A duplicação do DNA ocorre na fase M, preparando a célula para se especializar.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q2" value="c"> 
-                    c) O pico na fase S indica a replicação do DNA, essencial para garantir o material genético nas células-filhas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q2" value="d"> 
-                    d) A queda na fase G2 indica que o DNA está sendo transformado em RNA para ser transmitido às células filhas.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 3 -->
-        <div class="question">
-            <div class="question-text">3.Uma empresa desenvolveu um sistema de IA para prever doenças hereditárias a partir da análise do DNA de recém-nascidos. O sistema lê a sequência de bases nitrogenadas e identifica mutações associadas a doenças.</div>
-             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvyaiJFYO_8vEF42t15w8y4I0k2_TnN9yUkhERVLBEbfeCrHe-9XlPsWO9Kcr03Lb4jvmNkNY7-MLavEggGNAyXBZV5OhwHfkCk5IU5XMx9v8pAEy6grnib_3x3v7BbqlDFzc6COFZPEdnDtAZc2dUk1hPL6RMEbGcFWtbO6iXdHguFJxV4Rb4QTqodYLK/s140/elyx-elyxyak.webp"></center><br>
-            <div class="image-upload-container">
-                <input type="file" id="upload-q3" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q3')">
-                <img id="preview-q3" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q3" value="a"> 
-                    a) A sequência de bases nitrogenadas no DNA determina a cor da pele e do cabelo, mas não influencia o risco de doenças.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q3" value="b"> 
-                    b) O DNA é formado por proteínas que reagem com enzimas e geram características hereditárias.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q3" value="c"> 
-                    c) As trincas de nucleotídeos (códons) definem a sequência de aminoácidos das proteínas, e mutações podem alterar essas funções.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q3" value="d"> 
-                    d) As organelas celulares modificam o DNA constantemente, o que justifica a necessidade de atualizações em tempo real.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 4 -->
-        <div class="question">
-            <div class="question-text">4.Um paciente com deficiência na produção de proteínas digestivas foi diagnosticado com disfunção nos ribossomos.</div>
-            <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9jz51Zc5l2hKEpx5_myNmVUZ1_TI2Eare7i0c_KkLzI5HD1bUE9O-h4zm3SJS0oBvNwgUEW2DFzqcV7QFSjs59QwJpViYM2VvfFRFFxIkqaSS5gudS9CkZ6pDU0r_DwIVXPq6RSSI7Y1Pxu0aiP0BP4FfUJ98L1NNQAzV2EGmahwWaKM1SwqLdihNDg88/s603/C0044367-Dna_compaction-removebg-preview.png"</center><br><br>
-                        <div class="options">
-                <label class="option">
-                    <input type="radio" name="q4" value="a"> 
-                    a) Os ribossomos sintetizam proteínas essenciais, e sua falha compromete a digestão por deficiência de enzimas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q4" value="b"> 
-                    b) Os ribossomos produzem lipídios, que revestem o intestino e previnem refluxo gástrico.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q4" value="c"> 
-                    c) A função dos ribossomos é absorver os nutrientes, e sua falha impede o transporte de glicose.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q4" value="d"> 
-                    d) Os ribossomos são exclusivos das mitocôndrias, e sua falha impede o controle da temperatura corporal.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 5 -->
-        <div class="question">
-            <div class="question-text">5.Você usou um simulador online de uma célula animal em 3D. Ao clicar sobre o retículo endoplasmático rugoso, apareceu a seguinte mensagem: "Estrutura responsável por produzir e transportar proteínas."</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q5" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q5')">
-                <img id="preview-q5" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q5" value="a"> 
-                    a) As proteínas continuariam a ser produzidas normalmente no núcleo.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q5" value="b"> 
-                    b) A célula não seria capaz de produzir as proteínas que compõem suas estruturas e enzimas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q5" value="c"> 
-                    c) A síntese de DNA seria interrompida, causando a morte celular imediata.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q5" value="d"> 
-                    d) O material genético se espalharia pelo citoplasma, perdendo a capacidade de codificar enzimas.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 6 -->
-        <div class="question">
-            <div class="question-text">6.Assinale a alternativa que apresenta a sequência de bases nitrogenadas, que combina com a seguinte sequência de pares de bases:T-A, A-T, C-G, G-C</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q6" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q6')">
-                <img id="preview-q6" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q6" value="a"> 
-                    a) A-T, T-A, G-C, C-G
-                </label>
-                <label class="option">
-                    <input type="radio" name="q6" value="b"> 
-                    b) A-C, T-G, G-A, C-T
-                </label>
-                <label class="option">
-                    <input type="radio" name="q6" value="c"> 
-                    c) A-U, T-A, G-U, C-A
-                </label>
-                <label class="option">
-                    <input type="radio" name="q6" value="d"> 
-                    d) A-G, T-C, G-A, C-T
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 7 -->
-        <div class="question">
-            <div class="question-text">7.Rosalind Franklin foi uma cientista fundamental para o entendimento da estrutura do DNA, mas seu trabalho foi apropriado sem os devidos créditos por Watson e Crick, em 1953.</div>
-             <center><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMVYCboQKn9FoJ760DVzd3GWjkNjkTl6Q4Hcur927s-wLjkbBQ5HWONPWAoBA4Po5-_R9-1xKmexBjWEfvSArisJh2zrPKnGc4JwsjrDDs6sHa2vVDnr5yrh2hMjXiVHTqAl-Aaq7xBcr-EW3mAMn1jNxo8jFHIdbPw1ou_467OWFsency_0NGGZF1e5Sw/s813/Captura%20de%20tela%202025-05-25%20223541.png"</center><br><br>
-            <div class="image-upload-container">
-                <input type="file" id="upload-q7" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q7')">
-                <img id="preview-q7" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q7" value="a"> 
-                    a) Franklin se destacou por identificar os pares de bases do RNA.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q7" value="b"> 
-                    b) A descoberta da dupla hélice do DNA só foi possível graças às imagens de cristalografia obtidas por Franklin.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q7" value="c"> 
-                    c) Crick e Watson criaram a técnica de raios X usada por Franklin para visualizar os cromossomos.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q7" value="d"> 
-                    d) O trabalho de Franklin foi ignorado porque sua teoria se opunha à existência do DNA.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 8 -->
-        <div class="question">
-            <div class="question-text">8.Uma empresa de genética vegetal alterou a sequência de DNA de uma planta para que ela resistisse a pragas sem uso de agrotóxicos. Após a análise, foi verificado que a planta expressava uma nova proteína não presente anteriormente.</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q8" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q8')">
-                <img id="preview-q8" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="options">
-                <label class="option">
-                    <input type="radio" name="q8" value="a"> 
-                    a) O DNA é imutável, e a modificação gerou um erro que beneficiou a planta.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q8" value="b"> 
-                    b) Os ribossomos da planta foram substituídos por proteínas sintéticas.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q8" value="c"> 
-                    c) A alteração na sequência de nucleotídeos levou à formação de novos códons, gerando proteínas diferentes.
-                </label>
-                <label class="option">
-                    <input type="radio" name="q8" value="d"> 
-                    d) A fotossíntese foi aumentada, ativando genes latentes da planta.
-                </label>
-            </div>
-        </div>
-
-        <!-- Questão 9 (Discursiva) -->
-        <div class="question">
-            <div class="question-text">9.Um laboratório de genética ajudou a solucionar um crime a partir do DNA presente em um fio de cabelo encontrado na cena. O material genético foi comparado com um banco de dados criminal.</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q9" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q9')">
-                <img id="preview-q9" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="discursive">
-                <p>Explique como o DNA pode ser usado para identificar uma pessoa. Em seguida, discuta uma possível questão ética envolvendo o uso de bancos de dados genéticos em investigações criminais.</p>
-                <textarea name="q9" placeholder="Digite sua resposta aqui..."></textarea>
-            </div>
-        </div>
-
-        <!-- Questão 10 (Discursiva) -->
-        <div class="question">
-            <div class="question-text">10.Durante um experimento, uma aluna notou que, em células vegetais, estruturas verdes chamadas cloroplastos estavam sempre voltadas para a luz.</div>
-            
-            <div class="image-upload-container">
-                <input type="file" id="upload-q10" accept="image/*" style="display: none;" onchange="previewImage(this, 'preview-q10')">
-                <img id="preview-q10" class="preview-image" alt="Pré-visualização da imagem">
-            </div>
-            
-            <div class="discursive">
-                <p>Descreva a função dos cloroplastos e explique por que sua localização na célula pode se modificar conforme a incidência de luz. Em sua resposta, relacione esse comportamento com a importância da fotossíntese para o organismo vegetal.</p>
-                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhrc3y3PR14PnSbVq3XsL486SozlzQpaLDNVkLlkZAOvWa3LGgEQsFMScwdj9Nu5qIuEsOy6WbGBhg5TrwidCG0z8KUAESTaGxpjfjidptUGIWe5s73RFY43jC2Rsd-Hl1zFM3jpHfGBmqFpVBdAB3ciOP8iiISOOeeqmiNSePkyqOaGBW10HZIFszEmWsU/s280/557f2352d3032-cloroplastos-medium.webp" alt="Descrição da imagem" style="max-width:100%; height:auto; margin-top:10px;">
-                <textarea name="q10" placeholder="Digite sua resposta aqui..."></textarea>
-            </div>
-        </div>
+    <div class="intro-text">
+        Esta atividade exige leitura atenta e análise de dados. A ciência não é apenas um conjunto de fatos, mas uma forma de investigar o mundo baseada em evidências, ética e colaboração. Leia os textos de apoio e analise os gráficos/tabelas antes de responder.
     </div>
 
-    <!-- Adicionado: Indicador de carregamento -->
-    <div class="loading" id="loading">
-        <div class="loading-spinner"></div>
-        <p>Enviando dados...</p>
-    </div>
+    <form id="quiz-form">
 
-    <button id="submit-btn" onclick="submitForm()">Enviar Respostas</button>
+        <!-- QUESTÃO 01 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 01 — A NATUREZA DA PROVA CIENTÍFICA</span>
+            <div class="context-box">
+                "Se eu afirmo que há um dragão na minha garagem, mas ele é invisível, incorpóreo e flutua, e eu invalido cada teste que você propõe (como jogar farinha no chão ou usar sensores térmicos), minha afirmação deixa de ser científica. Na ciência, uma hipótese deve ser <strong>falseável</strong>, ou seja, deve ser possível imaginar um experimento que prove que ela está errada." (Adaptado de Carl Sagan)
+            </div>
+
+            <!-- SVG Q1: Dragão invisível na garagem / falseabilidade -->
+            <svg class="question-svg" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#d0e8ff"/>
+                  <stop offset="100%" stop-color="#f0f4ff"/>
+                </linearGradient>
+                <linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#c8b89a"/>
+                  <stop offset="100%" stop-color="#a08060"/>
+                </linearGradient>
+              </defs>
+              <!-- fundo -->
+              <rect width="600" height="280" fill="url(#skyG)"/>
+              <!-- garagem - parede -->
+              <rect x="100" y="60" width="400" height="200" rx="4" fill="#e8ddd0" stroke="#b0957a" stroke-width="2"/>
+              <!-- porta da garagem -->
+              <rect x="200" y="100" width="200" height="160" fill="#c0a880" stroke="#8a6a40" stroke-width="2"/>
+              <!-- listras da porta -->
+              <line x1="200" y1="133" x2="400" y2="133" stroke="#8a6a40" stroke-width="1.5"/>
+              <line x1="200" y1="166" x2="400" y2="166" stroke="#8a6a40" stroke-width="1.5"/>
+              <line x1="200" y1="199" x2="400" y2="199" stroke="#8a6a40" stroke-width="1.5"/>
+              <line x1="200" y1="232" x2="400" y2="232" stroke="#8a6a40" stroke-width="1.5"/>
+              <!-- chão -->
+              <rect x="0" y="240" width="600" height="40" fill="url(#floorG)"/>
+              <!-- dragão fantasma (contorno pontilhado) -->
+              <g opacity="0.28" stroke="#6a3fa0" stroke-width="2" fill="none" stroke-dasharray="6,4">
+                <!-- corpo -->
+                <ellipse cx="300" cy="170" rx="70" ry="45"/>
+                <!-- cabeça -->
+                <ellipse cx="370" cy="140" rx="35" ry="25"/>
+                <!-- asa esquerda -->
+                <path d="M240,150 Q200,100 220,80 Q260,120 270,150"/>
+                <!-- asa direita -->
+                <path d="M360,150 Q390,90 420,85 Q410,130 380,155"/>
+                <!-- cauda -->
+                <path d="M230,185 Q190,210 180,240"/>
+                <!-- chifres -->
+                <line x1="355" y1="118" x2="348" y2="100"/>
+                <line x1="375" y1="116" x2="380" y2="98"/>
+              </g>
+              <!-- ponto de interrogação sobre o dragão -->
+              <text x="300" y="178" font-family="Georgia,serif" font-size="52" fill="#6a3fa0" opacity="0.35" text-anchor="middle">?</text>
+              <!-- farinha no chão (bolinhas) -->
+              <circle cx="260" cy="242" r="3" fill="white" opacity="0.7"/>
+              <circle cx="275" cy="244" r="2.5" fill="white" opacity="0.7"/>
+              <circle cx="290" cy="241" r="3" fill="white" opacity="0.7"/>
+              <circle cx="310" cy="243" r="2" fill="white" opacity="0.7"/>
+              <circle cx="325" cy="241" r="3" fill="white" opacity="0.7"/>
+              <circle cx="340" cy="244" r="2.5" fill="white" opacity="0.7"/>
+              <!-- label farinha -->
+              <text x="300" y="268" font-family="sans-serif" font-size="11" fill="#fff" text-anchor="middle" opacity="0.9">farinha no chão — nenhuma marca encontrada</text>
+              <!-- label título -->
+              <rect x="110" y="64" width="200" height="24" rx="4" fill="#1a2a6c" opacity="0.85"/>
+              <text x="210" y="80" font-family="sans-serif" font-size="12" fill="white" text-anchor="middle" font-weight="bold">O Dragão Invisível</text>
+              <!-- balão HIPÓTESE NÃO FALSEÁVEL -->
+              <rect x="390" y="65" width="160" height="38" rx="8" fill="#fff3cd" stroke="#f0a500" stroke-width="1.5"/>
+              <text x="470" y="80" font-family="sans-serif" font-size="10" fill="#7a4f00" text-anchor="middle" font-weight="bold">Hipótese não falseável:</text>
+              <text x="470" y="94" font-family="sans-serif" font-size="10" fill="#7a4f00" text-anchor="middle">nenhum teste é aceito</text>
+            </svg>
+
+            <p>Com base no texto e no conceito de <strong>falseabilidade</strong>, por que a ciência rejeita a hipótese do dragão invisível?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q1" value="a"> a) Porque a ciência só acredita naquilo que pode ser visto a olho nu, sem o uso de aparelhos.</label>
+                <label class="option"><input type="radio" name="q1" value="b"> b) Porque o dono da garagem não possui autoridade acadêmica para fazer tal afirmação.</label>
+                <label class="option"><input type="radio" name="q1" value="c"> c) Porque a hipótese foi construída de forma a evitar qualquer teste que pudesse refutá-la, tornando-a dogmática.</label>
+                <label class="option"><input type="radio" name="q1" value="d"> d) Porque dragões são seres mitológicos e a ciência não estuda literatura ou folclore.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 02 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 02 — CIÊNCIA BRASILEIRA E AGILIDADE</span>
+            <div class="context-box">
+                Em 2020, a equipe liderada pela Dra. Jaqueline Goes de Jesus sequenciou o genoma do SARS-CoV-2 em tempo recorde. Analise o gráfico abaixo que compara o tempo de resposta de diferentes centros de pesquisa no início da pandemia.
+            </div>
+
+            <!-- SVG Q2: Gráfico de barras - tempo de sequenciamento -->
+            <svg class="question-svg" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="barBR" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#009c3b"/>
+                  <stop offset="100%" stop-color="#006b28"/>
+                </linearGradient>
+                <linearGradient id="barUS" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#3c5fa0"/>
+                  <stop offset="100%" stop-color="#1a2a6c"/>
+                </linearGradient>
+                <linearGradient id="barUK" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#b21f1f"/>
+                  <stop offset="100%" stop-color="#7a0f0f"/>
+                </linearGradient>
+              </defs>
+              <rect width="600" height="320" fill="#f8f9fa" rx="8"/>
+              <!-- título -->
+              <text x="300" y="28" font-family="sans-serif" font-size="14" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Tempo de Sequenciamento do Genoma do SARS-CoV-2</text>
+              <text x="300" y="46" font-family="sans-serif" font-size="11" fill="#555" text-anchor="middle">(em horas, após confirmação do 1º caso)</text>
+              <!-- eixo Y label -->
+              <text x="18" y="180" font-family="sans-serif" font-size="11" fill="#555" text-anchor="middle" transform="rotate(-90,18,180)">Horas</text>
+              <!-- linhas de grade -->
+              <line x1="80" y1="70" x2="80" y2="270" stroke="#ccc" stroke-width="1"/>
+              <line x1="80" y1="270" x2="560" y2="270" stroke="#333" stroke-width="2"/>
+              <line x1="80" y1="220" x2="560" y2="220" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="80" y1="170" x2="560" y2="170" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="80" y1="120" x2="560" y2="120" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="80" y1="70"  x2="560" y2="70"  stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <!-- labels eixo Y -->
+              <text x="72" y="274" font-family="sans-serif" font-size="10" fill="#555" text-anchor="end">0</text>
+              <text x="72" y="224" font-family="sans-serif" font-size="10" fill="#555" text-anchor="end">24h</text>
+              <text x="72" y="174" font-family="sans-serif" font-size="10" fill="#555" text-anchor="end">48h</text>
+              <text x="72" y="124" font-family="sans-serif" font-size="10" fill="#555" text-anchor="end">72h</text>
+              <text x="72" y="74"  font-family="sans-serif" font-size="10" fill="#555" text-anchor="end">96h</text>
+              <!-- BARRA BRASIL: 48h → height=100, y=170 -->
+              <rect x="140" y="170" width="90" height="100" fill="url(#barBR)" rx="4"/>
+              <text x="185" y="163" font-family="sans-serif" font-size="13" fill="#006b28" text-anchor="middle" font-weight="bold">48h</text>
+              <text x="185" y="288" font-family="sans-serif" font-size="12" fill="#1a2a6c" text-anchor="middle" font-weight="bold">🇧🇷 Brasil</text>
+              <!-- BARRA EUA: 96h → height=200, y=70 -->
+              <rect x="265" y="70" width="90" height="200" fill="url(#barUS)" rx="4"/>
+              <text x="310" y="63" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">96h</text>
+              <text x="310" y="288" font-family="sans-serif" font-size="12" fill="#1a2a6c" text-anchor="middle" font-weight="bold">🇺🇸 EUA</text>
+              <!-- BARRA REINO UNIDO: 126h → height=262.5 → cap 200 → height=195, y=75 aprox: vamos usar 130h → 135h = 140px, y=130 -->
+              <!-- RU = 130h → height=130px*200/96 ≈ 135, y=270-135=135 -->
+              <rect x="390" y="103" width="90" height="167" fill="url(#barUK)" rx="4"/>
+              <text x="435" y="96" font-family="sans-serif" font-size="13" fill="#7a0f0f" text-anchor="middle" font-weight="bold">130h</text>
+              <text x="435" y="288" font-family="sans-serif" font-size="12" fill="#1a2a6c" text-anchor="middle" font-weight="bold">🇬🇧 Reino Unido</text>
+              <!-- seta de destaque Brasil -->
+              <text x="185" y="145" font-family="sans-serif" font-size="10" fill="#009c3b" text-anchor="middle">⭐ mais rápido</text>
+            </svg>
+
+            <p>A análise do gráfico permite concluir que a equipe brasileira:</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q2" value="a"> a) Foi 50% mais lenta que a equipe dos EUA devido à falta de recursos tecnológicos.</label>
+                <label class="option"><input type="radio" name="q2" value="b"> b) Demonstrou alta eficiência técnica, reduzindo o tempo de resposta pela metade em relação aos EUA e em mais de 60% em relação ao Reino Unido.</label>
+                <label class="option"><input type="radio" name="q2" value="c"> c) Só conseguiu o resultado porque o vírus que chegou ao Brasil era mais simples de sequenciar.</label>
+                <label class="option"><input type="radio" name="q2" value="d"> d) Levou o mesmo tempo que os outros países, mostrando que a ciência é igual em todo lugar.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 03 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 03 — IMPACTO SOCIAL DA CIÊNCIA</span>
+            <div class="context-box">
+                A vacinação é uma das maiores conquistas da ciência. Analise a relação entre a cobertura vacinal (porcentagem da população vacinada) e o número de hospitalizações graves ao longo de um semestre.
+            </div>
+
+            <!-- SVG Q3: Gráfico duplo eixo - vacinação x hospitalizações -->
+            <svg class="question-svg" viewBox="0 0 620 320" xmlns="http://www.w3.org/2000/svg">
+              <rect width="620" height="320" fill="#f8f9fa" rx="8"/>
+              <text x="310" y="26" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Cobertura Vacinal × Hospitalizações Graves (Semestre)</text>
+              <!-- eixos -->
+              <line x1="80" y1="60" x2="80" y2="260" stroke="#333" stroke-width="2"/>
+              <line x1="80" y1="260" x2="560" y2="260" stroke="#333" stroke-width="2"/>
+              <line x1="560" y1="60" x2="560" y2="260" stroke="#aaa" stroke-width="1.5"/>
+              <!-- grade -->
+              <line x1="80" y1="160" x2="560" y2="160" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="80" y1="110" x2="560" y2="110" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <line x1="80" y1="210" x2="560" y2="210" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="4,3"/>
+              <!-- labels eixo esquerdo (vacinação %) -->
+              <text x="75" y="264" font-family="sans-serif" font-size="9" fill="#006b28" text-anchor="end">0%</text>
+              <text x="75" y="214" font-family="sans-serif" font-size="9" fill="#006b28" text-anchor="end">25%</text>
+              <text x="75" y="164" font-family="sans-serif" font-size="9" fill="#006b28" text-anchor="end">50%</text>
+              <text x="75" y="114" font-family="sans-serif" font-size="9" fill="#006b28" text-anchor="end">75%</text>
+              <text x="75" y="64"  font-family="sans-serif" font-size="9" fill="#006b28" text-anchor="end">100%</text>
+              <!-- labels eixo direito (hospitalizações) -->
+              <text x="565" y="264" font-family="sans-serif" font-size="9" fill="#b21f1f" text-anchor="start">0</text>
+              <text x="565" y="214" font-family="sans-serif" font-size="9" fill="#b21f1f" text-anchor="start">1000</text>
+              <text x="565" y="164" font-family="sans-serif" font-size="9" fill="#b21f1f" text-anchor="start">2000</text>
+              <text x="565" y="114" font-family="sans-serif" font-size="9" fill="#b21f1f" text-anchor="start">3000</text>
+              <text x="565" y="64"  font-family="sans-serif" font-size="9" fill="#b21f1f" text-anchor="start">4000</text>
+              <!-- labels eixo X (meses) -->
+              <text x="113" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Jan</text>
+              <text x="179" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Fev</text>
+              <text x="245" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Mar</text>
+              <text x="311" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Abr</text>
+              <text x="377" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Mai</text>
+              <text x="443" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Jun</text>
+              <text x="509" y="275" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Jul</text>
+              <!-- CURVA VACINAÇÃO (sobe) pontos: Jan=10% Fev=22% Mar=38% Abr=55% Mai=70% Jun=82% Jul=90% -->
+              <!-- y = 260 - (pct/100)*200 -->
+              <!-- Jan:240 Fev:216 Mar:184 Abr:150 Mai:120 Jun:96 Jul:80 -->
+              <polyline points="113,240 179,216 245,184 311,150 377,120 443,96 509,80"
+                fill="none" stroke="#009c3b" stroke-width="3" stroke-linejoin="round"/>
+              <!-- pontos vacinação -->
+              <circle cx="113" cy="240" r="5" fill="#009c3b"/>
+              <circle cx="179" cy="216" r="5" fill="#009c3b"/>
+              <circle cx="245" cy="184" r="5" fill="#009c3b"/>
+              <circle cx="311" cy="150" r="5" fill="#009c3b"/>
+              <circle cx="377" cy="120" r="5" fill="#009c3b"/>
+              <circle cx="443" cy="96"  r="5" fill="#009c3b"/>
+              <circle cx="509" cy="80"  r="5" fill="#009c3b"/>
+              <!-- CURVA HOSPITALIZAÇÕES (desce) valores: Jan=3800 Fev=3400 Mar=2800 Abr=2100 Mai=1400 Jun=800 Jul=300 -->
+              <!-- y = 260 - (val/4000)*200 -->
+              <!-- Jan:70 Fev:90 Mar:120 Abr:155 Mai:190 Jun=220 Jul=245 -->
+              <polyline points="113,70 179,90 245,120 311,155 377,190 443,220 509,245"
+                fill="none" stroke="#b21f1f" stroke-width="3" stroke-linejoin="round" stroke-dasharray="8,4"/>
+              <circle cx="113" cy="70"  r="5" fill="#b21f1f"/>
+              <circle cx="179" cy="90"  r="5" fill="#b21f1f"/>
+              <circle cx="245" cy="120" r="5" fill="#b21f1f"/>
+              <circle cx="311" cy="155" r="5" fill="#b21f1f"/>
+              <circle cx="377" cy="190" r="5" fill="#b21f1f"/>
+              <circle cx="443" cy="220" r="5" fill="#b21f1f"/>
+              <circle cx="509" cy="245" r="5" fill="#b21f1f"/>
+              <!-- legenda -->
+              <rect x="90" y="36" width="14" height="4" fill="#009c3b" rx="2"/>
+              <text x="108" y="41" font-family="sans-serif" font-size="10" fill="#009c3b">Cobertura Vacinal (%)</text>
+              <line x1="230" y1="38" x2="244" y2="38" stroke="#b21f1f" stroke-width="3" stroke-dasharray="5,3"/>
+              <text x="248" y="41" font-family="sans-serif" font-size="10" fill="#b21f1f">Hospitalizações Graves</text>
+            </svg>
+
+            <p>Interpretando o gráfico de duplo eixo, qual é a correlação observada entre as duas variáveis?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q3" value="a"> a) Conforme a cobertura vacinal aumenta, o número de hospitalizações também aumenta, mostrando ineficácia.</label>
+                <label class="option"><input type="radio" name="q3" value="b"> b) Não há relação clara entre as variáveis, pois as curvas se cruzam de forma aleatória.</label>
+                <label class="option"><input type="radio" name="q3" value="c"> c) Existe uma correlação inversamente proporcional: o aumento da cobertura vacinal está associado a uma queda drástica nas hospitalizações.</label>
+                <label class="option"><input type="radio" name="q3" value="d"> d) As hospitalizações caíram apenas por causa do isolamento social, sem influência da vacina.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 04 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 04 — ÉTICA E USO DO CONHECIMENTO</span>
+            <div class="context-box">
+                O currículo destaca que a ciência não é neutra. Analise a tabela abaixo sobre o uso de tecnologias nucleares em diferentes contextos históricos.
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Aplicação</th><th>Objetivo Principal</th><th>Impacto Social</th></tr></thead>
+                <tbody>
+                    <tr><td>Bomba Atômica (1945)</td><td>Destruição militar</td><td>Milhares de mortes e danos ambientais</td></tr>
+                    <tr><td>Medicina Nuclear</td><td>Diagnóstico e tratamento (Câncer)</td><td>Aumento da expectativa de vida</td></tr>
+                    <tr><td>Energia Nuclear</td><td>Geração de eletricidade</td><td>Baixa emissão de CO2, mas risco de acidentes</td></tr>
+                </tbody>
+            </table>
+
+            <!-- SVG Q4: Balança da ética científica -->
+            <svg class="question-svg" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="260" fill="#f8f9fa" rx="8"/>
+              <text x="300" y="24" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">O Mesmo Conhecimento — Impactos Opostos</text>
+              <!-- átomo central -->
+              <circle cx="300" cy="130" r="22" fill="#1a2a6c" opacity="0.9"/>
+              <text x="300" y="135" font-family="sans-serif" font-size="20" fill="white" text-anchor="middle">⚛️</text>
+              <!-- órbitas do átomo -->
+              <ellipse cx="300" cy="130" rx="40" ry="15" fill="none" stroke="#fdbb2d" stroke-width="1.5" opacity="0.6"/>
+              <ellipse cx="300" cy="130" rx="15" ry="40" fill="none" stroke="#fdbb2d" stroke-width="1.5" opacity="0.6"/>
+              <!-- seta esquerda -->
+              <line x1="258" y1="130" x2="180" y2="130" stroke="#555" stroke-width="2" marker-end="url(#arr)"/>
+              <!-- seta direita -->
+              <line x1="342" y1="130" x2="420" y2="130" stroke="#555" stroke-width="2" marker-end="url(#arr2)"/>
+              <defs>
+                <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+                </marker>
+                <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+                </marker>
+              </defs>
+              <!-- caixa esquerda - destruição -->
+              <rect x="60" y="90" width="110" height="80" rx="8" fill="#ffd0d0" stroke="#b21f1f" stroke-width="2"/>
+              <text x="115" y="115" font-family="sans-serif" font-size="22" text-anchor="middle">💣</text>
+              <text x="115" y="135" font-family="sans-serif" font-size="11" fill="#7a0f0f" text-anchor="middle" font-weight="bold">Destruição</text>
+              <text x="115" y="150" font-family="sans-serif" font-size="10" fill="#7a0f0f" text-anchor="middle">Bomba Atômica</text>
+              <text x="115" y="163" font-family="sans-serif" font-size="10" fill="#7a0f0f" text-anchor="middle">1945</text>
+              <!-- caixa direita - saúde / energia -->
+              <rect x="430" y="90" width="110" height="80" rx="8" fill="#d0f5d0" stroke="#009c3b" stroke-width="2"/>
+              <text x="485" y="115" font-family="sans-serif" font-size="22" text-anchor="middle">🏥</text>
+              <text x="485" y="135" font-family="sans-serif" font-size="11" fill="#006b28" text-anchor="middle" font-weight="bold">Cura / Energia</text>
+              <text x="485" y="150" font-family="sans-serif" font-size="10" fill="#006b28" text-anchor="middle">Medicina Nuclear</text>
+              <text x="485" y="163" font-family="sans-serif" font-size="10" fill="#006b28" text-anchor="middle">Energia Elétrica</text>
+              <!-- texto central inferior -->
+              <text x="300" y="200" font-family="sans-serif" font-size="11" fill="#555" text-anchor="middle">O conhecimento científico não é bom nem mau por si só.</text>
+              <text x="300" y="218" font-family="sans-serif" font-size="11" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Quem decide o impacto são os valores humanos que guiam seu uso.</text>
+            </svg>
+
+            <p>Com base na tabela, a afirmação "a ciência não é neutra" significa que:</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q4" value="a"> a) O conhecimento científico é perigoso por natureza e deve ser evitado.</label>
+                <label class="option"><input type="radio" name="q4" value="b"> b) A ciência só serve para criar armas de guerra, como mostra o exemplo de 1945.</label>
+                <label class="option"><input type="radio" name="q4" value="c"> c) O mesmo conhecimento (física nuclear) pode ter impactos opostos dependendo dos valores e interesses de quem o aplica.</label>
+                <label class="option"><input type="radio" name="q4" value="d"> d) A medicina nuclear é a única aplicação ética permitida para a ciência atual.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 05 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 05 — DESINFORMAÇÃO NAS REDES</span>
+            <div class="context-box">
+                A desinformação científica (fake news) é um desafio para a saúde pública. Analise o gráfico de pizza sobre os principais canais onde os estudantes relatam encontrar informações falsas sobre ciência.
+            </div>
+
+            <!-- SVG Q5: Gráfico de pizza - canais de desinformação -->
+            <svg class="question-svg" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="300" fill="#f8f9fa" rx="8"/>
+              <text x="300" y="24" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Principais Canais de Desinformação Científica</text>
+              <text x="300" y="40" font-family="sans-serif" font-size="11" fill="#555" text-anchor="middle">(percepção de estudantes)</text>
+              <!-- pizza: cx=190, cy=170, r=100 -->
+              <!-- Redes Sociais 50%: 0° a 180° -->
+              <path d="M190,170 L190,70 A100,100 0 0,1 190,270 Z" fill="#1a2a6c"/>
+              <!-- Apps Mensagem 30%: 180° a 288° -->
+              <path d="M190,170 L190,270 A100,100 0 0,1 90,120 Z" fill="#b21f1f"/>
+              <!-- YouTube 15%: 288° a 342° -->
+              <path d="M190,170 L90,120 A100,100 0 0,1 241,83 Z" fill="#fdbb2d"/>
+              <!-- Boca a Boca 5%: 342° a 360° -->
+              <path d="M190,170 L241,83 A100,100 0 0,1 190,70 Z" fill="#4caf50"/>
+              <!-- centro branco -->
+              <circle cx="190" cy="170" r="38" fill="white"/>
+              <text x="190" y="167" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Total</text>
+              <text x="190" y="180" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle">100%</text>
+              <!-- legenda -->
+              <rect x="330" y="80" width="16" height="16" fill="#1a2a6c" rx="3"/>
+              <text x="352" y="93" font-family="sans-serif" font-size="12" fill="#333">Redes Sociais — 50%</text>
+              <rect x="330" y="108" width="16" height="16" fill="#b21f1f" rx="3"/>
+              <text x="352" y="121" font-family="sans-serif" font-size="12" fill="#333">Apps de Mensagem — 30%</text>
+              <rect x="330" y="136" width="16" height="16" fill="#fdbb2d" rx="3"/>
+              <text x="352" y="149" font-family="sans-serif" font-size="12" fill="#333">YouTube / Vídeos — 15%</text>
+              <rect x="330" y="164" width="16" height="16" fill="#4caf50" rx="3"/>
+              <text x="352" y="177" font-family="sans-serif" font-size="12" fill="#333">Boca a Boca — 5%</text>
+              <!-- seta 80% -->
+              <rect x="320" y="200" width="220" height="36" rx="6" fill="#fff3cd" stroke="#f0a500" stroke-width="1.5"/>
+              <text x="430" y="214" font-family="sans-serif" font-size="11" fill="#7a4f00" text-anchor="middle" font-weight="bold">⚠ Redes + Apps = 80% da</text>
+              <text x="430" y="229" font-family="sans-serif" font-size="11" fill="#7a4f00" text-anchor="middle">propagação de desinformação</text>
+            </svg>
+
+            <p>De acordo com os dados apresentados, qual estratégia seria mais eficaz para combater a desinformação científica?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q5" value="a"> a) Focar exclusivamente em jornais impressos, pois são a maior fonte de mentiras.</label>
+                <label class="option"><input type="radio" name="q5" value="b"> b) Criar campanhas de educação midiática e divulgação científica focadas em Redes Sociais e Apps de Mensagem, que somam 80% da propagação.</label>
+                <label class="option"><input type="radio" name="q5" value="c"> c) Proibir o uso de internet para pesquisas escolares, voltando apenas aos livros físicos.</label>
+                <label class="option"><input type="radio" name="q5" value="d"> d) Ignorar o "Boca a Boca", pois 5% é um valor insignificante para a ciência.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 06 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 06 — O RIGOR DO MÉTODO</span>
+            <div class="context-box">
+                Um cientista observa que certas plantas crescem mais rápido quando expostas a música clássica. Ele elabora a seguinte frase: "A música clássica estimula o metabolismo celular das plantas".
+            </div>
+
+            <!-- SVG Q6: Etapas do método científico -->
+            <svg class="question-svg" viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg">
+              <rect width="620" height="200" fill="#f8f9fa" rx="8"/>
+              <text x="310" y="24" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Etapas do Método Científico</text>
+              <!-- setas entre etapas -->
+              <defs>
+                <marker id="arrowM" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#1a2a6c"/>
+                </marker>
+              </defs>
+              <!-- etapa 1: Observação -->
+              <rect x="20" y="60" width="90" height="70" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="2"/>
+              <text x="65" y="90" font-family="sans-serif" font-size="20" text-anchor="middle">🔍</text>
+              <text x="65" y="110" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">1. Observação</text>
+              <text x="65" y="122" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">planta cresce mais</text>
+              <line x1="112" y1="95" x2="132" y2="95" stroke="#1a2a6c" stroke-width="2" marker-end="url(#arrowM)"/>
+              <!-- etapa 2: Hipótese (DESTACADA) -->
+              <rect x="134" y="54" width="100" height="82" rx="8" fill="#fff9db" stroke="#fdbb2d" stroke-width="3"/>
+              <text x="184" y="84" font-family="sans-serif" font-size="20" text-anchor="middle">💡</text>
+              <text x="184" y="104" font-family="sans-serif" font-size="10" fill="#7a4f00" text-anchor="middle" font-weight="bold">2. Hipótese ⭐</text>
+              <text x="184" y="118" font-family="sans-serif" font-size="9" fill="#7a4f00" text-anchor="middle">"música estimula</text>
+              <text x="184" y="129" font-family="sans-serif" font-size="9" fill="#7a4f00" text-anchor="middle">metabolismo"</text>
+              <line x1="236" y1="95" x2="256" y2="95" stroke="#1a2a6c" stroke-width="2" marker-end="url(#arrowM)"/>
+              <!-- etapa 3: Experimentação -->
+              <rect x="258" y="60" width="90" height="70" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="2"/>
+              <text x="303" y="90" font-family="sans-serif" font-size="20" text-anchor="middle">🧪</text>
+              <text x="303" y="110" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">3. Experimento</text>
+              <text x="303" y="122" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">testes controlados</text>
+              <line x1="350" y1="95" x2="370" y2="95" stroke="#1a2a6c" stroke-width="2" marker-end="url(#arrowM)"/>
+              <!-- etapa 4: Análise -->
+              <rect x="372" y="60" width="90" height="70" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="2"/>
+              <text x="417" y="90" font-family="sans-serif" font-size="20" text-anchor="middle">📊</text>
+              <text x="417" y="110" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">4. Análise</text>
+              <text x="417" y="122" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">interpretar dados</text>
+              <line x1="464" y1="95" x2="484" y2="95" stroke="#1a2a6c" stroke-width="2" marker-end="url(#arrowM)"/>
+              <!-- etapa 5: Conclusão -->
+              <rect x="486" y="60" width="108" height="70" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="2"/>
+              <text x="540" y="90" font-family="sans-serif" font-size="20" text-anchor="middle">📝</text>
+              <text x="540" y="110" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">5. Conclusão</text>
+              <text x="540" y="122" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">confirmar ou refutar</text>
+              <!-- rótulo destaque -->
+              <text x="184" y="155" font-family="sans-serif" font-size="10" fill="#b21f1f" text-anchor="middle" font-weight="bold">▲ O cientista está aqui</text>
+            </svg>
+
+            <p>No contexto do método científico, a frase elaborada pelo cientista representa qual etapa?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q6" value="a"> a) Conclusão, pois ele já afirmou o que acontece com a planta.</label>
+                <label class="option"><input type="radio" name="q6" value="b"> b) Hipótese, pois é uma explicação provisória que ainda precisa ser testada experimentalmente.</label>
+                <label class="option"><input type="radio" name="q6" value="c"> c) Observação, pois ele apenas descreveu o que viu sem pensar no porquê.</label>
+                <label class="option"><input type="radio" name="q6" value="d"> d) Resultado, pois é o dado final obtido após anos de pesquisa.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 07 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 07 — CURADORIA DE INFORMAÇÃO</span>
+            <div class="context-box">
+                Para decidir se uma informação é confiável, devemos analisar critérios específicos. Veja a tabela de comparação entre dois sites que falam sobre "Vacinas e Autismo".
+            </div>
+            <table class="data-table">
+                <thead><tr><th>Critério</th><th>Site A (Blog Pessoal)</th><th>Site B (Portal Fiocruz)</th></tr></thead>
+                <tbody>
+                    <tr><td>Autor</td><td>"Anônimo" ou "Mãe Preocupada"</td><td>Corpo de pesquisadores e médicos</td></tr>
+                    <tr><td>Referências</td><td>Relatos de vizinhos e vídeos do YouTube</td><td>Artigos científicos revisados por pares</td></tr>
+                    <tr><td>Linguagem</td><td>Sensacionalista ("O que não te contam!")</td><td>Técnica, objetiva e baseada em dados</td></tr>
+                </tbody>
+            </table>
+
+            <!-- SVG Q7: Comparação confiabilidade sites -->
+            <svg class="question-svg" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+              <rect width="600" height="220" fill="#f8f9fa" rx="8"/>
+              <text x="300" y="26" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Avaliando a Confiabilidade de Fontes</text>
+              <!-- site A -->
+              <rect x="40" y="45" width="230" height="150" rx="10" fill="#fff5f5" stroke="#ff8787" stroke-width="2.5"/>
+              <text x="155" y="70" font-family="sans-serif" font-size="12" fill="#c92a2a" text-anchor="middle" font-weight="bold">❌  Site A — Blog Pessoal</text>
+              <text x="60" y="95" font-family="sans-serif" font-size="11" fill="#555">👤 Autor: Anônimo</text>
+              <text x="60" y="115" font-family="sans-serif" font-size="11" fill="#555">📎 Fontes: relatos informais</text>
+              <text x="60" y="135" font-family="sans-serif" font-size="11" fill="#555">🔊 Linguagem: sensacionalista</text>
+              <text x="60" y="155" font-family="sans-serif" font-size="11" fill="#555">🔗 Sem revisão científica</text>
+              <rect x="50" y="167" width="210" height="18" rx="4" fill="#ffcccc"/>
+              <text x="155" y="180" font-family="sans-serif" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="bold">BAIXA CONFIABILIDADE</text>
+              <!-- site B -->
+              <rect x="330" y="45" width="230" height="150" rx="10" fill="#d3f9d8" stroke="#51cf66" stroke-width="2.5"/>
+              <text x="445" y="70" font-family="sans-serif" font-size="12" fill="#2b8a3e" text-anchor="middle" font-weight="bold">✅  Site B — Portal Fiocruz</text>
+              <text x="350" y="95" font-family="sans-serif" font-size="11" fill="#333">👤 Autor: pesquisadores</text>
+              <text x="350" y="115" font-family="sans-serif" font-size="11" fill="#333">📎 Fontes: artigos científicos</text>
+              <text x="350" y="135" font-family="sans-serif" font-size="11" fill="#333">📐 Linguagem: técnica</text>
+              <text x="350" y="155" font-family="sans-serif" font-size="11" fill="#333">🔬 Revisão por pares</text>
+              <rect x="340" y="167" width="210" height="18" rx="4" fill="#b2f2bb"/>
+              <text x="445" y="180" font-family="sans-serif" font-size="10" fill="#2b8a3e" text-anchor="middle" font-weight="bold">ALTA CONFIABILIDADE</text>
+            </svg>
+
+            <p>Ao realizar uma pesquisa escolar, qual site deve ser priorizado e por quê?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q7" value="a"> a) Site A, porque relatos pessoais são mais emocionantes e verdadeiros que dados frios.</label>
+                <label class="option"><input type="radio" name="q7" value="b"> b) Site B, porque possui autoridade institucional, referências verificáveis e rigor na linguagem.</label>
+                <label class="option"><input type="radio" name="q7" value="c"> c) Ambos têm o mesmo valor, pois na internet todas as opiniões são válidas.</label>
+                <label class="option"><input type="radio" name="q7" value="d"> d) Nenhum dos dois, pois a ciência muda o tempo todo e nada é confiável.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 08 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 08 — CIÊNCIA COMO ESFORÇO COLETIVO</span>
+            <div class="context-box">
+                O currículo menciona o experimento de cientistas brasileiras que enviaram "minicérebros" para a Estação Espacial Internacional (ISS). Esse projeto envolveu universidades brasileiras, a NASA e agências espaciais europeias.
+            </div>
+
+            <!-- SVG Q8: Colaboração científica global -->
+            <svg class="question-svg" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="spaceG" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#0d1b4a"/>
+                  <stop offset="100%" stop-color="#010510"/>
+                </radialGradient>
+              </defs>
+              <rect width="600" height="260" fill="url(#spaceG)" rx="8"/>
+              <!-- estrelas -->
+              <circle cx="30" cy="20" r="1.2" fill="white" opacity="0.7"/>
+              <circle cx="80" cy="45" r="1" fill="white" opacity="0.6"/>
+              <circle cx="150" cy="15" r="1.5" fill="white" opacity="0.8"/>
+              <circle cx="200" cy="50" r="1" fill="white" opacity="0.5"/>
+              <circle cx="320" cy="20" r="1.2" fill="white" opacity="0.7"/>
+              <circle cx="420" cy="35" r="1" fill="white" opacity="0.6"/>
+              <circle cx="500" cy="18" r="1.5" fill="white" opacity="0.8"/>
+              <circle cx="560" cy="55" r="1" fill="white" opacity="0.5"/>
+              <circle cx="570" cy="10" r="1.2" fill="white" opacity="0.6"/>
+              <!-- texto título -->
+              <text x="300" y="28" font-family="sans-serif" font-size="13" fill="white" text-anchor="middle" font-weight="bold">Projeto ISS — Minicérebros no Espaço</text>
+              <!-- ISS no centro -->
+              <rect x="255" y="100" width="90" height="35" rx="4" fill="#aaa"/>
+              <rect x="170" y="112" width="260" height="12" rx="3" fill="#ccc"/>
+              <rect x="275" y="85" width="50" height="18" rx="2" fill="#bbb"/>
+              <text x="300" y="123" font-family="sans-serif" font-size="9" fill="#1a2a6c" text-anchor="middle" font-weight="bold">🛰 ISS</text>
+              <!-- Brasil -->
+              <circle cx="100" cy="185" r="30" fill="#006b28" opacity="0.9"/>
+              <text x="100" y="181" font-family="sans-serif" font-size="18" text-anchor="middle">🇧🇷</text>
+              <text x="100" y="198" font-family="sans-serif" font-size="10" fill="white" text-anchor="middle" font-weight="bold">Brasil</text>
+              <text x="100" y="210" font-family="sans-serif" font-size="9" fill="#b2f2bb" text-anchor="middle">Minicérebros</text>
+              <!-- NASA / EUA -->
+              <circle cx="300" cy="200" r="30" fill="#1a2a6c" opacity="0.9"/>
+              <text x="300" y="196" font-family="sans-serif" font-size="18" text-anchor="middle">🇺🇸</text>
+              <text x="300" y="213" font-family="sans-serif" font-size="10" fill="white" text-anchor="middle" font-weight="bold">NASA</text>
+              <text x="300" y="225" font-family="sans-serif" font-size="9" fill="#74c0fc" text-anchor="middle">Transporte</text>
+              <!-- Europa -->
+              <circle cx="500" cy="185" r="30" fill="#003399" opacity="0.9"/>
+              <text x="500" y="181" font-family="sans-serif" font-size="18" text-anchor="middle">🇪🇺</text>
+              <text x="500" y="198" font-family="sans-serif" font-size="10" fill="white" text-anchor="middle" font-weight="bold">ESA</text>
+              <text x="500" y="210" font-family="sans-serif" font-size="9" fill="#a5d8ff" text-anchor="middle">Suporte técnico</text>
+              <!-- linhas de conexão -->
+              <line x1="130" y1="170" x2="255" y2="120" stroke="#fdbb2d" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+              <line x1="470" y1="170" x2="345" y2="120" stroke="#fdbb2d" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+              <line x1="300" y1="170" x2="300" y2="135" stroke="#fdbb2d" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.8"/>
+              <line x1="130" y1="190" x2="270" y2="200" stroke="#fdbb2d" stroke-width="1" opacity="0.5"/>
+              <line x1="330" y1="200" x2="470" y2="188" stroke="#fdbb2d" stroke-width="1" opacity="0.5"/>
+              <!-- label -->
+              <text x="300" y="250" font-family="sans-serif" font-size="10" fill="#fdbb2d" text-anchor="middle">Ciência transnacional: fronteiras não limitam o conhecimento</text>
+            </svg>
+
+            <p>Esse exemplo reforça qual característica fundamental da ciência moderna?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q8" value="a"> a) A ciência é uma competição onde apenas um país pode descobrir a verdade.</label>
+                <label class="option"><input type="radio" name="q8" value="b"> b) O trabalho científico é solitário e depende apenas da inteligência de um único gênio.</label>
+                <label class="option"><input type="radio" name="q8" value="c"> c) A produção do conhecimento é uma prática colaborativa e transnacional, unindo esforços para objetivos comuns.</label>
+                <label class="option"><input type="radio" name="q8" value="d"> d) Cientistas brasileiros só conseguem trabalhar se forem para outros países.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 09 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 09 — O FILTRO DA CIÊNCIA</span>
+            <div class="context-box">
+                Antes de um estudo ser publicado em uma revista científica importante (como a <em>Nature</em> ou <em>Science</em>), ele passa pela "Revisão por Pares" (Peer Review). Outros cientistas da mesma área, que não participaram da pesquisa, analisam os métodos e os cálculos para encontrar erros.
+            </div>
+
+            <!-- SVG Q9: Fluxo da Revisão por Pares -->
+            <svg class="question-svg" viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
+              <rect width="620" height="220" fill="#f8f9fa" rx="8"/>
+              <text x="310" y="26" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Fluxo da Revisão por Pares (Peer Review)</text>
+              <defs>
+                <marker id="arrP" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#1a2a6c"/>
+                </marker>
+                <marker id="arrOk" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#2b8a3e"/>
+                </marker>
+                <marker id="arrNo" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                  <path d="M0,0 L0,6 L8,3 z" fill="#c92a2a"/>
+                </marker>
+              </defs>
+              <!-- 1 Pesquisador -->
+              <rect x="20" y="75" width="95" height="60" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="1.5"/>
+              <text x="67" y="100" font-family="sans-serif" font-size="22" text-anchor="middle">🔬</text>
+              <text x="67" y="118" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Pesquisador</text>
+              <text x="67" y="130" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">submete artigo</text>
+              <line x1="117" y1="105" x2="145" y2="105" stroke="#1a2a6c" stroke-width="2" marker-end="url(#arrP)"/>
+              <!-- 2 Revista -->
+              <rect x="147" y="75" width="95" height="60" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="1.5"/>
+              <text x="194" y="100" font-family="sans-serif" font-size="22" text-anchor="middle">📰</text>
+              <text x="194" y="118" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Revista</text>
+              <text x="194" y="130" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">encaminha</text>
+              <line x1="244" y1="105" x2="272" y2="105" stroke="#1a2a6c" stroke-width="2" marker-end="url(#arrP)"/>
+              <!-- 3 Revisores -->
+              <rect x="274" y="75" width="95" height="60" rx="8" fill="#fff9db" stroke="#fdbb2d" stroke-width="2.5"/>
+              <text x="321" y="100" font-family="sans-serif" font-size="22" text-anchor="middle">👩‍🔬👨‍🔬</text>
+              <text x="321" y="118" font-family="sans-serif" font-size="10" fill="#7a4f00" text-anchor="middle" font-weight="bold">Revisores</text>
+              <text x="321" y="130" font-family="sans-serif" font-size="9" fill="#7a4f00" text-anchor="middle">avaliam erros</text>
+              <!-- setas revisores -->
+              <line x1="371" y1="90" x2="430" y2="75" stroke="#2b8a3e" stroke-width="2" marker-end="url(#arrOk)"/>
+              <line x1="371" y1="120" x2="430" y2="135" stroke="#c92a2a" stroke-width="2" marker-end="url(#arrNo)"/>
+              <!-- aprovado -->
+              <rect x="432" y="50" width="95" height="50" rx="8" fill="#d3f9d8" stroke="#51cf66" stroke-width="2"/>
+              <text x="479" y="72" font-family="sans-serif" font-size="18" text-anchor="middle">✅</text>
+              <text x="479" y="88" font-family="sans-serif" font-size="10" fill="#2b8a3e" text-anchor="middle" font-weight="bold">Publicado</text>
+              <!-- rejeitado -->
+              <rect x="432" y="115" width="95" height="50" rx="8" fill="#fff5f5" stroke="#ff8787" stroke-width="2"/>
+              <text x="479" y="137" font-family="sans-serif" font-size="18" text-anchor="middle">🔄</text>
+              <text x="479" y="153" font-family="sans-serif" font-size="10" fill="#c92a2a" text-anchor="middle" font-weight="bold">Revisão/Recusa</text>
+              <!-- legenda -->
+              <text x="310" y="190" font-family="sans-serif" font-size="11" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Objetivo: garantir qualidade, precisão e confiabilidade do conhecimento</text>
+            </svg>
+
+            <p>Qual é a principal função desse processo de revisão?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q9" value="a"> a) Impedir que novos cientistas fiquem famosos rapidamente.</label>
+                <label class="option"><input type="radio" name="q9" value="b"> b) Garantir que apenas ideias que o governo aprova sejam publicadas.</label>
+                <label class="option"><input type="radio" name="q9" value="c"> c) Atuar como um controle de qualidade, aumentando a confiabilidade e a precisão do conhecimento gerado.</label>
+                <label class="option"><input type="radio" name="q9" value="d"> d) Cobrar taxas caras dos cientistas para que eles possam mostrar seu trabalho.</label>
+            </div>
+        </div>
+
+        <!-- QUESTÃO 10 -->
+        <div class="question">
+            <span class="question-header">QUESTÃO 10 — CIÊNCIA E CIDADANIA</span>
+            <div class="context-box">
+                "Saber ciência não serve apenas para passar na prova, mas para tomar decisões na vida real: escolher um alimento mais saudável, entender um diagnóstico médico ou votar em políticas ambientais."
+            </div>
+
+            <!-- SVG Q10: Ciência e cidadania -->
+            <svg class="question-svg" viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg">
+              <rect width="620" height="240" fill="#f8f9fa" rx="8"/>
+              <text x="310" y="26" font-family="sans-serif" font-size="13" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Pensamento Científico no Exercício da Cidadania</text>
+              <!-- centro: pessoa -->
+              <circle cx="310" cy="130" r="32" fill="#1a2a6c"/>
+              <text x="310" y="138" font-family="sans-serif" font-size="30" text-anchor="middle">🧑</text>
+              <text x="310" y="175" font-family="sans-serif" font-size="11" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Cidadão Crítico</text>
+              <!-- card saúde -->
+              <rect x="30" y="50" width="110" height="70" rx="8" fill="#d0f5d0" stroke="#2b8a3e" stroke-width="1.5"/>
+              <text x="85" y="76" font-family="sans-serif" font-size="24" text-anchor="middle">🏥</text>
+              <text x="85" y="96" font-family="sans-serif" font-size="10" fill="#2b8a3e" text-anchor="middle" font-weight="bold">Saúde</text>
+              <text x="85" y="110" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">diagnósticos</text>
+              <line x1="140" y1="90" x2="278" y2="118" stroke="#2b8a3e" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+              <!-- card alimentação -->
+              <rect x="30" y="145" width="110" height="70" rx="8" fill="#fff9db" stroke="#f0a500" stroke-width="1.5"/>
+              <text x="85" y="171" font-family="sans-serif" font-size="24" text-anchor="middle">🥗</text>
+              <text x="85" y="191" font-family="sans-serif" font-size="10" fill="#7a4f00" text-anchor="middle" font-weight="bold">Alimentação</text>
+              <text x="85" y="205" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">rótulos e nutrição</text>
+              <line x1="140" y1="180" x2="278" y2="138" stroke="#f0a500" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+              <!-- card meio ambiente -->
+              <rect x="480" y="50" width="115" height="70" rx="8" fill="#e8eaf6" stroke="#1a2a6c" stroke-width="1.5"/>
+              <text x="537" y="76" font-family="sans-serif" font-size="24" text-anchor="middle">🌱</text>
+              <text x="537" y="96" font-family="sans-serif" font-size="10" fill="#1a2a6c" text-anchor="middle" font-weight="bold">Meio Ambiente</text>
+              <text x="537" y="110" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">políticas públicas</text>
+              <line x1="480" y1="90" x2="342" y2="118" stroke="#1a2a6c" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+              <!-- card voto -->
+              <rect x="480" y="145" width="115" height="70" rx="8" fill="#ffd0d0" stroke="#b21f1f" stroke-width="1.5"/>
+              <text x="537" y="171" font-family="sans-serif" font-size="24" text-anchor="middle">🗳️</text>
+              <text x="537" y="191" font-family="sans-serif" font-size="10" fill="#7a0f0f" text-anchor="middle" font-weight="bold">Participação</text>
+              <text x="537" y="205" font-family="sans-serif" font-size="9" fill="#555" text-anchor="middle">voto consciente</text>
+              <line x1="480" y1="180" x2="342" y2="138" stroke="#b21f1f" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>
+              <!-- frase base -->
+              <text x="310" y="225" font-family="sans-serif" font-size="10" fill="#555" text-anchor="middle">Ceticismo saudável + valorização de evidências = decisões mais justas e responsáveis</text>
+            </svg>
+
+            <p>Com base em tudo o que foi estudado, como o pensamento científico auxilia no exercício da cidadania?</p>
+            <div class="options">
+                <label class="option"><input type="radio" name="q10" value="a"> a) Fazendo com que as pessoas aceitem tudo o que os especialistas dizem sem questionar.</label>
+                <label class="option"><input type="radio" name="q10" value="b"> b) Desenvolvendo uma postura crítica que valoriza evidências e o ceticismo saudável diante de afirmações sem provas.</label>
+                <label class="option"><input type="radio" name="q10" value="c"> c) Ensinando a decorar fórmulas para resolver problemas matemáticos complexos.</label>
+                <label class="option"><input type="radio" name="q10" value="d"> d) Mostrando que a tecnologia pode resolver todos os problemas do mundo sem esforço humano.</label>
+            </div>
+        </div>
+
+        <button type="button" class="btn-submit" id="btn-submit" onclick="calcularNota()">
+            ✅ Finalizar e Registrar Nota
+        </button>
+    </form>
+
     <div id="result"></div>
+    <div id="sheets-status"></div>
 
-    <script>
-        // Dados dos alunos por série
-        const studentsData = {
-            '9A': [
-                {number: '1', name: 'ÁGATHA NIKOLLE DA SILVA RAMOS'},
-                {number: '2', name: 'AMANDA BEATRIZ LEAL MOURAD'},
-                {number: '4', name: 'ANNA NICOLY BENVINDO DOS SANTOS'},
-                {number: '5', name: 'ARTHUR DOS SANTOS'},
-                {number: '6', name: 'BEATRIZ UCHOA DOS SANTOS'},
-                {number: '7', name: 'BRUNO EDUARDO NOGUEIRA DE OLIVEIRA'},
-                {number: '8', name: 'CARLOS EDUARDO BELMIRO DOS SANTOS'},
-                {number: '9', name: 'CHRISTIAN DAVI DE OLIVEIRA'},
-                {number: '11', name: 'ERICK HENRIQUE RIBEIRO GONÇALVES'},
-                {number: '12', name: 'FILIPE RODRIGUES SANTOS'},
-                {number: '13', name: 'GABRIEL ALMEIDA MOSCARDINI'},
-                {number: '14', name: 'GIOVANA MOTA VAZ DE JESUS'},
-                {number: '15', name: 'GUILHERME DA SILVA GUIMARÃES'},
-                {number: '16', name: 'HELOÍSA LEAL DOS REIS'},
-                {number: '17', name: 'IAGO ANJOS DE JESUS'},
-                {number: '18', name: 'IGNACIO LINS SANTOS'},
-                {number: '19', name: 'ISADORA DE SOUZA SILVA'},
-                {number: '20', name: 'JOAO VICTOR BATISTA DUARTE'},
-                {number: '21', name: 'JULIANA SANTOS LIMA'},
-                {number: '25', name: 'MANUELA VITÓRIA LIMA DOS SANTOS'},
-                {number: '26', name: 'MIGUEL ALVES OLIVEIRA'},
-                {number: '27', name: 'NIKOLAS ANTONIO'},
-                {number: '28', name: 'ORIANA JOSE TUAREZ RENGEL'},
-                {number: '31', name: 'RAFAELLA VITÓRIA EXPEDITA DE ANDRADE MARQUES'},
-                {number: '33', name: 'RAYLAN DE JESUS BARBOSA'},
-                {number: '34', name: 'REBECA DOS SANTOS SOUSA'},
-                {number: '35', name: 'RICHARD JOSÉ DOS SANTOS'},
-                {number: '36', name: 'SARA CRISTINA PASSOS MARTINS'},
-                {number: '37', name: 'VANESSA CARDOSO DOS SANTOS'},
-                {number: '41', name: 'JULIA DIAS AZEVEDO'},
-                {number: '42', name: 'SAMARA HELEN DA SILVA'},
-                {number: '44', name: 'LUIS MATHEUS DA SILVA RAMOS'}
-            ],
-            '9B': [
-                {number: '1', name: 'ALEJANDRO VIEIRA LIMA'},
-                {number: '2', name: 'ALEX GUSTAVO DA SILVA VIEIRA'},
-                {number: '3', name: 'ALLAN BEZERRA DE LIMA'},
-                {number: '6', name: 'ARTHUR DE JESUS NASCIMENTO'},
-                {number: '8', name: 'ARTHUR MARYANO MENDES'},
-                {number: '9', name: 'CAROS EDUARDO OLIVEIRA SABATERRA'},
-                {number: '10', name: 'DARYO PALMA GREGORIO'},
-                {number: '13', name: 'EDUARDA DE SOUSA OLIVEIRA'},
-                {number: '16', name: 'GIOVANNA MARTINEZ FERREIRA'},
-                {number: '17', name: 'GRAZIELLE VITÓRIA SILVA FIGUEIREDO'},
-                {number: '20', name: 'JULLIA OLIVEIRA DE SOUZA'},
-                {number: '21', name: 'KARINA DE JESUS SANTANA'},
-                {number: '24', name: 'LEONARDO JUNIOR ALBUQUERQUE DA SILVA'},
-                {number: '27', name: 'MARCOS DE OLIVEIRA CARVALHO'},
-                {number: '28', name: 'MARIA EDUARDA SILVA SOUZA'},
-                {number: '29', name: 'MOISES DOS SANTOS BOMFIM'},
-                {number: '30', name: 'NAHYMÊ VITORIA TAVARES DOS SANTOS'},
-                {number: '31', name: 'NICOLAS LUAN MENDES'},
-                {number: '32', name: 'PEDRO HENRIQUE ARRABAL MANZARO'},
-                {number: '33', name: 'PIETRO RAMON DE PAIVA MAGALHÃES LEITÃO'},
-                {number: '34', name: 'SOFIA DE FRANCA COSTA'},
-                {number: '35', name: 'TATIANA DA SILVA RODRIGUES'},
-                {number: '36', name: 'VITOR HUGO DOMINGOS SANTOS'},
-                {number: '37', name: 'WAGNER SILVA MEIRA'},
-                {number: '38', name: 'YASMIM ANDRADE DOS SANTOS'}
-            ],
-            '9C': [
-                {number: '2', name: 'ALEXANDRE SERAFIM JUNIOR'},
-                {number: '3', name: 'ANA LUIZA DO NASCIMENTO'},
-                {number: '5', name: 'ARTHUR EMANUEL ALMEIDA REIS'},
-                {number: '7', name: 'CARLOS AUGUSTO DIAS DE MENDONÇA'},
-                {number: '9', name: 'DAPHINE SINDIFER RODRIGUES SILVA'},
-                {number: '12', name: 'ELOISA DE OLIVEIRA CARVALHO'},
-                {number: '13', name: 'ENZO BAPTISTA MAIA'},
-                {number: '14', name: 'EVELLYN ANGELINA CAVALCANTE DE OLIVEIRA'},
-                {number: '16', name: 'GABRIEL VICTOR OLIVEIRA SANTOS'},
-                {number: '17', name: 'GIOVANNA SOUSA DA SILVA'},
-                {number: '18', name: 'GUSTAVO FURLAN GUEDES DA SILVA'},
-                {number: '23', name: 'KAUÃ BRYAN MAZARIO BARBEIRO'},
-                {number: '25', name: 'KAUAN ALAMBERT GOMES DE SOUSA'},
-                {number: '26', name: 'KEMILLY CARVALHO DA FONSECA BRITO'},
-                {number: '27', name: 'KLAIVYN WALLAS ARAUJO ESPIRITO SANTO'},
-                {number: '28', name: 'LORHANNY CAVALCANTE SANTOS'},
-                {number: '29', name: 'MANUELLA LELIS DA SILVA SIMAO'},
-                {number: '33', name: 'MONALISA DOS SANTOS BALDUINO'},
-                {number: '34', name: 'NATHAN SANTANA MONTEMOR'},
-                {number: '35', name: 'NICOLAS PYETRO CASTRO DE ALMEIDA SOUZA'},
-                {number: '36', name: 'NICOLLAS JHAMAL DA SILVA ALVES'},
-                {number: '37', name: 'SARAH SILVA ROGER'},
-                {number: '38', name: 'SERGIO RICARDO SILVA DE SOUZA'},
-                {number: '40', name: 'VINICIUS COSTA SILVA'},
-                {number: '41', name: 'VITÓRIA SILVA VIEIRA'},
-                {number: '42', name: 'FELIPE RITIELLI NEVES DA SILVA'},
-                {number: '43', name: 'JAQUELYNE PEREIRA GONCALVES'},
-                {number: '44', name: 'KRYSTOFER LEITE DA SILVA'}
-            ]
-        };
+</div>
 
-        // Respostas corretas
-        const correctAnswers = {
-            q1: "b",
-            q2: "c",
-            q3: "c",
-            q4: "a",
-            q5: "b",
-            q6: "a",
-            q7: "b",
-            q8: "c"
-        };
+<script>
+// ─────────────────────────────────────────────────────────────
+//  IMPORTANTE — para funcionar no GitHub Pages você precisa:
+//  1. No Google Apps Script > Implantar > Gerenciar implantações
+//  2. Clique no lápis (editar) > "Quem tem acesso"
+//  3. Mude para "Qualquer pessoa" → SALVE e gere uma NOVA versão
+//  4. Copie a nova URL e substitua APPS_SCRIPT_URL abaixo
+//  5. No código do Apps Script, certifique-se que doGet() retorna:
+//     ContentService.createTextOutput(JSON.stringify(resp))
+//       .setMimeType(ContentService.MimeType.JSON);
+// ─────────────────────────────────────────────────────────────
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-D-TPUeQl5DDCHXe9KTYsIZJWJm12XjZsi0vjnRhwRt_AO7mGnlkP8_34hGi_hOM/exec';
 
-        function previewImage(input, previewId) {
-            const preview = document.getElementById(previewId);
-            const file = input.files[0];
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        }
+const GABARITO = { q1:'c', q2:'b', q3:'c', q4:'c', q5:'b',
+                   q6:'b', q7:'b', q8:'c', q9:'c', q10:'b' };
 
-        function preencherNumero() {
-            const selectAluno = document.getElementById('alunos');
-            const inputNumero = document.getElementById('numero');
-            const selectSerie = document.getElementById('serie');
-            
-            if (selectAluno.value) {
-                const selectedOption = selectAluno.options[selectAluno.selectedIndex];
-                inputNumero.value = selectedOption.value;
-                selectSerie.value = selectedOption.getAttribute('data-grade');
-            } else {
-                inputNumero.value = '';
-            }
-        }
+const cacheAlunos = {};
 
-        // Configurar data atual
-        document.getElementById('data').valueAsDate = new Date();
+// ── requisição via proxy (resolve bloqueio CORS do GitHub Pages) ──
+async function gasRequest(url) {
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    let resp;
+    try {
+        resp = await fetch(proxy);
+    } catch (e) {
+        throw new Error('Sem conexão com o servidor proxy. Verifique sua internet.');
+    }
+    if (!resp.ok) throw new Error(`Proxy retornou HTTP ${resp.status}`);
+    const json = await resp.json();
+    if (!json.contents) throw new Error('Proxy não retornou conteúdo. Tente novamente.');
+    try {
+        return JSON.parse(json.contents);
+    } catch {
+        throw new Error('Resposta inválida do Apps Script. Verifique se o código foi implantado corretamente.');
+    }
+}
 
-        async function submitForm() {
-            const alunoSelect = document.getElementById('alunos');
-            const nome = alunoSelect.options[alunoSelect.selectedIndex].text;
-            const numero = document.getElementById('numero').value;
-            const serie = document.getElementById('serie').value;
-            
-            if (!alunoSelect.value) {
-                alert('Por favor, selecione seu nome na lista.');
-                return;
-            }
-            
-            // Mostrar indicador de carregamento
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('submit-btn').disabled = true;
-            
-            let score = 0;
-            const totalQuestions = Object.keys(correctAnswers).length;
-            
-            // Verificar respostas
-            for (let i = 1; i <= totalQuestions; i++) {
-                const questionName = 'q' + i;
-                const selectedOption = document.querySelector(`input[name="${questionName}"]:checked`);
-                
-                if (selectedOption && selectedOption.value === correctAnswers[questionName]) {
-                    score++;
-                }
-            }
-            
-            const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Exibir resultado para o usuário
-            document.getElementById('result').innerHTML = `
-                <p>${nome}, você acertou ${score} de ${totalQuestions} questões (${percentage}%).</p>
-                <p>As questões discursivas serão avaliadas separadamente.</p>
-            `;
-            
-            try {
-                // Enviar para o Google Sheets
-                const response = await sendToGoogleSheets(nome, numero, serie, score, totalQuestions, percentage);
-                
-                if (response && response.success) {
-                    document.getElementById('result').innerHTML += `
-                        <p style="color: green;">Dados enviados com sucesso!</p>
-                    `;
-                } else {
-                    throw new Error(response?.message || 'Erro ao enviar dados');
-                }
-            } catch (error) {
-                console.error('Erro ao enviar dados:', error);
-                document.getElementById('result').innerHTML += `
-                    <p style="color: red;">Erro ao enviar dados: ${error.message}. Por favor, informe o professor.</p>
-                `;
-            } finally {
-                // Esconder indicador de carregamento
-                document.getElementById('loading').style.display = 'none';
-            }
-        }
+async function carregarAlunos() {
+    const turma    = document.getElementById('select-turma').value;
+    const selAluno = document.getElementById('select-aluno');
+    const inputNum = document.getElementById('input-numero');
+    const loadMsg  = document.getElementById('loading-msg');
 
-        async function sendToGoogleSheets(nome, numero, serie, acertos, total, porcentagem) {
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbw5dJ90NwRA0lOFGrDgc493QMHs0X1PYszYjOQ3ROIVcLQCdFGDrX1KnLnA2AusnNU/exec';
-            
-            // Usando FormData para enviar os dados
-            const formData = new FormData();
-            formData.append('nome', nome);
-            formData.append('numero', numero);
-            formData.append('serie', serie);
-            formData.append('acertos', acertos);
-            formData.append('total', total);
-            formData.append('porcentagem', porcentagem);
+    selAluno.innerHTML = '<option value="">— aguarde —</option>';
+    selAluno.disabled  = true;
+    inputNum.value     = '';
+    loadMsg.innerHTML  = '';
 
-            try {
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: formData
-                });
+    if (!turma) {
+        selAluno.innerHTML = '<option value="">— selecione a turma primeiro —</option>';
+        return;
+    }
 
-                if (!response.ok) {
-                    throw new Error('Falha na comunicação com o servidor');
-                }
+    if (cacheAlunos[turma]) {
+        preencherSelect(cacheAlunos[turma]);
+        loadMsg.innerHTML = `✅ ${cacheAlunos[turma].length} alunos carregados.`;
+        return;
+    }
 
-                return await response.json();
-            } catch (error) {
-                console.error('Erro ao enviar para o Google Sheets:', error);
-                throw error;
-            }
-        }
-    </script>
+    loadMsg.innerHTML = '<span class="spinner"></span> Carregando lista da turma…';
+
+    try {
+        const url  = `${APPS_SCRIPT_URL}?action=alunos&turma=${encodeURIComponent(turma)}`;
+        const data = await gasRequest(url);
+        if (data.erro) throw new Error(data.erro);
+        const alunos = data.alunos || [];
+        cacheAlunos[turma] = alunos;
+        preencherSelect(alunos);
+        loadMsg.innerHTML = `✅ ${alunos.length} alunos carregados.`;
+    } catch (e) {
+        selAluno.innerHTML = '<option value="">— erro ao carregar —</option>';
+        loadMsg.innerHTML  = `❌ Erro: ${e.message}`;
+        console.error('carregarAlunos:', e);
+    }
+}
+
+function preencherSelect(alunos) {
+    const sel = document.getElementById('select-aluno');
+    sel.innerHTML = '<option value="">— Selecione seu nome —</option>';
+    alunos.forEach((a, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        const prefixo = a.numero ? `${a.numero}. ` : '';
+        opt.textContent = `${prefixo}${a.nome}`;
+        sel.appendChild(opt);
+    });
+    sel.disabled = false;
+}
+
+function preencherNumero() {
+    const turma = document.getElementById('select-turma').value;
+    const idx   = document.getElementById('select-aluno').value;
+    if (idx === '' || !turma || !cacheAlunos[turma]) {
+        document.getElementById('input-numero').value = '';
+        return;
+    }
+    const aluno = cacheAlunos[turma][parseInt(idx)];
+    document.getElementById('input-numero').value = aluno?.numero ?? '';
+}
+
+async function calcularNota() {
+    const turma = document.getElementById('select-turma').value;
+    const idx   = document.getElementById('select-aluno').value;
+
+    if (!turma || idx === '') {
+        alert('⚠️ Selecione a Turma e o seu Nome antes de finalizar.');
+        return;
+    }
+
+    const aluno = cacheAlunos[turma]?.[parseInt(idx)];
+    if (!aluno) { alert('Aluno não encontrado. Recarregue a página.'); return; }
+
+    const formData = new FormData(document.getElementById('quiz-form'));
+    let score = 0;
+    for (const key in GABARITO) {
+        if (formData.get(key) === GABARITO[key]) score++;
+    }
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    let feedback = '';
+    const nomeLabel = aluno.nome;
+    if (score >= 9) {
+        resultDiv.className = 'success';
+        feedback = `Excelente, ${nomeLabel}! Você demonstrou altíssimo nível de análise crítica e interpretação de dados.`;
+    } else if (score >= 7) {
+        resultDiv.className = 'success';
+        feedback = `Bom trabalho, ${nomeLabel}! Você compreende bem os conceitos, mas preste mais atenção aos detalhes dos gráficos.`;
+    } else {
+        resultDiv.className = 'error';
+        feedback = `Atenção, ${nomeLabel}. Releia os textos de apoio e analise as tabelas com mais calma. A ciência exige paciência e observação.`;
+    }
+
+    resultDiv.innerHTML = `
+        <h3>RESULTADO FINAL</h3>
+        <p><strong>Estudante:</strong> ${aluno.nome}</p>
+        <p><strong>Turma:</strong> ${turma === '9A' ? '9º A' : '9º B'}
+           &nbsp;|&nbsp; <strong>Nº:</strong> ${aluno.numero || '—'}</p>
+        <p><strong>Acertos:</strong> ${score} de 10
+           &nbsp;|&nbsp; <strong>Nota:</strong> ${score}</p>
+        <p>${feedback}</p>
+    `;
+
+    document.getElementById('btn-submit').disabled = true;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+    setSheetsStatus('sending', '⏳ Registrando nota na planilha…');
+
+    try {
+        const url  = `${APPS_SCRIPT_URL}?action=gravar&turma=${encodeURIComponent(turma)}&linha=${aluno.linha}&nota=${score}`;
+        const data = await gasRequest(url);
+        if (data.erro) throw new Error(data.erro);
+        setSheetsStatus('sent',
+            `✅ Nota ${score} registrada com sucesso para ${aluno.nome} `
+          + `(${turma === '9A' ? '9º A' : '9º B'}, linha ${aluno.linha}, coluna X).`
+        );
+    } catch (e) {
+        setSheetsStatus('send-err',
+            `❌ Nota calculada (${score}), mas não foi possível salvar automaticamente: ${e.message}. `
+          + `Anote a nota e registre manualmente se necessário.`
+        );
+        console.error('calcularNota (gravar):', e);
+    }
+}
+
+function setSheetsStatus(cls, msg) {
+    const el = document.getElementById('sheets-status');
+    el.style.display = 'block';
+    el.className = cls;
+    el.textContent = msg;
+}
+</script>
 </body>
 </html>
-
